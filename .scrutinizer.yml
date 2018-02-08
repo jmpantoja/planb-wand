@@ -27,7 +27,7 @@ build:
     tests:
         override:
             -
-                command: composer spine coverage
+                command: vendor/bin/codecept run unit --coverage --coverage-text --coverage-xml -f --debug
                 coverage:
                     file: tests/_output/coverage.xml
                     format: php-clover

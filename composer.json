@@ -10,12 +10,29 @@
       "homepage": "https://github.com/jmpantoja/"
     }
   ],
+  "require": {
+    "symfony/config": "^4.0",
+    "symfony/console": "^4.0",
+    "symfony/dependency-injection": "^4.0",
+    "symfony/yaml": "^4.0"
+  },
   "require-dev": {
     "planb/utils-dev": "dev-develop"
+  },
+  "autoload": {
+    "psr-4": {
+      "PlanB\\": "src/"
+    }
   },
   "config": {
     "optimize-autoloader": true,
     "sort-packages": true,
     "apcu-autoloader": true
+  },
+  "scripts": {
+    "auto-scripts": {
+      "cache:clear": "symfony-cmd",
+      "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"
+    }
   }
 }
