@@ -1,0 +1,19 @@
+preset: psr2
+- blank_line_after_namespace
+- braces
+- single_blank_line_at_eof
+
+finder:
+  exclude:
+    - "bin"
+    - "config"
+    - "docker"
+    - "etc"
+    - "etc"
+    - "tests"
+    - "app"
+    - "web"
+    - "public"
+    - "vendor"
+    - "var"
+

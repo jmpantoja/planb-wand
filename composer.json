@@ -1,0 +1,21 @@
+{
+  "name": "planb/wand",
+  "description": "a project maker",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jose Manuel Pantoja",
+      "email": "jmpantoja@gmail.com",
+      "homepage": "https://github.com/jmpantoja/"
+    }
+  ],
+  "require-dev": {
+    "planb/utils-dev": "dev-develop"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "apcu-autoloader": true
+  }
+}
