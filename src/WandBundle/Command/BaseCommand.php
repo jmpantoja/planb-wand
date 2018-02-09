@@ -56,4 +56,14 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     {
         return $this->container;
     }
+
+    /**
+     * Devuelve el gestor de tareas
+     *
+     * @return \PlanB\Wand\Core\Task\TaskManager
+     */
+    public function getTaskManager(): TaskManager
+    {
+        return $this->container->get('wand.task.manager');
+    }
 }

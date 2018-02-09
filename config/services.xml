@@ -4,12 +4,15 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services
         http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="wand.task.manager.class">\PlanB\Wand\Core\Task\TaskManager</parameter>
+    </parameters>
+
     <services>
-        <defaults autowire="true" autoconfigure="true" public="false" />
+        <!--<defaults autowire="true" autoconfigure="true" public="false" />-->
 
-        <service id="wand.command" class="\PlanB\WandBundle\Command\WandCommand">
-            <argument type="service" id="service_container"/>
+        <service id="wand.task.manager" class="%wand.task.manager.class%">
+
         </service>
-
     </services>
 </container>

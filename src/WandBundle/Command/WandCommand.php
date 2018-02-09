@@ -11,7 +11,9 @@
 
 namespace PlanB\WandBundle\Command;
 
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -28,7 +30,10 @@ class WandCommand extends BaseCommand
      */
     protected function configure()
     {
-        $this->setName('wand');
+        $this->setName('wand')
+            ->addArgument('task', InputArgument::REQUIRED, 'Nombre de la tarea')
+            ->addArgument('path', InputArgument::OPTIONAL, 'Ruta de la raiz del proyecto')
+            ->addOption('only-staged', null, InputOption::VALUE_NONE, 'aplicar solo al stage de git');
     }
 
     /**
@@ -39,6 +44,11 @@ class WandCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->write('hola!');
+
+        $taskName = $input->getArgument('task');
+        $projectDir = $input->getArgument('path') ?? realpath('.');
+        $onlyStaged = $input->getOption('only-staged');
+
+        $this->getTaskManager()->runTask($taskName, $projectDir, $onlyStaged);
     }
 }
