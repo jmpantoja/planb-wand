@@ -1,0 +1,6 @@
+---
+tasks:
+  init:
+   readme: true
+   license: true
+

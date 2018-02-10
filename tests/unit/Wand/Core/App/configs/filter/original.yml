@@ -1,0 +1,42 @@
+tasks:
+  taskA:
+    classname: \PlanB\Wand\Core\Task\Task
+    description: wubba lubba dub dub
+    actions:
+      actionA:
+        group: metainfo
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.metainfo.readme.twig'
+          target: README.md
+          action: override # delete, create
+          chmod: 0644
+      actionB:
+        group: metainfo
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.metainfo.readme.twig'
+          target: README.md
+          action: override # delete, create
+          chmod: 0644
+
+  taskB:
+    classname: \PlanB\Wand\Core\Task\Task
+    description: wubba lubba dub dub
+    actions:
+      actionC:
+        group: metainfo
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.metainfo.readme.twig'
+          target: README.md
+          action: override # delete, create
+          chmod: 0644
+      actionD:
+        group: metainfo
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.metainfo.readme.twig'
+          target: README.md
+          action: override # delete, create
+          chmod: 0644

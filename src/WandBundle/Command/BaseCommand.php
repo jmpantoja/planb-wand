@@ -11,6 +11,7 @@
 namespace PlanB\WandBundle\Command;
 
 use PlanB\Wand\Core\App\AppManager;
+use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\TaskManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -70,11 +71,22 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * Devuelve el gestor de tareas
+     * Devuelve el gestor de la aplicacion
+     *
      * @return \PlanB\Wand\Core\App\AppManager
      */
     public function getAppManager(): AppManager
     {
         return $this->container->get('wand.app.manager');
+    }
+
+    /**
+     * Devuelve el gestor de rutas
+     *
+     * @return \PlanB\Wand\Core\Path\PathManager
+     */
+    public function getPathManager(): PathManager
+    {
+        return $this->container->get('wand.path.manager');
     }
 }

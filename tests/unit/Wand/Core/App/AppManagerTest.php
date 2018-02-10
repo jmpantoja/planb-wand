@@ -13,6 +13,7 @@ namespace PlanB\Wand\Core\App;
 
 use PlanB\Utils\Dev\Tdd\Test\Unit;
 use PlanB\Wand\Core\Path\PathManager;
+use PlanB\Wand\Core\Task\TaskManager;
 
 
 /**
@@ -30,19 +31,28 @@ class AppManagerTest extends Unit
      * @test
      *
      * @covers ::__construct
-     * @covers ::build
+     * @covers ::init
+     * @covers ::getDefaultPath
+     * @covers ::getCustomPath
      */
-    public function testBuild()
+    public function testInit()
     {
-        $pathManager = $this->mock(PathManager::class, [
-            'build' => null
+
+        $taskManager = $this->mock(TaskManager::class, [
+            'setTasks' => $this->make(TaskManager::class)
         ]);
 
-        $manager = new AppManager($pathManager->make());
-        $manager->build(realpath('.'));
+        $pathManager = $this->make(PathManager::class);
+        $pathManager->build(null);
 
+        $manager = new AppManager($taskManager->make(), $pathManager);
+        $this->assertAttributeInstanceOf(TaskManager::class, 'taskManager', $manager);
+        $this->assertAttributeInstanceOf(PathManager::class, 'pathManager', $manager);
 
-        $pathManager->verify('build', 1, [realpath('.')]);
+        $manager->init();
+
+        $taskManager->verify('setTasks', 1);
+
     }
 
 }

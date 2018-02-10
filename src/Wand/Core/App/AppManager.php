@@ -11,7 +11,9 @@
 
 namespace PlanB\Wand\Core\App;
 
+use PlanB\Utils\Path\Path;
 use PlanB\Wand\Core\Path\PathManager;
+use PlanB\Wand\Core\Task\TaskManager;
 
 /**
  * Gestiona la aplicación "wand"
@@ -23,28 +25,70 @@ use PlanB\Wand\Core\Path\PathManager;
  */
 class AppManager
 {
+
     /**
      * @var \PlanB\Wand\Core\Path\PathManager $pathManager
      */
     private $pathManager;
 
     /**
+     * @var \PlanB\Wand\Core\Task\TaskManager $taskManager
+     */
+    private $taskManager;
+
+
+    /**
      * AppManager constructor.
      *
+     * @param \PlanB\Wand\Core\Task\TaskManager $taskManager
      * @param \PlanB\Wand\Core\Path\PathManager $pathManager
      */
-    public function __construct(PathManager $pathManager)
+    public function __construct(TaskManager $taskManager, PathManager $pathManager)
     {
+        $this->taskManager = $taskManager;
         $this->pathManager = $pathManager;
     }
 
     /**
-     * Construye el proyecto wand para una ruta
-     *
-     * @param null|string $projectDir
+     * Inicializa wand
      */
-    public function build(?string $projectDir): void
+    public function init(): void
     {
-        $this->pathManager->build($projectDir);
+
+        $customPath = $this->getCustomPath();
+        $custom = CustomConfig::create($customPath)
+            ->process();
+
+
+        $defaultPath = $this->getDefaultPath();
+        $config = DefaultConfig::create($defaultPath)
+            ->processWithFilter($custom);
+
+
+        $this->taskManager->setTasks($config['tasks']);
+    }
+
+
+    /**
+     * Devuelve la ruta de la configuración por defecto
+     *
+     * @return \PlanB\Utils\Path\Path
+     */
+    private function getDefaultPath(): Path
+    {
+        $base = $this->pathManager->wandDir();
+        return Path::create($base, 'config/wand.yml');
+    }
+
+
+    /**
+     * Devuelve la ruta de la configuración personalizada
+     *
+     * @return \PlanB\Utils\Path\Path
+     */
+    private function getCustomPath(): Path
+    {
+        $base = $this->pathManager->projectDir();
+        return Path::create($base, '.wand.yml');
     }
 }

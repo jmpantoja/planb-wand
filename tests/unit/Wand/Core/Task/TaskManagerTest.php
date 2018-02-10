@@ -14,7 +14,11 @@ namespace PlanB\Spine\Core\Task;
 use PlanB\Utils\Dev\Tdd\Test\Unit;
 use PlanB\Utils\Path\Path;
 use PlanB\Wand\Core\Path\PathManager;
+use PlanB\Wand\Core\Task\Task;
+use PlanB\Wand\Core\Task\TaskBuilder;
+use PlanB\Wand\Core\Task\TaskInterface;
 use PlanB\Wand\Core\Task\TaskManager;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class TaskManagerTest
@@ -27,13 +31,55 @@ class TaskManagerTest extends Unit
 {
 
     /**
-     * @covers ::run
+     * @test
+     *
+     * @covers ::setTasks
      */
-    public function testRunTask()
+    public function testSetTasks()
     {
+        $tasks = $this->fromFile('complete');
+
+        $builder = $this->make(TaskBuilder::class, [
+            'buildTask' => $this->make(TaskInterface::class)
+        ]);
 
         $manager = new TaskManager();
-        $manager->run('task', false);
+        $response = $manager->setTasks($tasks);
+
+        $this->assertInstanceOf(TaskManager::class, $response);
+
     }
+
+
+    /**
+     * @test
+     *
+     * @covers ::run
+     */
+    public function testRun()
+    {
+        $tasks = $this->fromFile('complete');
+
+
+        $manager = new TaskManager();
+        $manager->setTasks($tasks);
+
+        $manager->run('taskA', false);
+
+    }
+
+
+    private function fromFile(string $name): array
+    {
+        $data = ['tasks' => []];
+        $path = sprintf('%s/configs/%s.yml', __DIR__, $name);
+        if (is_file($path)) {
+            $data = Yaml::parseFile($path);
+        }
+
+        return $data['tasks'];
+
+    }
+
 
 }

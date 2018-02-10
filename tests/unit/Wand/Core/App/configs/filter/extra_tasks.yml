@@ -1,0 +1,14 @@
+---
+tasks:
+  taskA:
+   actionA: true
+   actionB: true
+  taskB:
+   actionC: true
+   actionD: true
+  taskC:
+   actionC: true
+   actionD: true
+  taskD:
+   actionC: true
+   actionD: true

@@ -49,7 +49,9 @@ class WandCommand extends BaseCommand
         $projectDir = $input->getArgument('path');
         $onlyStaged = $input->getOption('only-staged');
 
-        $this->getAppManager()->build($projectDir);
+        $this->getPathManager()->build($projectDir);
+        $this->getAppManager()->init();
+
         $this->getTaskManager()->run($taskName, $onlyStaged);
     }
 }

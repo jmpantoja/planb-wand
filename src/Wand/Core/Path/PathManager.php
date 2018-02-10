@@ -47,7 +47,6 @@ class PathManager
     public function build(?string $projectDir): void
     {
         $projectDir = $this->sanitizePathArgument($projectDir);
-
         $this->projectDir = $this->findProjectDir($projectDir);
     }
 

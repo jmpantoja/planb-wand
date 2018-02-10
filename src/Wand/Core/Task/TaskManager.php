@@ -19,7 +19,19 @@ namespace PlanB\Wand\Core\Task;
  */
 class TaskManager
 {
-    
+
+    /**
+     * Añade un conjunto de tareas definidas en un array de configuración
+     *
+     * @param mixed[] $tasks
+     * @return \PlanB\Wand\Core\Task\TaskManager
+     */
+    public function setTasks(array $tasks): self
+    {
+        return $this;
+    }
+
+
     /**
      * Ejecuta una tarea
      *
@@ -28,6 +40,5 @@ class TaskManager
      */
     public function run(string $taskName, bool $onlyStage): void
     {
-        echo "ejecutar $taskName en modo $onlyStage";
     }
 }

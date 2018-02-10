@@ -1,0 +1,6 @@
+---
+tasks:
+  init:
+    actionA: true
+    actionB: false
+    actionC: true
