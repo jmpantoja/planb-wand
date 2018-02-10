@@ -27,19 +27,13 @@ class TaskManagerTest extends Unit
 {
 
     /**
-     * @covers ::__construct
-     * @covers ::runTask
-     * @covers ::configure
+     * @covers ::run
      */
     public function testRunTask()
     {
 
-        $pathManager = $this->make(PathManager::class);
-
-        $manager = new TaskManager($pathManager);
-        $manager->runTask('task', realpath('.'), false);
-
-        $this->assertAttributeInstanceOf(PathManager::class, 'pathManager', $manager);
+        $manager = new TaskManager();
+        $manager->run('task', false);
     }
 
 }

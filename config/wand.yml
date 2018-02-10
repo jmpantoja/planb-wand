@@ -1,0 +1,18 @@
+---
+actions:
+  readme:
+    classname: \PlanB\Wand\Core\File\File
+    type: metainfo
+    params:
+      template: '@wand.metainfo.readme.twig'
+      target: README.md
+    options:
+      override: false
+      chmod: 0644
+
+tasks:
+  init:
+    classname: \PlanB\Wand\Core\Task\Task
+    active: true
+    actions:
+      readme: false

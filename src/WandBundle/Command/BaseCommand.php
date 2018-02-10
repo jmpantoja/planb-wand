@@ -10,6 +10,7 @@
 
 namespace PlanB\WandBundle\Command;
 
+use PlanB\Wand\Core\App\AppManager;
 use PlanB\Wand\Core\Task\TaskManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -66,5 +67,14 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     public function getTaskManager(): TaskManager
     {
         return $this->container->get('wand.task.manager');
+    }
+
+    /**
+     * Devuelve el gestor de tareas
+     * @return \PlanB\Wand\Core\App\AppManager
+     */
+    public function getAppManager(): AppManager
+    {
+        return $this->container->get('wand.app.manager');
     }
 }

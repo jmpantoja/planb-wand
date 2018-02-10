@@ -25,7 +25,11 @@ class PathManagerTest extends Unit
 {
 
     /**
+     * @test
+     *
+     * @covers ::__construct
      * @covers ::build
+     * @covers ::sanitizePathArgument
      * @covers ::findProjectDir
      */
     public function testBuild()
@@ -37,7 +41,11 @@ class PathManagerTest extends Unit
     }
 
     /**
+     * @test
+     *
+     * @covers ::__construct
      * @covers ::build
+     * @covers ::sanitizePathArgument
      * @covers ::findProjectDir
      *
      * @covers \PlanB\Wand\Core\Path\Exception\InvalidProjectDirectoryException::notFound
@@ -53,7 +61,11 @@ class PathManagerTest extends Unit
     }
 
     /**
+     * @test
+     *
+     * @covers ::__construct
      * @covers ::build
+     * @covers ::sanitizePathArgument
      * @covers ::findProjectDir
      *
      * @covers \PlanB\Wand\Core\Path\Exception\InvalidProjectDirectoryException::composerMissing()
@@ -68,12 +80,39 @@ class PathManagerTest extends Unit
         $manager->build(dirname(realpath('.')));
     }
 
+    /**
+     * @test
+     * 
+     * @covers ::__construct
+     * @covers ::build
+     * @covers ::sanitizePathArgument
+     * @covers ::projectDir
+     */
     public function testProjectDir()
     {
         $manager = new PathManager();
-        $manager->build(realpath('.'));
 
+
+        $manager->build(__FILE__);
+        $this->assertEquals(realpath('.'), $manager->projectDir());
+
+        $manager->build(realpath('.'));
         $this->assertEquals(realpath('.'), $manager->projectDir());
     }
+
+    /**
+     * @test
+     *
+     * @covers ::__construct
+     * @covers ::build
+     * @covers ::sanitizePathArgument
+     * @covers ::wandDir
+     */
+    public function testWandDir()
+    {
+        $manager = new PathManager();
+        $this->assertEquals(realpath('.'), $manager->wandDir());
+    }
+
 
 }

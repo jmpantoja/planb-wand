@@ -11,7 +11,6 @@
 
 namespace PlanB\WandBundle\Command;
 
-use PlanB\Wand\Core\Path\Exception\InvalidProjectDirectoryException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -47,27 +46,10 @@ class WandCommand extends BaseCommand
     {
 
         $taskName = $input->getArgument('task');
-        $projectDir = $this->parsePathArgument($input);
+        $projectDir = $input->getArgument('path');
         $onlyStaged = $input->getOption('only-staged');
 
-        $this->getTaskManager()->runTask($taskName, $projectDir, $onlyStaged);
-    }
-
-    /**
-     * Devuelve el argumento path bien formado
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @return string
-     */
-    private function parsePathArgument(InputInterface $input): string
-    {
-        $path = $input->getArgument('path') ?? realpath('.');
-        $realPath = realpath($path);
-
-        if (empty($realPath)) {
-            throw InvalidProjectDirectoryException::notFound($path);
-        }
-
-        return (string)$realPath;
+        $this->getAppManager()->build($projectDir);
+        $this->getTaskManager()->run($taskName, $onlyStaged);
     }
 }
