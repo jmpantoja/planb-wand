@@ -4,8 +4,45 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a8d0aac765b1a6de31910ea8d01bd76",
+    "content-hash": "385675bc232d1b6d083d02253473e414",
     "packages": [
+        {
+            "name": "planb/utils",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jmpantoja/planb-utils.git",
+                "reference": "0b038dbf02cd5aff9346bd7ff6731262e53a21f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jmpantoja/planb-utils/zipball/0b038dbf02cd5aff9346bd7ff6731262e53a21f5",
+                "reference": "0b038dbf02cd5aff9346bd7ff6731262e53a21f5",
+                "shasum": ""
+            },
+            "require-dev": {
+                "planb/utils-dev": "dev-develop"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PlanB\\Utils\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jose Manuel Pantoja",
+                    "email": "jmpantoja@gmail.com",
+                    "homepage": "https://github.com/jmpantoja/"
+                }
+            ],
+            "description": "utilidades para proyectos php",
+            "time": "2018-02-10T12:05:46+00:00"
+        },
         {
             "name": "psr/container",
             "version": "1.0.0",
@@ -617,47 +654,6 @@
                 "unit testing"
             ],
             "time": "2018-01-27T22:47:33+00:00"
-        },
-        {
-            "name": "codeception/mockery-module",
-            "version": "0.2.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Codeception/MockeryModule.git",
-                "reference": "d01f9d0c52cf4fa87c789c65191027a0d434bd3d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/MockeryModule/zipball/d01f9d0c52cf4fa87c789c65191027a0d434bd3d",
-                "reference": "d01f9d0c52cf4fa87c789c65191027a0d434bd3d",
-                "shasum": ""
-            },
-            "require": {
-                "codeception/codeception": "^2.0",
-                "mockery/mockery": "^0.8|^0.9|^1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Codeception\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Bodnarchuk",
-                    "email": "davert.php@mailican.com"
-                },
-                {
-                    "name": "Jáchym Toušek",
-                    "email": "enumag@gmail.com"
-                }
-            ],
-            "description": "Mockery Module for Codeception",
-            "time": "2017-10-10T16:22:46+00:00"
         },
         {
             "name": "codeception/stub",
@@ -2197,18 +2193,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jmpantoja/planb-utils-dev.git",
-                "reference": "a08c396bf6ff7d5b3fb07930b729d2da2afffdc8"
+                "reference": "73131f2943e9ba0106e6cd455b11bf3435ecd520"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jmpantoja/planb-utils-dev/zipball/a08c396bf6ff7d5b3fb07930b729d2da2afffdc8",
-                "reference": "a08c396bf6ff7d5b3fb07930b729d2da2afffdc8",
+                "url": "https://api.github.com/repos/jmpantoja/planb-utils-dev/zipball/73131f2943e9ba0106e6cd455b11bf3435ecd520",
+                "reference": "73131f2943e9ba0106e6cd455b11bf3435ecd520",
                 "shasum": ""
             },
             "require": {
                 "codeception/aspect-mock": "^2.1",
                 "codeception/codeception": "^2.3",
-                "codeception/mockery-module": "^0.2.3",
+                "goaop/framework": "<2.2",
                 "mockery/mockery": "^1.0"
             },
             "type": "library",
@@ -2229,7 +2225,7 @@
                 }
             ],
             "description": "utilidades para el desarrollo de proyectos php",
-            "time": "2018-02-08T18:18:47+00:00"
+            "time": "2018-02-10T17:01:44+00:00"
         },
         {
             "name": "psr/http-message",
@@ -3261,6 +3257,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "planb/utils": 20,
         "planb/utils-dev": 20
     },
     "prefer-stable": false,

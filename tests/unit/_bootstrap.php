@@ -5,13 +5,14 @@ include $base . '/vendor/autoload.php'; // composer autoload
 
 $kernel = \AspectMock\Kernel::getInstance();
 $kernel->init([
-    'debug' => true,
+    'debug' => false,
     'cacheDir' => $base . 'var/mocks',
     'includePaths' => [
         $base . '/src',
-        $base . '/vendor',
+        $base . '/vendor'
     ],
     'excludePaths' => [
+        $base . "/vendor/planb/utils-dev",
         $base . "/vendor/behat",
         $base . "/vendor/codeception",
         $base . "/vendor/mockery",

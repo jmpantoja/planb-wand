@@ -10,6 +10,7 @@
 
 namespace PlanB\WandBundle\Command;
 
+use PlanB\Wand\Core\Task\TaskManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;

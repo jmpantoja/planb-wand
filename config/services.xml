@@ -6,13 +6,16 @@
 
     <parameters>
         <parameter key="wand.task.manager.class">\PlanB\Wand\Core\Task\TaskManager</parameter>
+        <parameter key="wand.path.manager.class">\PlanB\Wand\Core\Path\PathManager</parameter>
     </parameters>
 
     <services>
         <!--<defaults autowire="true" autoconfigure="true" public="false" />-->
 
-        <service id="wand.task.manager" class="%wand.task.manager.class%">
+        <service id="wand.path.manager" class="%wand.path.manager.class%" />
 
+        <service id="wand.task.manager" class="%wand.task.manager.class%">
+            <argument type="service" id="wand.path.manager" />
         </service>
     </services>
 </container>

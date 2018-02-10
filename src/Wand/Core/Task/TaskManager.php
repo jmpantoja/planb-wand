@@ -11,6 +11,8 @@
 
 namespace PlanB\Wand\Core\Task;
 
+use PlanB\Wand\Core\Path\PathManager;
+
 /**
  * Gestiona las tareas
  *
@@ -21,13 +23,39 @@ class TaskManager
 {
 
     /**
+     * @var \PlanB\Wand\Core\Path\PathManager $pathManager
+     */
+    private $pathManager;
+
+    /**
+     * TaskManager constructor.
+     *
+     * @param \PlanB\Wand\Core\Path\PathManager $pathManager
+     */
+    public function __construct(PathManager $pathManager)
+    {
+        $this->pathManager = $pathManager;
+    }
+
+    /**
      * Ejecuta una tarea
      *
      * @param string $taskName
-     * @param string $projectDir
      * @param bool $onlyStage
      */
-    public function runTask(string $taskName, string $projectDir, bool $onlyStage): void
+    public function runTask(string $taskName, ?string $projectDir, bool $onlyStage): void
     {
+        $this->configure($projectDir, $onlyStage);
+    }
+
+    /**
+     * Configura el gestor de tareas
+     *
+     * @param null|string $projectDir
+     * @param bool $onlyStage
+     */
+    private function configure(?string $projectDir, bool $onlyStage): void
+    {
+        $this->pathManager->build($projectDir);
     }
 }

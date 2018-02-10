@@ -12,6 +12,8 @@
 namespace PlanB\Spine\Core\Task;
 
 use PlanB\Utils\Dev\Tdd\Test\Unit;
+use PlanB\Utils\Path\Path;
+use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\TaskManager;
 
 /**
@@ -25,12 +27,19 @@ class TaskManagerTest extends Unit
 {
 
     /**
+     * @covers ::__construct
      * @covers ::runTask
+     * @covers ::configure
      */
     public function testRunTask()
     {
-        $manager = new TaskManager();
+
+        $pathManager = $this->make(PathManager::class);
+
+        $manager = new TaskManager($pathManager);
         $manager->runTask('task', realpath('.'), false);
+
+        $this->assertAttributeInstanceOf(PathManager::class, 'pathManager', $manager);
     }
 
 }
