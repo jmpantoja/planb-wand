@@ -12,8 +12,10 @@
 namespace PlanB\Spine\Core\Task;
 
 use PlanB\Utils\Dev\Tdd\Test\Unit;
+use PlanB\Wand\Core\Action\ActionInterface;
 use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskBuilder;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class TaskManagerTest
@@ -32,17 +34,34 @@ class TaskBuilderTest extends Unit
      * @covers ::create
      *
      * @covers ::buildTask
-     * @covers ::getClassName
      * @covers ::resolveActions
+     * @covers ::buildAction
      *
      */
     public function create()
     {
-        $builder = TaskBuilder::create();
-        $options = [];
+        $tasks = $this->fromFile('complete');
 
-        $this->assertInstanceOf(Task::class, $builder->buildTask($options));
+        foreach ($tasks as $options) {
+            $builder = TaskBuilder::create();
+            $task = $builder->buildTask($options);
+            $this->assertInstanceOf(Task::class, $task);
+
+            $this->assertContainsOnly(ActionInterface::class, $task->getActions());
+        }
+
     }
 
+    private function fromFile(string $name): array
+    {
+        $data = ['tasks' => []];
+        $path = sprintf('%s/configs/%s.yml', __DIR__, $name);
+        if (is_file($path)) {
+            $data = Yaml::parseFile($path);
+        }
+
+        return $data['tasks'];
+
+    }
 
 }

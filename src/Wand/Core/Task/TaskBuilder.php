@@ -11,6 +11,8 @@
 
 namespace PlanB\Wand\Core\Task;
 
+use PlanB\Wand\Core\Action\ActionInterface;
+
 /**
  * Se encarga de instancias tareas
  *
@@ -46,7 +48,7 @@ final class TaskBuilder
      */
     public function buildTask(array $options): TaskInterface
     {
-        $className = $this->getClassName($options);
+        $className = $options['classname'];
         unset($options['classname']);
 
         $options['actions'] = $this->resolveActions($options);
@@ -54,18 +56,6 @@ final class TaskBuilder
         return $className::create($options);
     }
 
-    /**
-     * Devuelve el nombre de la clase
-     *
-     * @param mixed[] $options
-     * @return string
-     */
-    private function getClassName(array $options): string
-    {
-        $className = $options['classname'] ?? Task::class;
-
-        return (string)$className;
-    }
 
     /**
      * Resuelve la lista de acciones de una tarea
@@ -76,6 +66,25 @@ final class TaskBuilder
     private function resolveActions(array $options): array
     {
         $actions = $options['actions'] ?? [];
+
+        array_walk($actions, function (&$action): void {
+            $action = $this->buildAction($action);
+        });
+
         return $actions;
+    }
+
+    /**
+     * Crea una nueva acción
+     *
+     * @param mixed[] $options
+     * @return \PlanB\Wand\Core\Action\ActionInterface
+     */
+    private function buildAction(array $options): ActionInterface
+    {
+        $className = $options['classname'];
+        unset($options['classname']);
+
+        return $className::create($options);
     }
 }

@@ -21,12 +21,24 @@ class Task implements TaskInterface
 {
 
     /**
+     * @var string $description
+     */
+    private $description;
+
+    /**
+     * @var \PlanB\Wand\Core\Action\ActionInterface[] $actions ;
+     */
+    private $actions;
+
+    /**
      * Task constructor.
      *
      * @param mixed[] $options
      */
     final public function __construct(array $options)
     {
+        $this->description = $options['description'];
+        $this->actions = $options['actions'];
     }
 
     /**
@@ -37,6 +49,29 @@ class Task implements TaskInterface
      */
     final public static function create(array $params): TaskInterface
     {
-        return new self([]);
+        $options = TaskOptions::create()
+            ->resolve($params);
+
+        return new self($options);
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @return \PlanB\Wand\Core\Action\ActionInterface[]
+     */
+    public function getActions(): array
+    {
+        return $this->actions;
     }
 }

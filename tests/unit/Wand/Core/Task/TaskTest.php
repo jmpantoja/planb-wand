@@ -13,6 +13,7 @@ namespace PlanB\Spine\Core\Task;
 
 use PlanB\Utils\Dev\Tdd\Test\Unit;
 use PlanB\Utils\Path\Path;
+use PlanB\Wand\Core\Action\ActionInterface;
 use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskBuilder;
@@ -35,15 +36,35 @@ class TaskTest extends Unit
      *
      * @covers ::__construct
      * @covers ::create
+     * @covers ::getActions
+     * @covers ::getDescription
      */
-    public function testCreate()
+    public function create()
     {
-        $task = Task::create([]);
+        $tasks = $this->fromFile('complete');
 
-        $this->assertInstanceOf(Task::class, $task);
+        foreach ($tasks as $options) {
+            $builder = TaskBuilder::create();
+            $task = $builder->buildTask($options);
+            $this->assertInstanceOf(Task::class, $task);
+
+            $this->assertContainsOnly(ActionInterface::class, $task->getActions());
+            $this->assertEquals('wubba lubba dub dub', $task->getDescription());
+        }
 
     }
 
+    private function fromFile(string $name): array
+    {
+        $data = ['tasks' => []];
+        $path = sprintf('%s/configs/%s.yml', __DIR__, $name);
+        if (is_file($path)) {
+            $data = Yaml::parseFile($path);
+        }
+
+        return $data['tasks'];
+
+    }
 
 
 }

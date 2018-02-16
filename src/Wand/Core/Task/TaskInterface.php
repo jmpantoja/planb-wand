@@ -32,4 +32,18 @@ interface TaskInterface
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
     public static function create(array $params): TaskInterface;
+
+    /**
+     * Devuelve la descripción de la tarea
+     *
+     * @return string
+     */
+    public function getDescription(): string;
+
+    /**
+     * Devuelve las acciones definidas en esta tarea
+     *
+     * @return \PlanB\Wand\Core\Action\ActionInterface[]
+     */
+    public function getActions(): array;
 }
