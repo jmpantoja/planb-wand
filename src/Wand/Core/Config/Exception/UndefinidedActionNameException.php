@@ -9,7 +9,7 @@
  */
 
 
-namespace PlanB\Wand\Core\App\Exception;
+namespace PlanB\Wand\Core\Config\Exception;
 
 /**
  * Se lanza cuando en la configuración custom se trata de definir una tarea que no existe en default
@@ -27,7 +27,7 @@ class UndefinidedActionNameException extends \RuntimeException
      * @param string[] $availables
      * @param \Throwable|null $previous
      * s
-     * @return \PlanB\Wand\Core\App\Exception\UndefinidedActionNameException
+     * @return \PlanB\Wand\Core\Config\Exception\UndefinidedActionNameException
      */
     public static function create(string $task, array $names, array $availables, ?\Throwable $previous = null): self
     {

@@ -9,9 +9,11 @@
  */
 
 
-namespace PlanB\Wand\Core\Action;
+namespace PlanB\Wand\Core\File;
 
-class File extends Action
+use PlanB\Wand\Core\Action\ActionInterface;
+
+class File implements ActionInterface
 {
     /**
      * File constructor.
@@ -20,18 +22,27 @@ class File extends Action
      */
     private function __construct(array $options)
     {
-        //codecept_debug($options);
     }
 
     /**
      * Crea una nueva instancia
      *
      * @param mixed[] $options
-     * @return \PlanB\Wand\Core\Action\File
+     * @return \PlanB\Wand\Core\File\File
      *
      */
     public static function create(array $options): self
     {
         return new self($options);
+    }
+
+    /**
+     * Devuelve el nombre del evento asociado a esta acción
+     *
+     * @return string
+     */
+    public function getEventName(): string
+    {
+        return 'wand.file.execute';
     }
 }

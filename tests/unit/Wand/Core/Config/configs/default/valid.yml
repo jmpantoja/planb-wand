@@ -6,7 +6,7 @@ tasks:
     actions:
       readme:
         group: metainfo
-        classname: \PlanB\Wand\Core\Action\File
+        classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.metainfo.readme.twig'
           target: README.md
@@ -19,7 +19,7 @@ tasks:
     actions:
       readme:
         group: metainfo
-        classname: \PlanB\Wand\Core\Action\File
+        classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.metainfo.readme.twig'
           target: README.md

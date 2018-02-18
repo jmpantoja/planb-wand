@@ -1,11 +1,11 @@
 tasks:
   init:
-    classname: \PlanB\Wand\Core\Task\Task
+    classname: \PlanB\Wand\Core\Task\SimpleTask
     description: wubba lubba dub dub
     actions:
       readme:
         group: metainfo
-        classname: \PlanB\Wand\Core\Action\File
+        classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.metainfo.readme.twig'
           target: README.md
@@ -13,7 +13,7 @@ tasks:
           chmod: 0644
       license:
         group: metainfo
-        classname: \PlanB\Wand\Core\Action\File
+        classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.metainfo.readme.twig'
           target: README.md

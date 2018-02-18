@@ -9,7 +9,7 @@
  */
 
 
-namespace PlanB\Wand\Core\App;
+namespace PlanB\Wand\Core\Config;
 
 use PlanB\Utils\Path\Path;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -34,12 +34,11 @@ abstract class BaseConfig
      * Crea una nueva instancia
      *
      * @param \PlanB\Utils\Path\Path $path
-     * @return \PlanB\Wand\Core\App\BaseConfig
+     * @return \PlanB\Wand\Core\Config\BaseConfig
      */
     public static function create(Path $path): self
     {
-        $className = get_called_class();
-        return new $className($path);
+        return new static($path);
     }
 
     /**

@@ -9,7 +9,7 @@
  */
 
 
-namespace PlanB\Wand\Core\Action;
+namespace PlanB\Wand\Core\File;
 
 use PlanB\Utils\Dev\Tdd\Test\Unit;
 
@@ -18,7 +18,7 @@ use PlanB\Utils\Dev\Tdd\Test\Unit;
  * @package PlanB\Spine\Core\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  *
- * @coversDefaultClass \PlanB\Wand\Core\Action\File
+ * @coversDefaultClass \PlanB\Wand\Core\File\File
  */
 class FileTest extends Unit
 {
@@ -28,12 +28,15 @@ class FileTest extends Unit
      *
      * @covers ::__construct
      * @covers ::create
+     * @covers ::getEventName
      */
     public function create()
     {
         $file = File::create([]);
 
         $this->assertInstanceOf(File::class, $file);
+
+        $this->assertEquals('wand.file.execute', $file->getEventName());
 
     }
 }

@@ -9,7 +9,7 @@
  */
 
 
-namespace PlanB\Wand\Core\App;
+namespace PlanB\Wand\Core\Config;
 
 use PlanB\Utils\Dev\Tdd\Test\Data\Data;
 use PlanB\Utils\Dev\Tdd\Test\Data\Provider;
@@ -19,10 +19,10 @@ use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class CustomConfigTest
- * @package PlanB\Wand\Core\App
+ * @package PlanB\Wand\Core\Config
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  *
- * @coversDefaultClass \PlanB\Wand\Core\App\ConfigFilter
+ * @coversDefaultClass \PlanB\Wand\Core\Config\ConfigFilter
  */
 class ConfigFilterTest extends Unit
 {
@@ -68,7 +68,7 @@ class ConfigFilterTest extends Unit
      *
      * @dataProvider providerExtraTaskException
      *
-     * @expectedException \PlanB\Wand\Core\App\Exception\UndefinidedTaskNameException
+     * @expectedException \PlanB\Wand\Core\Config\Exception\UndefinidedTaskNameException
      */
     public function testExtraTaskException(Data $data)
     {
@@ -104,7 +104,7 @@ class ConfigFilterTest extends Unit
      *
      * @dataProvider providerExtraActionException
      *
-     * @expectedException \PlanB\Wand\Core\App\Exception\UndefinidedActionNameException
+     * @expectedException \PlanB\Wand\Core\Config\Exception\UndefinidedActionNameException
      */
     public function testExtraActionException(Data $data)
     {

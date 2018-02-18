@@ -9,21 +9,20 @@
  */
 
 
-namespace PlanB\Wand\Core\App;
+namespace PlanB\Wand\Core\Config;
 
 use PlanB\Utils\Path\Path;
 use PlanB\Wand\Core\Path\PathManager;
-use PlanB\Wand\Core\Task\TaskManager;
 
 /**
  * Gestiona la aplicación "wand"
  * Lee la configuración, crea los objetos action y task
  * y los añade a sus gestores correspondientes
  *
- * @package PlanB\Spine\Core\App
+ * @package PlanB\Spine\Core\Config
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
-class AppManager
+class ConfigManager
 {
 
     /**
@@ -31,28 +30,23 @@ class AppManager
      */
     private $pathManager;
 
-    /**
-     * @var \PlanB\Wand\Core\Task\TaskManager $taskManager
-     */
-    private $taskManager;
-
 
     /**
      * AppManager constructor.
      *
-     * @param \PlanB\Wand\Core\Task\TaskManager $taskManager
      * @param \PlanB\Wand\Core\Path\PathManager $pathManager
      */
-    public function __construct(TaskManager $taskManager, PathManager $pathManager)
+    public function __construct(PathManager $pathManager)
     {
-        $this->taskManager = $taskManager;
         $this->pathManager = $pathManager;
     }
 
     /**
-     * Inicializa wand
+     * Devuelve el array de tareas validado y bien formado
+     *
+     * @return mixed[]
      */
-    public function init(): void
+    public function getTasks(): array
     {
 
         $customPath = $this->getCustomPath();
@@ -65,7 +59,7 @@ class AppManager
             ->processWithFilter($custom);
 
 
-        $this->taskManager->setTasks($config['tasks']);
+        return $config['tasks'];
     }
 
 

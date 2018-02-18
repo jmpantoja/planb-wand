@@ -13,5 +13,10 @@ namespace PlanB\Wand\Core\Action;
 
 interface ActionInterface
 {
-
+    /**
+     * Devuelve el nombre del evento asociado a esta acción
+     *
+     * @return string
+     */
+    public function getEventName(): string;
 }

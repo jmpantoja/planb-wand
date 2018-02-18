@@ -1,12 +1,12 @@
 ---
 tasks:
   taskA:
-    classname: \PlanB\Wand\Core\Task\Task
+    classname: \PlanB\Wand\Core\Task\SimpleTask
     description: wubba lubba dub dub
     actions:
       actionA:
         group: metainfo
-        classname: \PlanB\Wand\Core\Action\File
+        classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.metainfo.readme.twig'
           target: README.md
@@ -15,7 +15,7 @@ tasks:
 
       actionB:
         group: metainfo
-        classname: \PlanB\Wand\Core\Action\File
+        classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.metainfo.readme.twig'
           target: README.md
@@ -23,12 +23,12 @@ tasks:
           chmod: 0644
 
   taskB:
-    classname: \PlanB\Wand\Core\Task\Task
+    classname: \PlanB\Wand\Core\Task\SimpleTask
     description: wubba lubba dub dub
     actions:
       actionA:
         group: metainfo
-        classname: \PlanB\Wand\Core\Action\File
+        classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.metainfo.readme.twig'
           target: README.md

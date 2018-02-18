@@ -9,7 +9,7 @@
  */
 
 
-namespace PlanB\Wand\Core\App;
+namespace PlanB\Wand\Core\Config;
 
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;

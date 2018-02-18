@@ -14,6 +14,8 @@ namespace PlanB\Spine\Core\Task;
 use PlanB\Utils\Dev\Tdd\Test\Unit;
 use PlanB\Utils\Path\Path;
 use PlanB\Wand\Core\Action\ActionInterface;
+use PlanB\Wand\Core\Action\ActionRunner;
+use PlanB\Wand\Core\Config\ConfigManager;
 use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskBuilder;
@@ -34,22 +36,18 @@ class TaskManagerTest extends Unit
     /**
      * @test
      *
+     * @covers ::__construct
      * @covers ::setTasks
      * @covers ::addTask
      * @covers ::exists
      */
     public function testSetTasks()
     {
-        $tasks = $this->fromFile('complete');
-
         $this->make(TaskBuilder::class, [
-            'buildTask' => $this->make(TaskInterface::class)
+            'buildTask' => $this->make(Task::class)
         ]);
 
-        $manager = new TaskManager();
-        $response = $manager->setTasks($tasks);
-
-        $this->assertInstanceOf(TaskManager::class, $response);
+        $manager = $this->getTaskManager();
 
         $this->assertTrue($manager->exists('taskA'));
         $this->assertTrue($manager->exists('taskB'));
@@ -61,15 +59,13 @@ class TaskManagerTest extends Unit
     /**
      * @test
      *
+     * @covers ::__construct
      * @covers ::get
      * @covers ::exists
      */
     public function testGetTask()
     {
-        $tasks = $this->fromFile('complete');
-
-        $manager = new TaskManager();
-        $manager->setTasks($tasks);
+        $manager = $this->getTaskManager();
 
         $task = $manager->get('taskA');
         $this->assertInstanceOf(TaskInterface::class, $task);
@@ -83,6 +79,7 @@ class TaskManagerTest extends Unit
     /**
      * @test
      *
+     * @covers ::__construct
      * @covers ::get
      * @covers ::exists
      *
@@ -93,29 +90,9 @@ class TaskManagerTest extends Unit
      */
     public function testGetTaskException()
     {
-        $tasks = $this->fromFile('complete');
-
-        $manager = new TaskManager();
-        $manager->setTasks($tasks);
+        $manager = $this->getTaskManager();
 
         $manager->get('taskXXX');
-
-    }
-
-    /**
-     * @test
-     *
-     * @covers ::run
-     */
-    public function testRun()
-    {
-        $tasks = $this->fromFile('complete');
-
-
-        $manager = new TaskManager();
-        $manager->setTasks($tasks);
-
-        $manager->run('taskA', false);
 
     }
 
@@ -131,5 +108,15 @@ class TaskManagerTest extends Unit
 
     }
 
+    private function getTaskManager(): TaskManager
+    {
+        $tasks = $this->fromFile('complete');
+
+        $config = $this->make(ConfigManager::class, [
+            'getTasks' => $tasks
+        ]);
+
+        return new TaskManager($config);
+    }
 
 }

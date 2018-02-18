@@ -10,12 +10,14 @@
 
 namespace PlanB\WandBundle\Command;
 
-use PlanB\Wand\Core\App\AppManager;
+use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Path\PathManager;
+
 use PlanB\Wand\Core\Task\TaskManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Comando con funcionalidades comunes
@@ -73,11 +75,11 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     /**
      * Devuelve el gestor de la aplicacion
      *
-     * @return \PlanB\Wand\Core\App\AppManager
+     * @return \PlanB\Wand\Core\Logger\LogManager
      */
-    public function getAppManager(): AppManager
+    public function getTaskRunner(): LogManager
     {
-        return $this->container->get('wand.app.manager');
+        return $this->container->get('wand.task.runner');
     }
 
     /**
@@ -88,5 +90,25 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     public function getPathManager(): PathManager
     {
         return $this->container->get('wand.path.manager');
+    }
+
+    /**
+     * Devuelve el dispatcher
+     *
+     * @return \Symfony\Component\EventDispatcher\EventDispatcher
+     */
+    public function getEventDispatcher(): EventDispatcher
+    {
+        return $this->container->get('event_dispatcher');
+    }
+
+    /**
+     * Devuelve el gestor de logs
+     *
+     * @return \PlanB\Wand\Core\Logger\LogManager
+     */
+    public function getLogger(): LogManager
+    {
+        return $this->container->get('wand.log.manager');
     }
 }

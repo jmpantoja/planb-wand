@@ -9,7 +9,7 @@
  */
 
 
-namespace PlanB\Wand\Core\App;
+namespace PlanB\Wand\Core\Config;
 
 use PlanB\Utils\Dev\Tdd\Test\Unit;
 use PlanB\Wand\Core\Path\PathManager;
@@ -22,36 +22,29 @@ use PlanB\Wand\Core\Task\TaskManager;
  * @package PlanB\Spine\Core\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  *
- * @coversDefaultClass \PlanB\Wand\Core\App\AppManager
+ * @coversDefaultClass \PlanB\Wand\Core\Config\ConfigManager
  */
-class AppManagerTest extends Unit
+class ConfigManagerTest extends Unit
 {
 
     /**
      * @test
      *
      * @covers ::__construct
-     * @covers ::init
+     * @covers ::getTasks
      * @covers ::getDefaultPath
      * @covers ::getCustomPath
      */
     public function testInit()
     {
-
-        $taskManager = $this->mock(TaskManager::class, [
-            'setTasks' => $this->make(TaskManager::class)
-        ]);
-
         $pathManager = $this->make(PathManager::class);
         $pathManager->build(null);
 
-        $manager = new AppManager($taskManager->make(), $pathManager);
-        $this->assertAttributeInstanceOf(TaskManager::class, 'taskManager', $manager);
+        $manager = new ConfigManager($pathManager);
+
         $this->assertAttributeInstanceOf(PathManager::class, 'pathManager', $manager);
 
-        $manager->init();
-
-        $taskManager->verify('setTasks', 1);
+        $manager->getTasks();
 
     }
 

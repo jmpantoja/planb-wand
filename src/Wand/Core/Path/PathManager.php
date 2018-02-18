@@ -92,7 +92,7 @@ class PathManager
             }
         }
 
-        if (empty($projectPath)) {
+        if (is_null($projectPath)) {
             throw InvalidProjectDirectoryException::composerMissing($projectDir);
         }
 

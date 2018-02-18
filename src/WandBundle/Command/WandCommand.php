@@ -46,12 +46,24 @@ class WandCommand extends BaseCommand
     {
 
         $taskName = $input->getArgument('task');
-        $projectDir = $input->getArgument('path');
         $onlyStaged = $input->getOption('only-staged');
 
-        $this->getPathManager()->build($projectDir);
-        $this->getAppManager()->init();
+        $this->build($input, $output);
 
-        $this->getTaskManager()->run($taskName, $onlyStaged);
+        $task = $this->getTaskManager()->get($taskName);
+
+
+        $task->setEventDispatcher($this->getEventDispatcher());
+        $task->setLogger($this->getLogger());
+
+        $task->launch($taskName);
+    }
+
+    protected function build(InputInterface $input, OutputInterface $output): void
+    {
+        $projectDir = $input->getArgument('path');
+
+        $this->getPathManager()->build($projectDir);
+        $this->getLogger()->setOutput($output);
     }
 }

@@ -11,6 +11,9 @@
 
 namespace PlanB\Wand\Core\Task;
 
+use PlanB\Wand\Core\Logger\LogManager;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
 /**
  * Modela una tarea
  *
@@ -25,13 +28,25 @@ interface TaskInterface
      * @param mixed[] $params
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
+    public static function create(array $params): TaskInterface;
+
+
     /**
-     * @inheritdoc
+     * Asigna el controlador de eventos
      *
-     * @param array $params
+     * @param \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
-    public static function create(array $params): TaskInterface;
+    public function setEventDispatcher(EventDispatcher $dispatcher): TaskInterface;
+
+
+    /**
+     * Asigna el gestor de logs
+     *
+     * @param \PlanB\Wand\Core\Logger\LogManager $logger
+     * @return \PlanB\Wand\Core\Task\TaskInterface
+     */
+    public function setLogger(LogManager $logger): TaskInterface;
 
     /**
      * Devuelve la descripción de la tarea
@@ -46,4 +61,9 @@ interface TaskInterface
      * @return \PlanB\Wand\Core\Action\ActionInterface[]
      */
     public function getActions(): array;
+
+    /**
+     * Lanza la tarea
+     */
+    public function launch(string $name): void;
 }

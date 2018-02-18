@@ -9,7 +9,7 @@
  */
 
 
-namespace PlanB\Wand\Core\App;
+namespace PlanB\Wand\Core\Config;
 
 use PlanB\Wand\Core\Action\ActionInterface;
 use PlanB\Wand\Core\Task\Task;

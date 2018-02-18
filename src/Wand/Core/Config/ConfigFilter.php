@@ -9,10 +9,10 @@
  */
 
 
-namespace PlanB\Wand\Core\App;
+namespace PlanB\Wand\Core\Config;
 
-use PlanB\Wand\Core\App\Exception\UndefinidedActionNameException;
-use PlanB\Wand\Core\App\Exception\UndefinidedTaskNameException;
+use PlanB\Wand\Core\Config\Exception\UndefinidedActionNameException;
+use PlanB\Wand\Core\Config\Exception\UndefinidedTaskNameException;
 
 /**
  * Aplica los filtros definidos en custom a la configuración original
@@ -51,7 +51,7 @@ final class ConfigFilter
      * @param mixed[] $config
      * @param mixed[] $custom
      *
-     * @return \PlanB\Wand\Core\App\ConfigFilter
+     * @return \PlanB\Wand\Core\Config\ConfigFilter
      */
     public static function create(array $config, array $custom): self
     {

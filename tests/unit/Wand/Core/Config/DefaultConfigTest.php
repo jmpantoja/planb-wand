@@ -9,7 +9,7 @@
  */
 
 
-namespace PlanB\Wand\Core\App;
+namespace PlanB\Wand\Core\Config;
 
 use PlanB\Utils\Dev\Tdd\Test\Data\Data;
 use PlanB\Utils\Dev\Tdd\Test\Data\Provider;
@@ -19,10 +19,10 @@ use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class CustomConfigTest
- * @package PlanB\Wand\Core\App
+ * @package PlanB\Wand\Core\Config
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  *
- * @coversDefaultClass \PlanB\Wand\Core\App\DefaultConfig
+ * @coversDefaultClass \PlanB\Wand\Core\Config\DefaultConfig
  */
 class DefaultConfigTest extends Unit
 {
@@ -40,10 +40,10 @@ class DefaultConfigTest extends Unit
      *
      * @covers ::processWithFilter
      *
-     * @covers       \PlanB\Wand\Core\App\BaseConfig::__construct
-     * @covers       \PlanB\Wand\Core\App\BaseConfig::create
-     * @covers       \PlanB\Wand\Core\App\BaseConfig::process
-     * @covers       \PlanB\Wand\Core\App\BaseConfig::readFromFile
+     * @covers       \PlanB\Wand\Core\Config\BaseConfig::__construct
+     * @covers       \PlanB\Wand\Core\Config\BaseConfig::create
+     * @covers       \PlanB\Wand\Core\Config\BaseConfig::process
+     * @covers       \PlanB\Wand\Core\Config\BaseConfig::readFromFile
      */
     public function testProcess(Data $data)
     {

@@ -11,6 +11,7 @@
 
 namespace PlanB\Wand\Core\Task;
 
+use PlanB\Wand\Core\Config\ConfigManager;
 use PlanB\Wand\Core\Task\Exception\TaskMissingException;
 
 /**
@@ -25,6 +26,20 @@ class TaskManager
      * @var \PlanB\Wand\Core\Task\TaskInterface[] $tasks
      */
     private $tasks;
+
+
+    /**
+     * @var \PlanB\Wand\Core\Config\ConfigManager $configManager
+     */
+    private $configManager;
+
+    public function __construct(ConfigManager $configManager)
+    {
+        $this->configManager = $configManager;
+
+        $tasks = $this->configManager->getTasks();
+        $this->setTasks($tasks);
+    }
 
     /**
      * Añade un conjunto de tareas definidas en un array de configuración
@@ -80,15 +95,5 @@ class TaskManager
         }
 
         return $this->tasks[$task];
-    }
-
-    /**
-     * Ejecuta una tarea
-     *
-     * @param string $taskName
-     * @param bool $onlyStage
-     */
-    public function run(string $taskName, bool $onlyStage): void
-    {
     }
 }
