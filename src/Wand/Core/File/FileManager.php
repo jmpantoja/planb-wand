@@ -23,6 +23,16 @@ class FileManager
 {
 
     /**
+     * @var \Twig_Environment $twig
+     */
+    private $twig;
+
+    public function __construct(\Twig_Environment $twig)
+    {
+        $this->twig = $twig;
+    }
+
+    /**
      * Crea / Elimina un archivo
      *
      * @param \PlanB\Wand\Core\File\File $file
@@ -31,10 +41,12 @@ class FileManager
     public function execute(File $file): LogMessage
     {
 
+        $template = $file->getTemplate();
+        $content = $this->twig->render($template, []);
 
-        return LogMessage::success('file success', [
-            'path' => 'la ruta',
-            'trace' => "asdadsadad\nasadasd\nadsadasda\nadsadasd",
+        return LogMessage::success($file->getTarget() . ' success', [
+            'path' => $file->getTarget(),
+            'trace' => $content,
         ]);
     }
 }

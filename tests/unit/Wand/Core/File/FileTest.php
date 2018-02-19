@@ -29,14 +29,32 @@ class FileTest extends Unit
      * @covers ::__construct
      * @covers ::create
      * @covers ::getEventName
+     *
+     * @covers ::getChmod
+     * @covers ::getAction
+     * @covers ::getTemplate
+     * @covers ::getTarget
+     * @covers ::getGroup
      */
     public function create()
     {
-        $file = File::create([]);
+        $file = File::create([
+            'group' => 'metainfo',
+            'params' => [
+                'template' => '@wand.metainfo.readme.twig',
+                'target' => 'README.md'
+            ]
+        ]);
 
         $this->assertInstanceOf(File::class, $file);
 
         $this->assertEquals('wand.file.execute', $file->getEventName());
 
+        $this->assertEquals(0644, $file->getChmod());
+        $this->assertEquals('create', $file->getAction());
+        $this->assertEquals('@wand.metainfo.readme.twig', $file->getTemplate());
+        $this->assertEquals('README.md', $file->getTarget());
+
+        $this->assertEquals('metainfo', $file->getGroup());
     }
 }

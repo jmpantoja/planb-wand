@@ -9,7 +9,7 @@ tasks:
         params:
           template: '@wand.metainfo.readme.twig'
           target: README.md
-          action: override # delete, create
+          action: create # delete, create
           chmod: 0644
       actionB:
         group: metainfo
@@ -17,5 +17,5 @@ tasks:
         params:
           template: '@wand.metainfo.readme.twig'
           target: README.md
-          action: override # delete, create
+          action: create # delete, create
           chmod: 0644
