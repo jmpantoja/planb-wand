@@ -9,14 +9,10 @@
  */
 
 
-namespace PlanB\Wand\Core\Path;
+namespace PlanB\Wand\Core\Logger\Message;
 
-use PlanB\Utils\Dev\Tdd\Test\Data\Data;
-use PlanB\Utils\Dev\Tdd\Test\Data\Provider;
 use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Wand\Core\Logger\LogManager;
-use PlanB\Wand\Core\Logger\LogMessage;
-use Symfony\Component\Console\Output\OutputInterface;
+use PlanB\Wand\Core\Logger\Message\LogMessage;
 
 
 /**
@@ -25,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package PlanB\Spine\Core\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  *
- * @coversDefaultClass \PlanB\Wand\Core\Logger\LogMessage
+ * @coversDefaultClass \PlanB\Wand\Core\Logger\Message\LogMessage
  */
 class LogMessageTest extends Unit
 {
@@ -37,6 +33,8 @@ class LogMessageTest extends Unit
      * @covers ::info
      * @covers ::parse
      * @covers ::parseVerbose
+     * @covers ::isInfo
+     * @covers ::getType
      */
     public function testInfo()
     {
@@ -48,6 +46,9 @@ class LogMessageTest extends Unit
         $verbose = $message->parseVerbose();
         $this->assertContains('<fg=default>title</>', $verbose[0]);
 
+        $this->assertTrue($message->isInfo());
+        $this->assertTrue($message->getType()->isInfo());
+
     }
 
     /**
@@ -57,6 +58,8 @@ class LogMessageTest extends Unit
      * @covers ::success
      * @covers ::parse
      * @covers ::parseVerbose
+     * @covers ::isSuccessful
+     * @covers ::getType
      */
     public function testSuccess()
     {
@@ -78,6 +81,8 @@ class LogMessageTest extends Unit
         $this->assertContains('line2', $verbose[4]);
         $this->assertContains('line3', $verbose[5]);
 
+        $this->assertTrue($message->isSuccessful());
+        $this->assertTrue($message->getType()->isSuccessful());
     }
 
 
@@ -88,6 +93,8 @@ class LogMessageTest extends Unit
      * @covers ::skip
      * @covers ::parse
      * @covers ::parseVerbose
+     * @covers ::isSkipped
+     * @covers ::getType
      */
     public function testSkip()
     {
@@ -109,6 +116,8 @@ class LogMessageTest extends Unit
         $this->assertContains('line2', $verbose[4]);
         $this->assertContains('line3', $verbose[5]);
 
+        $this->assertTrue($message->isSkipped());
+        $this->assertTrue($message->getType()->isSkipped());
     }
 
     /**
@@ -118,6 +127,8 @@ class LogMessageTest extends Unit
      * @covers ::error
      * @covers ::parse
      * @covers ::parseVerbose
+     * @covers ::isError
+     * @covers ::getType
      */
     public function testError()
     {
@@ -138,6 +149,9 @@ class LogMessageTest extends Unit
         $this->assertContains('line1', $verbose[3]);
         $this->assertContains('line2', $verbose[4]);
         $this->assertContains('line3', $verbose[5]);
+
+        $this->assertTrue($message->isError());
+        $this->assertTrue($message->getType()->isError());
 
     }
 

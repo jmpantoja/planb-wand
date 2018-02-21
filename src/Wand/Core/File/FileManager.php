@@ -11,7 +11,9 @@
 
 namespace PlanB\Wand\Core\File;
 
-use PlanB\Wand\Core\Logger\LogMessage;
+use PlanB\Wand\Core\Action\ActionEvent;
+use PlanB\Wand\Core\Logger\LogManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Gestiona los archivos
@@ -19,34 +21,57 @@ use PlanB\Wand\Core\Logger\LogMessage;
  * @package PlanB\Wand\Core\File
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
-class FileManager
+class FileManager implements EventSubscriberInterface
 {
+
+
+    /**
+     * @var \PlanB\Wand\Core\Logger\LogManager $logger
+     */
+    private $logger;
 
     /**
      * @var \Twig_Environment $twig
      */
     private $twig;
 
-    public function __construct(\Twig_Environment $twig)
+
+    public function __construct(LogManager $logger, \Twig_Environment $twig)
     {
+        $this->logger = $logger;
         $this->twig = $twig;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @return array The event names to listen to
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            'wand.file.execute' => 'execute',
+        ];
     }
 
     /**
      * Crea / Elimina un archivo
      *
-     * @param \PlanB\Wand\Core\File\File $file
-     * @return \PlanB\Wand\Core\Logger\LogMessage
+     * @param \PlanB\Wand\Core\Action\ActionEvent $event
      */
-    public function execute(File $file): LogMessage
+    public function execute(ActionEvent $event): void
     {
+
+        $file = $event->getFile();
 
         $template = $file->getTemplate();
         $content = $this->twig->render($template, []);
 
-        return LogMessage::success($file->getTarget() . ' success', [
+        $event->error($file->getTarget() . ' success', [
             'path' => $file->getTarget(),
             'trace' => $content,
         ]);
+
+        $this->logger->log($event);
     }
 }

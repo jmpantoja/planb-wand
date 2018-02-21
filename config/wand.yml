@@ -3,6 +3,9 @@ tasks:
     classname: \PlanB\Wand\Core\Task\SimpleTask
     description: wubba lubba dub dub
     actions:
+      context:
+        group: context
+        classname: \PlanB\Wand\Core\File\File
       readme:
         group: metainfo
         classname: \PlanB\Wand\Core\File\File

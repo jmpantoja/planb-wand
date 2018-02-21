@@ -9,12 +9,12 @@
  */
 
 
-namespace PlanB\Wand\Core\Logger;
+namespace PlanB\Wand\Core\Logger\Message;
 
 /**
  * Formatea un mensaje de log
  *
- * @package PlanB\Wand\Core\Logger
+ * @package PlanB\Wand\Core\Logger\Message
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 final class LogFormat
@@ -22,6 +22,11 @@ final class LogFormat
 
     public const PADDING_LENGTH = 80;
     private const TAB = '  ';
+
+    /**
+     * @var \PlanB\Wand\Core\Logger\Message\MessageType $type
+     */
+    private $type;
 
     /**
      * @var string $color
@@ -35,11 +40,15 @@ final class LogFormat
 
     /**
      * LogFormat constructor.
+     *
+     * @param \PlanB\Wand\Core\Logger\Message\MessageType $type
+     *
      * @param string $color
      * @param null|string $resume
      */
-    private function __construct(string $color, ?string $resume = null)
+    private function __construct(MessageType $type, string $color, ?string $resume = null)
     {
+        $this->type = $type;
         $this->color = $color;
         $this->resume = $resume;
     }
@@ -47,44 +56,54 @@ final class LogFormat
     /**
      * Crea una nueva instancia, tipo info
      *
-     * @return \PlanB\Wand\Core\Logger\LogFormat
+     * @return \PlanB\Wand\Core\Logger\Message\LogFormat
      */
     public static function info(): self
     {
-        return new static('default');
+        return new static(MessageType::INFO(), 'default');
     }
 
 
     /**
      * Crea una nueva instancia, tipo success
      *
-     * @return \PlanB\Wand\Core\Logger\LogFormat
+     * @return \PlanB\Wand\Core\Logger\Message\LogFormat
      */
     public static function success(): self
     {
-        return new static('green', 'OK');
+        return new static(MessageType::SUCCESS(), 'green', 'OK');
     }
 
 
     /**
      * Crea una nueva instancia, tipo skip
      *
-     * @return \PlanB\Wand\Core\Logger\LogFormat
+     * @return \PlanB\Wand\Core\Logger\Message\LogFormat
      */
     public static function skip(): self
     {
-        return new static('yellow', 'SKIP');
+        return new static(MessageType::SKIP(), 'yellow', 'SKIP');
     }
 
 
     /**
      * Crea una nueva instancia, tipo skip
      *
-     * @return \PlanB\Wand\Core\Logger\LogFormat
+     * @return \PlanB\Wand\Core\Logger\Message\LogFormat
      */
     public static function error(): self
     {
-        return new static('red', 'ERROR');
+        return new static(MessageType::ERROR(), 'red', 'ERROR');
+    }
+
+    /**
+     * Devuelve el tipo de mensaje
+     *
+     * @return \PlanB\Wand\Core\Logger\Message\MessageType
+     */
+    public function getType(): MessageType
+    {
+        return $this->type;
     }
 
 

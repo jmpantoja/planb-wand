@@ -9,15 +9,9 @@
  */
 
 
-namespace PlanB\Wand\Core\Path;
+namespace PlanB\Wand\Core\Logger\Message;
 
-use PlanB\Utils\Dev\Tdd\Test\Data\Data;
-use PlanB\Utils\Dev\Tdd\Test\Data\Provider;
 use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Wand\Core\Logger\LogFormat;
-use PlanB\Wand\Core\Logger\LogManager;
-use PlanB\Wand\Core\Logger\LogMessage;
-use Symfony\Component\Console\Output\OutputInterface;
 
 
 /**
@@ -25,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package PlanB\Spine\Core\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  *
- * @coversDefaultClass \PlanB\Wand\Core\Logger\LogFormat
+ * @coversDefaultClass \PlanB\Wand\Core\Logger\Message\LogFormat
  */
 class LogFormatTest extends Unit
 {
@@ -42,6 +36,8 @@ class LogFormatTest extends Unit
      *
      * @covers ::verbose
      * @covers ::formatVerbose
+     *
+     * @covers ::getType
      */
     public function testInfo()
     {
@@ -50,6 +46,7 @@ class LogFormatTest extends Unit
         $title = $format->title('title');
         $this->assertContains('<fg=default>title</>', $title[0]);
 
+        $this->assertTrue($format->getType()->isInfo());
     }
 
     /**
@@ -66,6 +63,8 @@ class LogFormatTest extends Unit
      * @covers ::formatVerbose
      * @covers ::addTabs
      * @covers ::toLines
+     *
+     * @covers ::getType
      */
     public function testSuccess()
     {
@@ -103,6 +102,8 @@ class LogFormatTest extends Unit
         $this->assertContains('<fg=green>XXXXXXXXXXXXXXX', $bigTitle[0]);
         $this->assertContains('<fg=green>OK</>', $bigTitle[0]);
         $this->assertNotContains('.', $bigTitle[0]);
+
+        $this->assertTrue($format->getType()->isSuccessful());
     }
 
 
@@ -120,6 +121,8 @@ class LogFormatTest extends Unit
      * @covers ::formatVerbose
      * @covers ::addTabs
      * @covers ::toLines
+     *
+     * @covers ::getType
      */
     public function testSkip()
     {
@@ -140,6 +143,8 @@ class LogFormatTest extends Unit
         $this->assertContains('line1', $verbose[2]);
         $this->assertContains('line2', $verbose[3]);
         $this->assertContains('line3', $verbose[4]);
+
+        $this->assertTrue($format->getType()->isSkipped());
     }
 
 
@@ -157,6 +162,8 @@ class LogFormatTest extends Unit
      * @covers ::formatVerbose
      * @covers ::addTabs
      * @covers ::toLines
+     *
+     * @covers ::getType
      */
     public function testError()
     {
@@ -177,5 +184,7 @@ class LogFormatTest extends Unit
         $this->assertContains('line1', $verbose[2]);
         $this->assertContains('line2', $verbose[3]);
         $this->assertContains('line3', $verbose[4]);
+
+        $this->assertTrue($format->getType()->isError());
     }
 }

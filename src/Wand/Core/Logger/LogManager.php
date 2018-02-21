@@ -11,7 +11,15 @@
 
 namespace PlanB\Wand\Core\Logger;
 
-use Symfony\Component\Console\Output\OutputInterface;
+use PlanB\Wand\Core\Action\ActionEvent;
+
+use PlanB\Wand\Core\Logger\Confirm\ConfirmEvent;
+use PlanB\Wand\Core\Logger\Confirm\ConfirmMessage;
+use PlanB\Wand\Core\Logger\Message\LogMessage;
+use PlanB\Wand\Core\Logger\Message\MessageEvent;
+use PlanB\Wand\Core\Logger\Question\QuestionEvent;
+use PlanB\Wand\Core\Logger\Question\QuestionMessage;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Gestor de logs
@@ -23,20 +31,18 @@ class LogManager
 {
 
     /**
-     * @var \Symfony\Component\Console\Output\OutputInterface $output
+     * @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
      */
-    private $output;
+    private $dispatcher;
 
     /**
-     * Asgina el output
+     * LogManager constructor.
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @return \PlanB\Wand\Core\Logger\LogManager
+     * @param \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
      */
-    public function setOutput(OutputInterface $output): self
+    public function __construct(EventDispatcher $dispatcher)
     {
-        $this->output = $output;
-        return $this;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -47,7 +53,7 @@ class LogManager
     public function info(string $title): void
     {
         $message = LogMessage::info($title);
-        $this->log($message);
+        $this->message($message);
     }
 
     /**
@@ -59,7 +65,7 @@ class LogManager
     public function success(string $title, array $verbose = []): void
     {
         $message = LogMessage::success($title, $verbose);
-        $this->log($message);
+        $this->message($message);
     }
 
     /**
@@ -71,7 +77,7 @@ class LogManager
     public function skip(string $title, array $verbose = []): void
     {
         $message = LogMessage::skip($title, $verbose);
-        $this->log($message);
+        $this->message($message);
     }
 
     /**
@@ -83,34 +89,61 @@ class LogManager
     public function error(string $title, array $verbose = []): void
     {
         $message = LogMessage::error($title, $verbose);
-        $this->log($message);
+        $this->message($message);
     }
 
 
     /**
      * Muestra un LogMessage por consola
      *
-     * @param \PlanB\Wand\Core\Logger\LogMessage $message
+     * @param \PlanB\Wand\Core\Action\ActionEvent $event
      */
-    public function log(LogMessage $message): void
+    public function log(ActionEvent $event): void
     {
-        $isNormal = $this->isNormalVerbosity();
-
-
-        if ($isNormal) {
-            $this->output->writeln($message->parse());
-        } else {
-            $this->output->writeln($message->parseVerbose());
-        }
+        $this->message($event->getMessage());
     }
 
     /**
-     * Indica si estamos en modo verbosity quiet o normal
+     * Muestra un LogMessage por consola
      *
+     * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
+     */
+    public function message(LogMessage $message): void
+    {
+        $event = new MessageEvent($message);
+        $this->dispatcher->dispatch('wand.log.message', $event);
+    }
+
+
+    /**
+     * Pide información al usuario
+     *
+     * @param \PlanB\Wand\Core\Logger\Question\QuestionMessage $question
+     * @return string
+     */
+    public function question(QuestionMessage $question): string
+    {
+        $event = new QuestionEvent($question);
+        $this->dispatcher->dispatch('wand.log.question', $event);
+
+        return $event->getAnswer();
+    }
+
+    /**
+     * Pide confirmación al usuario
+     *
+     * @param string $message
+     * @param bool $default
      * @return bool
      */
-    protected function isNormalVerbosity(): bool
+    public function confirm(string $message, bool $default = true): bool
     {
-        return $this->output->getVerbosity() <= OutputInterface::VERBOSITY_NORMAL;
+        $question = ConfirmMessage::create($message)
+            ->setDefault($default);
+
+        $event = new ConfirmEvent($question);
+        $this->dispatcher->dispatch('wand.log.confirm', $event);
+
+        return $event->getAnswer();
     }
 }

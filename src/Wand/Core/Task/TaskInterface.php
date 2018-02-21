@@ -30,6 +30,13 @@ interface TaskInterface
      */
     public static function create(array $params): TaskInterface;
 
+    /**
+     * Asigna un nombre a la tarea
+     *
+     * @param string $name
+     * @return \PlanB\Wand\Core\Task\TaskInterface
+     */
+    public function setName(string $name): TaskInterface;
 
     /**
      * Asigna el controlador de eventos
@@ -65,5 +72,5 @@ interface TaskInterface
     /**
      * Lanza la tarea
      */
-    public function launch(string $name): void;
+    public function launch(): void;
 }

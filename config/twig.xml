@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="wand.twig_debug" class="Twig_Extension_Debug"/>
+
+        <service id="wand.twig_loader" class="Twig_Loader_Filesystem">
+            <call method="addPath">
+                <argument type="string">src/Wand/MetaInfo/config/views</argument>
+                <argument type="string">wand.metainfo</argument>
+            </call>
+        </service>
+
+        <service id="wand.twig" class="Twig_Environment">
+            <argument type="service" id="wand.twig_loader"/>
+            <argument type="collection">
+                <argument key="debug">constant('true')</argument>
+            </argument>
+            <call method="addExtension">
+                <argument type="service" id="wand.twig_debug"/>
+            </call>
+        </service>
+
+    </services>
+</container>

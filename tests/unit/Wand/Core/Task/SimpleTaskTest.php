@@ -12,6 +12,7 @@
 namespace PlanB\Spine\Core\Task;
 
 use PlanB\Utils\Dev\Tdd\Test\Unit;
+use PlanB\Wand\Core\Action\ActionEvent;
 use PlanB\Wand\Core\File\FileManager;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Task\SimpleTask;
@@ -35,19 +36,82 @@ class SimpleTaskTest extends Unit
      * @covers ::execute
      *
      * @covers \PlanB\Wand\Core\Task\Task::run
-     * @covers \PlanB\Wand\Core\Task\Task::launch()
+     * @covers \PlanB\Wand\Core\Task\Task::launch
+     * @covers \PlanB\Wand\Core\Task\Task::setName
+     * @covers \PlanB\Wand\Core\Task\Task::isValidContext
      *
      */
-    public function testLaunch()
+    public function testLaunchValidContext()
     {
 
         $logger = $this->mock(LogManager::class, [
             'info' => null
         ]);
 
-        $dispatcher = $this->mock(EventDispatcher::class, [
-            'dispatch' => null
+        $task = $this->getTask($logger, true);
+
+        $this->assertInstanceOf(SimpleTask::class, $task);
+
+        $task->setName('init');
+        $task->launch();
+
+        $logger->verify('info', 1, ['Running init task...']);
+    }
+
+
+    /**
+     * @test
+     *
+     * @covers ::execute
+     *
+     * @covers \PlanB\Wand\Core\Task\Task::run
+     * @covers \PlanB\Wand\Core\Task\Task::launch
+     * @covers \PlanB\Wand\Core\Task\Task::setName
+     * @covers \PlanB\Wand\Core\Task\Task::isValidContext
+     *
+     */
+    public function testLaunchInValidContext()
+    {
+
+        $logger = $this->mock(LogManager::class, [
+            'info' => null
         ]);
+
+        $task = $this->getTask($logger, false);
+
+        $this->assertInstanceOf(SimpleTask::class, $task);
+
+        $task->setName('init');
+        $task->launch();
+
+        $logger->verify('info', 0);
+    }
+
+
+
+
+    private function getTask($logger, $validContext)
+    {
+        $this->make(ActionEvent::class, [
+            'isError' => false
+        ]);
+
+        $dispatcher = new EventDispatcher();
+
+        $dispatcher->addListener('wand.context.execute', function (ActionEvent $event) use ($validContext) {
+
+            if ($validContext) {
+                $event->success('ok');
+            } else {
+                $event->error('ok');
+            }
+
+        });
+
+        $dispatcher->addListener('wand.file.execute', function (ActionEvent $event) {
+            $event->success('ok');
+        });
+
 
         $tasks = $this->fromFile('complete');
         $options = $tasks['taskA'];
@@ -55,15 +119,10 @@ class SimpleTaskTest extends Unit
         $builder = TaskBuilder::create();
         $task = $builder->buildTask($options);
 
-        $task->setEventDispatcher($dispatcher->make());
+        $task->setEventDispatcher($dispatcher);
         $task->setLogger($logger->make());
 
-        $this->assertInstanceOf(SimpleTask::class, $task);
-
-        $task->launch('init');
-
-        $logger->verify('info', 1);
-
+        return $task;
     }
 
 

@@ -100,6 +100,27 @@ class PathManagerTest extends Unit
         $this->assertEquals(realpath('.'), $manager->projectDir());
     }
 
+
+    /**
+     * @test
+     *
+     * @covers ::__construct
+     * @covers ::build
+     * @covers ::sanitizePathArgument
+     * @covers ::composerJsonPath
+     */
+    public function composerJsonPath()
+    {
+        $manager = new PathManager();
+
+        $target = sprintf('%s/composer.json', realpath('.'));
+        $manager->build(__FILE__);
+        $this->assertEquals($target, $manager->composerJsonPath());
+
+        $manager->build(realpath('.'));
+        $this->assertEquals($target, $manager->composerJsonPath());
+    }
+
     /**
      * @test
      *

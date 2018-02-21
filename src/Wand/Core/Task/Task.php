@@ -11,11 +11,12 @@
 
 namespace PlanB\Wand\Core\Task;
 
+use PlanB\Wand\Core\Action\ActionEvent;
 use PlanB\Wand\Core\Action\ActionInterface;
 use PlanB\Wand\Core\Logger\LogManager;
+use PlanB\Wand\Core\Logger\Message\LogMessage;
 use PlanB\Wand\Core\Task\Exception\ActionMissingException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Tareas
@@ -29,6 +30,11 @@ abstract class Task implements TaskInterface
      * @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
      */
     protected $dispatcher;
+
+    /**
+     * @var string $name
+     */
+    private $name = '<??>';
 
     /**
      * @var \PlanB\Wand\Core\Logger\LogManager $logger
@@ -70,6 +76,18 @@ abstract class Task implements TaskInterface
         return new static($options);
     }
 
+    /**
+     * @inheritdoc
+     *
+     * @param string $name
+     * @return \PlanB\Wand\Core\Task\TaskInterface
+     */
+    public function setName(string $name): TaskInterface
+    {
+        $this->name = $name;
+        return $this;
+    }
+
 
     /**
      * @inheritdoc
@@ -91,7 +109,6 @@ abstract class Task implements TaskInterface
      */
     public function setLogger(LogManager $logger): TaskInterface
     {
-
         $this->logger = $logger;
         return $this;
     }
@@ -148,24 +165,45 @@ abstract class Task implements TaskInterface
      * Ejecuta una acción
      *
      * @param string $action
+     * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
-    public function run(string $action): void
+    public function run(string $action): LogMessage
     {
         $action = $this->get($action);
         $name = $action->getEventName();
 
-        $event = new GenericEvent($action);
+        $event = new ActionEvent($action);
         $this->dispatcher->dispatch($name, $event);
+
+        return $event->getMessage();
     }
 
     /**
      * Lanza la tarea
      */
-    public function launch(string $name): void
+    public function launch(): void
     {
-        $title = sprintf('Running %s task...', $name);
+        if (!$this->isValidContext()) {
+            return;
+        }
+
+        $title = sprintf('Running %s task...', $this->name);
         $this->logger->info($title);
         $this->execute();
+    }
+
+    /**
+     * Comprueba que los valores del composer.json sean correctos
+     * antes de ejecutar la tarea
+     *
+     * @return bool
+     */
+    protected function isValidContext(): bool
+    {
+        $event = new ActionEvent();
+        $this->dispatcher->dispatch('wand.context.execute', $event);
+
+        return $event->isNotError();
     }
 
     /**

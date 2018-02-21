@@ -5,45 +5,61 @@
         http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="event_dispatcher.class">\Symfony\Component\EventDispatcher\EventDispatcher</parameter>
-        <parameter key="wand.config.manager.class">\PlanB\Wand\Core\Config\ConfigManager</parameter>
+        <!--log-->
+        <parameter key="wand.log.manager.class">\PlanB\Wand\Core\Logger\LogManager</parameter>
+
+        <!--path-->
         <parameter key="wand.path.manager.class">\PlanB\Wand\Core\Path\PathManager</parameter>
+
+        <!--config-->
+        <parameter key="wand.config.manager.class">\PlanB\Wand\Core\Config\ConfigManager</parameter>
+
+        <!--task-->
         <parameter key="wand.task.manager.class">\PlanB\Wand\Core\Task\TaskManager</parameter>
 
-        <parameter key="wand.log.manager.class">\PlanB\Wand\Core\Logger\LogManager</parameter>
+        <!--context-->
+        <parameter key="wand.context.composer.info.class">\PlanB\Wand\Core\Context\ComposerInfo</parameter>
+        <parameter key="wand.context.manager.class">\PlanB\Wand\Core\Context\ContextManager</parameter>
+
+        <!--file-->
         <parameter key="wand.file.manager.class">\PlanB\Wand\Core\File\FileManager</parameter>
-
-        <parameter key="wand.action.subscriber.class">\PlanB\Wand\Core\Action\ActionSubscriber</parameter>
-
-
     </parameters>
 
     <services>
 
-        <service id="wand.log.manager" class="%wand.log.manager.class%"/>
-        <service id="wand.file.manager" class="%wand.file.manager.class%"/>
-
-        <service id="wand.action.subscriber" class="%wand.action.subscriber.class%">
-            <argument type="service" id="wand.file.manager"/>
-            <argument type="service" id="wand.log.manager"/>
+        <!--logger-->
+        <service id="wand.log.manager" class="%wand.log.manager.class%">
+            <argument type="service" id="event_dispatcher"/>
         </service>
 
-        <service id="event_dispatcher" class="%event_dispatcher.class%">
-            <call method="addSubscriber">
-                <argument type="service" id="wand.action.subscriber"/>
-            </call>
-        </service>
-
+        <!--path-->
         <service id="wand.path.manager" class="%wand.path.manager.class%"/>
 
+        <!--config-->
         <service id="wand.config.manager" class="%wand.config.manager.class%">
             <argument type="service" id="wand.path.manager"/>
         </service>
 
+        <!--tasks-->
         <service id="wand.task.manager" class="%wand.task.manager.class%">
             <argument type="service" id="wand.config.manager"/>
         </service>
 
+        <!--context-->
+        <service id="wand.context.composer.info" class="%wand.context.composer.info.class%">
+            <argument type="service" id="wand.path.manager"/>
+        </service>
+
+        <service id="wand.context.manager" class="%wand.context.manager.class%">
+            <argument type="service" id="wand.log.manager"/>
+            <argument type="service" id="wand.context.composer.info"/>
+        </service>
+
+        <!--file-->
+        <service id="wand.file.manager" class="%wand.file.manager.class%">
+            <argument type="service" id="wand.log.manager"/>
+            <argument type="service" id="wand.twig"/>
+        </service>
 
     </services>
 </container>

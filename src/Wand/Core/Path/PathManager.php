@@ -109,6 +109,11 @@ class PathManager
         return $this->projectDir;
     }
 
+    public function composerJsonPath(): string
+    {
+        return Path::join($this->projectDir, 'composer.json');
+    }
+
     /**
      * Devuelve la ruta del proyecto wand
      *

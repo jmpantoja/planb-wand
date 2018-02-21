@@ -11,6 +11,7 @@
 
 namespace PlanB\WandBundle\Command;
 
+use PlanB\Wand\Core\Task\TaskInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -44,26 +45,49 @@ class WandCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
-        $taskName = $input->getArgument('task');
         $onlyStaged = $input->getOption('only-staged');
 
-        $this->build($input, $output);
+        $this->initPaths($input);
+
+        $task = $this->buildTask($input, $output);
+        $task->launch();
+    }
+
+    /**
+     * Indica al pathManager cual es la ruta raiz del proyecto
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     */
+    private function initPaths(InputInterface $input): void
+    {
+        $projectDir = $input->getArgument('path');
+        $this->getPathManager()->build($projectDir);
+    }
+
+    /**
+     * Prepara una tarea para ser ejecutada
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return \PlanB\Wand\Core\Task\TaskInterface
+     */
+    private function buildTask(InputInterface $input, OutputInterface $output): TaskInterface
+    {
+        $taskName = $input->getArgument('task');
+
+        $helperSet = $this->getHelperSet();
+
+        $consoleManager = ConsoleManager::create($input, $output, $helperSet);
+
+        $dispatcher = $this->getEventDispatcher();
+        $dispatcher->addSubscriber($consoleManager);
 
         $task = $this->getTaskManager()->get($taskName);
 
-
-        $task->setEventDispatcher($this->getEventDispatcher());
+        $task->setName($taskName);
+        $task->setEventDispatcher($dispatcher);
         $task->setLogger($this->getLogger());
 
-        $task->launch($taskName);
-    }
-
-    protected function build(InputInterface $input, OutputInterface $output): void
-    {
-        $projectDir = $input->getArgument('path');
-
-        $this->getPathManager()->build($projectDir);
-        $this->getLogger()->setOutput($output);
+        return $task;
     }
 }
