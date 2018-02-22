@@ -11,7 +11,8 @@
 
 namespace PlanB\Wand\Core\File;
 
-use PlanB\Wand\Core\Action\ActionInterface;
+use PlanB\Utils\Path\Path;
+use PlanB\Wand\Core\Action\Action;
 
 /**
  * Representa a un fichero del proyecto
@@ -19,8 +20,11 @@ use PlanB\Wand\Core\Action\ActionInterface;
  * @package PlanB\Wand\Core\File
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
-class File implements ActionInterface
+class File extends Action
 {
+
+    public const ACTION_CREATE = 'create';
+    public const ACTION_REMOVE = 'remove';
 
     /**
      * @var int $chmod
@@ -47,15 +51,6 @@ class File implements ActionInterface
      */
     private $group;
 
-    /**
-     * Devuelve el nombre del evento asociado a esta acción
-     *
-     * @return string
-     */
-    public function getEventName(): string
-    {
-        return 'wand.file.execute';
-    }
 
     /**
      * File constructor.
@@ -70,6 +65,7 @@ class File implements ActionInterface
         $this->target = $params['target'];
         $this->group = $params['group'];
     }
+
 
     /**
      * Crea una nueva instancia
@@ -128,6 +124,32 @@ class File implements ActionInterface
     public function getTarget(): string
     {
         return $this->target;
+    }
+
+    /**
+     * Devuelve la ruta absoluta de destino
+     *
+     * @return string
+     */
+    public function getPath(): string
+    {
+        $projectDir = $this->getPathManager()
+            ->projectDir();
+
+        return Path::join($projectDir, $this->target);
+    }
+
+    /**
+     * Indica si el fichero ya existe
+     *
+     * @return bool
+     */
+    public function exists(): bool
+    {
+        $path = $this->getPath();
+        $path = Path::create($path);
+
+        return $path->exists();
     }
 
     /**

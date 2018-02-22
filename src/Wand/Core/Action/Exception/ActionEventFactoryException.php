@@ -14,25 +14,23 @@ namespace PlanB\Wand\Core\Action\Exception;
 use PlanB\Wand\Core\Action\ActionInterface;
 
 /**
- * Se lanza cuando un ActionEvent no devuelve una acción del tipo esperado
+ * Se lanza cuando falla la creación de un ActionEvent
  *
  * @package PlanB\Wand\Core\Action\Exception
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
-class InvalidActionException extends \RuntimeException
+class ActionEventFactoryException extends \RuntimeException
 {
-
     /**
-     * Se esperaba un File, pero devuelve otra cosa
+     * No se puede crear un ActionEvent para un Action
      *
      * @param \PlanB\Wand\Core\Action\ActionInterface $action
-     * @param \Throwable $previous
-     * @return \PlanB\Wand\Core\Action\Exception\InvalidActionException
+     * @param \Throwable|null $previous
+     * @return \PlanB\Wand\Core\Action\Exception\ActionEventFactoryException
      */
-    public static function expectedFile(ActionInterface $action, ?\Throwable $previous = null): self
+    public static function create(ActionInterface $action, ?\Throwable $previous = null): self
     {
-        $message = sprintf('la acción es de tipo %s, y se esperaba un File', get_class($action));
-
+        $message = sprintf("No es posible crear un evento para la clase '%s' ", get_class($action));
         return new self($message, 0, $previous);
     }
 }

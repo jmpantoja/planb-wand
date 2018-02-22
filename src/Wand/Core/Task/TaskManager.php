@@ -33,9 +33,21 @@ class TaskManager
      */
     private $configManager;
 
-    public function __construct(ConfigManager $configManager)
+    /**
+     * @var \PlanB\Wand\Core\Task\TaskBuilder $builder
+     */
+    private $builder;
+
+    /**
+     * TaskManager constructor.
+     *
+     * @param \PlanB\Wand\Core\Config\ConfigManager $configManager
+     * @param \PlanB\Wand\Core\Task\TaskBuilder $builder
+     */
+    public function __construct(ConfigManager $configManager, TaskBuilder $builder)
     {
         $this->configManager = $configManager;
+        $this->builder = $builder;
 
         $tasks = $this->configManager->getTasks();
         $this->setTasks($tasks);
@@ -49,9 +61,9 @@ class TaskManager
      */
     public function setTasks(array $tasks): self
     {
-        $builder = TaskBuilder::create();
+
         foreach ($tasks as $name => $task) {
-            $this->addTask($name, $builder->buildTask($task));
+            $this->addTask($name, $this->builder->buildTask($task));
         }
 
         return $this;

@@ -12,6 +12,7 @@
 namespace PlanB\Wand\Core\Task;
 
 use PlanB\Wand\Core\Action\ActionEvent;
+use PlanB\Wand\Core\Action\ActionEventFactory;
 use PlanB\Wand\Core\Action\ActionInterface;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
@@ -169,13 +170,27 @@ abstract class Task implements TaskInterface
      */
     public function run(string $action): LogMessage
     {
-        $action = $this->get($action);
-        $name = $action->getEventName();
+        $event = $this->getEvent($action);
+        $name = $event->getName();
 
-        $event = new ActionEvent($action);
         $this->dispatcher->dispatch($name, $event);
 
+        $this->logger->log($event);
         return $event->getMessage();
+    }
+
+    /**
+     * Crea un evento para una acción
+     *
+     * @param string $name
+     * @return \PlanB\Wand\Core\Action\ActionEvent
+     */
+    private function getEvent(string $name): ActionEvent
+    {
+        $action = $this->get($name);
+        $event = ActionEventFactory::fromAction($action);
+
+        return $event;
     }
 
     /**
@@ -183,9 +198,7 @@ abstract class Task implements TaskInterface
      */
     public function launch(): void
     {
-        if (!$this->isValidContext()) {
-            return;
-        }
+        $this->validateContext();
 
         $title = sprintf('Running %s task...', $this->name);
         $this->logger->info($title);
@@ -196,14 +209,10 @@ abstract class Task implements TaskInterface
      * Comprueba que los valores del composer.json sean correctos
      * antes de ejecutar la tarea
      *
-     * @return bool
      */
-    protected function isValidContext(): bool
+    protected function validateContext(): void
     {
-        $event = new ActionEvent();
-        $this->dispatcher->dispatch('wand.context.execute', $event);
-
-        return $event->isNotError();
+        $this->dispatcher->dispatch('wand.context.execute');
     }
 
     /**

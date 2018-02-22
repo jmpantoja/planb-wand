@@ -40,9 +40,9 @@ class FileOptions extends Options
     {
         $resolver->setDefined('action');
         $resolver->addAllowedTypes('action', ['string', 'null']);
-        $resolver->addAllowedValues('action', ['create', 'remove']);
+        $resolver->addAllowedValues('action', [File::ACTION_CREATE, File::ACTION_REMOVE]);
 
-        $resolver->setDefault('action', 'create');
+        $resolver->setDefault('action', File::ACTION_CREATE);
     }
 
 

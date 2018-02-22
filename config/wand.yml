@@ -12,13 +12,13 @@ tasks:
         params:
           template: '@wand.metainfo/readme.twig'
           target: README.md
-          action: create # delete, create
+          action: create #remove|create
           chmod: 0644
       license:
         group: metainfo
-        classname: \PlanB\Wand\Core\File\File
+        classname: \PlanB\Wand\MetaInfo\File\License
         params:
           template: '@wand.metainfo/readme.twig'
-          target: README.md
-          action: create # delete, create
+          target: LICENSE
+          action: remove #remove|create
           chmod: 0644

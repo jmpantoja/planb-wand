@@ -13,8 +13,10 @@ namespace PlanB\Spine\Core\Task;
 
 use PlanB\Utils\Dev\Tdd\Test\Unit;
 use PlanB\Wand\Core\Action\ActionInterface;
+use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -31,19 +33,26 @@ class TaskBuilderTest extends Unit
      * @test
      *
      * @covers ::__construct
-     * @covers ::create
+     * @covers ::setContainer
      *
      * @covers ::buildTask
      * @covers ::resolveActions
      * @covers ::buildAction
-     *
      */
     public function create()
     {
         $tasks = $this->fromFile('complete');
 
+        $pathManager = $this->make(PathManager::class, [
+            'projectDir' => realpath('.')
+        ]);
+
+        $container = new ContainerBuilder();
+        $container->set('wand.path.manager', $pathManager);
+
         foreach ($tasks as $options) {
-            $builder = TaskBuilder::create();
+
+            $builder = new TaskBuilder($container);
             $task = $builder->buildTask($options);
             $this->assertInstanceOf(Task::class, $task);
 

@@ -15,6 +15,7 @@
         <parameter key="wand.config.manager.class">\PlanB\Wand\Core\Config\ConfigManager</parameter>
 
         <!--task-->
+        <parameter key="wand.task.builder.class">\PlanB\Wand\Core\Task\TaskBuilder</parameter>
         <parameter key="wand.task.manager.class">\PlanB\Wand\Core\Task\TaskManager</parameter>
 
         <!--context-->
@@ -41,8 +42,13 @@
         </service>
 
         <!--tasks-->
+        <service id="wand.task.builder" class="%wand.task.builder.class%">
+            <argument type="service" id="service_container"/>
+        </service>
+
         <service id="wand.task.manager" class="%wand.task.manager.class%">
             <argument type="service" id="wand.config.manager"/>
+            <argument type="service" id="wand.task.builder"/>
         </service>
 
         <!--context-->
@@ -57,8 +63,8 @@
 
         <!--file-->
         <service id="wand.file.manager" class="%wand.file.manager.class%">
-            <argument type="service" id="wand.log.manager"/>
             <argument type="service" id="wand.twig"/>
+            <argument type="service" id="wand.context.manager"/>
         </service>
 
     </services>

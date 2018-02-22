@@ -12,6 +12,8 @@
 namespace PlanB\Wand\Core\Task;
 
 use PlanB\Wand\Core\Action\ActionInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Se encarga de instancias tareas
@@ -19,24 +21,28 @@ use PlanB\Wand\Core\Action\ActionInterface;
  * @package PlanB\Wand\Core\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
-final class TaskBuilder
+class TaskBuilder implements ContainerAwareInterface
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface $container
+     */
+    private $container;
 
     /**
      * TaskBuilder constructor.
+     *
+     * TaskBuilder constructor.
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    private function __construct()
+    public function __construct(ContainerInterface $container)
     {
+        $this->setContainer($container);
     }
 
-    /**
-     * Crea una nueva instancia
-     *
-     * @return \PlanB\Wand\Core\Task\TaskBuilder
-     */
-    public static function create(): self
+
+    public function setContainer(?ContainerInterface $container = null): void
     {
-        return new self();
+        $this->container = $container;
     }
 
     /**
@@ -85,6 +91,9 @@ final class TaskBuilder
         $className = $options['classname'];
         unset($options['classname']);
 
-        return $className::create($options);
+        $action = $className::create($options);
+        $action->setContainer($this->container);
+
+        return $action;
     }
 }

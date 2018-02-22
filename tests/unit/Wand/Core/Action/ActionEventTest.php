@@ -13,88 +13,82 @@ namespace PlanB\Wand\Core\Action;
 
 use PlanB\Utils\Dev\Tdd\Test\Unit;
 use PlanB\Wand\Core\File\File;
-
+use PlanB\Wand\Core\File\FileEvent;
 
 /**
- * Class LogMessageTest
- *
- * @package PlanB\Spine\Core\Task
+ * Class CustomConfigTest
+ * @package PlanB\Wand\Core\Config
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  *
  * @coversDefaultClass \PlanB\Wand\Core\Action\ActionEvent
  */
 class ActionEventTest extends Unit
 {
-
     /**
      * @test
-     *
-     * @covers ::__construct
-     *
      * @covers ::success
      * @covers ::skip
      * @covers ::error
-     * @covers ::isNotError
      *
-     * @covers ::getAction
+     * @covers ::isNotError
      * @covers ::getMessage
      *
      */
-    public function testCreate()
+    public function testMessage()
     {
-        $action = $this->make(ActionInterface::class);
+        $file = $this->make(File::class, [
+            'getTarget' => 'target',
+            'getPath' => 'target',
+            'getAction' => 'action',
+        ]);
+        $event = new FileEvent($file);
 
-        $event = new ActionEvent($action);
-        $this->assertEquals($action, $event->getAction());
-
-
-        $event->success('message');
+        $event->success();
         $this->assertTrue($event->getMessage()->isSuccessful());
         $this->assertTrue($event->isNotError());
 
-        $event->skip('message');
+        $event->skip();
         $this->assertTrue($event->getMessage()->isSkipped());
         $this->assertTrue($event->isNotError());
 
+        $event->error();
+        $this->assertTrue($event->getMessage()->isError());
+        $this->assertFalse($event->isNotError());
 
         $event->error('message');
         $this->assertTrue($event->getMessage()->isError());
+
+        $this->assertContains('<fg=red>ERROR:</> message', $event->getMessage()->parseVerbose());
+        $this->assertFalse($event->isNotError());
+    }
+
+
+
+    /**
+     * @test
+     * @covers ::getMessage
+     *
+     */
+    public function testMessageException()
+    {
+        $file = $this->make(File::class, [
+            'getTarget' => 'target',
+            'getPath' => 'target',
+            'getAction' => 'action',
+        ]);
+        $event = new FileEvent($file);
+
+        $event->getMessage();
+
+        $this->assertTrue($event->getMessage()->isError());
+
+        $lines = $event->getMessage()->parseVerbose();
+        $this->assertContains('No se ha asignado un estado despues de ejecutar la acción', $lines[0]);
         $this->assertFalse($event->isNotError());
 
     }
 
-    /**
-     * @test
-     *
-     * @covers ::__construct
-     * @covers ::getFile
-     *
-     */
-    public function testFile()
-    {
-        $action = $this->make(File::class);
 
-        $event = new ActionEvent($action);
-        $this->assertEquals($action, $event->getFile());
-    }
 
-    /**
-     * @test
-     *
-     * @covers ::__construct
-     * @covers ::getFile
-     *
-     * @covers \PlanB\Wand\Core\Action\Exception\InvalidActionException::expectedFile
-     *
-     * @expectedException \PlanB\Wand\Core\Action\Exception\InvalidActionException
-     * @expectedExceptionMessageRegExp   /la acción es de tipo \w+, y se esperaba un File/
-     */
-    public function testFileException()
-    {
-        $action = $this->make(ActionInterface::class);
-
-        $event = new ActionEvent($action);
-        $this->assertEquals($action, $event->getFile());
-    }
 
 }

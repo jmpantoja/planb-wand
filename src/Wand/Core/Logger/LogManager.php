@@ -52,7 +52,9 @@ class LogManager
      */
     public function info(string $title): void
     {
-        $message = LogMessage::info($title);
+        $message = LogMessage::info()
+            ->setTitle($title);
+
         $this->message($message);
     }
 
@@ -64,7 +66,9 @@ class LogManager
      */
     public function success(string $title, array $verbose = []): void
     {
-        $message = LogMessage::success($title, $verbose);
+        $message = LogMessage::success()
+            ->setTitle($title)
+            ->setVerbose($verbose);
         $this->message($message);
     }
 
@@ -76,7 +80,10 @@ class LogManager
      */
     public function skip(string $title, array $verbose = []): void
     {
-        $message = LogMessage::skip($title, $verbose);
+        $message = LogMessage::skip()
+            ->setTitle($title)
+            ->setVerbose($verbose);
+
         $this->message($message);
     }
 
@@ -88,7 +95,10 @@ class LogManager
      */
     public function error(string $title, array $verbose = []): void
     {
-        $message = LogMessage::error($title, $verbose);
+        $message = LogMessage::error()
+            ->setTitle($title)
+            ->setVerbose($verbose);
+
         $this->message($message);
     }
 

@@ -145,12 +145,14 @@ class LogManagerTest extends Unit
             $this->assertTrue($event->getMessage()->isInfo());
 
             $lines = $event->getMessage()->parse();
+
             $this->assertContains('<fg=default>message</>', $lines[0]);
 
         });
 
         $event = $this->make(ActionEvent::class, [
-            'getMessage' => LogMessage::info('message')
+            'getMessage' => LogMessage::info()
+                ->setTitle('message')
         ]);
 
         $logger = new LogManager($dispatcher);

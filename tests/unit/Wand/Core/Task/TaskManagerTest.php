@@ -43,10 +43,6 @@ class TaskManagerTest extends Unit
      */
     public function testSetTasks()
     {
-        $this->make(TaskBuilder::class, [
-            'buildTask' => $this->make(Task::class)
-        ]);
-
         $manager = $this->getTaskManager();
 
         $this->assertTrue($manager->exists('taskA'));
@@ -112,11 +108,20 @@ class TaskManagerTest extends Unit
     {
         $tasks = $this->fromFile('complete');
 
+        $builder = $this->make(TaskBuilder::class, [
+            'buildTask' => $this->make(Task::class, [
+                'getActions' => [
+                    $this->make(ActionInterface::class),
+                    $this->make(ActionInterface::class)
+                ]
+            ])
+        ]);
+
         $config = $this->make(ConfigManager::class, [
             'getTasks' => $tasks
         ]);
 
-        return new TaskManager($config);
+        return new TaskManager($config, $builder);
     }
 
 }

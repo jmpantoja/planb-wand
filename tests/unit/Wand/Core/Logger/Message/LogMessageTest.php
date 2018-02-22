@@ -30,6 +30,10 @@ class LogMessageTest extends Unit
      * @test
      *
      * @covers ::__construct
+     *
+     * @covers ::setTitle
+     * @covers ::setVerbose
+     *
      * @covers ::info
      * @covers ::parse
      * @covers ::parseVerbose
@@ -38,7 +42,8 @@ class LogMessageTest extends Unit
      */
     public function testInfo()
     {
-        $message = LogMessage::info('title');
+        $message = LogMessage::info()
+            ->setTitle('title');
 
         $normal = $message->parse();
         $this->assertContains('<fg=default>title</>', $normal[0]);
@@ -55,6 +60,11 @@ class LogMessageTest extends Unit
      * @test
      *
      * @covers ::__construct
+     *
+     * @covers ::setTitle
+     * @covers ::setVerbose
+     * @covers ::addVerbose
+     *
      * @covers ::success
      * @covers ::parse
      * @covers ::parseVerbose
@@ -63,10 +73,13 @@ class LogMessageTest extends Unit
      */
     public function testSuccess()
     {
-        $message = LogMessage::success('title', [
-            'A' => 'simple',
-            'B' => "line1\nline2\nline3\nline4"
-        ]);
+        $message = LogMessage::success()
+            ->setTitle('title')
+            ->setVerbose([
+                'A' => 'simple',
+                'B' => "line1\nline2\nline3\nline4"
+            ])
+            ->addVerbose('extra', 'simple');
 
         $normal = $message->parse();
         $this->assertContains('<fg=green>title</>', $normal[0]);
@@ -80,6 +93,8 @@ class LogMessageTest extends Unit
         $this->assertContains('line1', $verbose[3]);
         $this->assertContains('line2', $verbose[4]);
         $this->assertContains('line3', $verbose[5]);
+        $this->assertContains('line4', $verbose[6]);
+        $this->assertContains('<fg=green>EXTRA:</> simple', $verbose[7]);
 
         $this->assertTrue($message->isSuccessful());
         $this->assertTrue($message->getType()->isSuccessful());
@@ -90,6 +105,11 @@ class LogMessageTest extends Unit
      * @test
      *
      * @covers ::__construct
+     *
+     * @covers ::setTitle
+     * @covers ::setVerbose
+     * @covers ::addVerbose
+     *
      * @covers ::skip
      * @covers ::parse
      * @covers ::parseVerbose
@@ -98,10 +118,13 @@ class LogMessageTest extends Unit
      */
     public function testSkip()
     {
-        $message = LogMessage::skip('title', [
-            'A' => 'simple',
-            'B' => "line1\nline2\nline3\nline4"
-        ]);
+        $message = LogMessage::skip()
+            ->setTitle('title')
+            ->setVerbose([
+                'A' => 'simple',
+                'B' => "line1\nline2\nline3\nline4"
+            ])
+            ->addVerbose('extra', 'simple');;
 
         $normal = $message->parse();
         $this->assertContains('<fg=yellow>title</>', $normal[0]);
@@ -115,6 +138,8 @@ class LogMessageTest extends Unit
         $this->assertContains('line1', $verbose[3]);
         $this->assertContains('line2', $verbose[4]);
         $this->assertContains('line3', $verbose[5]);
+        $this->assertContains('line4', $verbose[6]);
+        $this->assertContains('<fg=yellow>EXTRA:</> simple', $verbose[7]);
 
         $this->assertTrue($message->isSkipped());
         $this->assertTrue($message->getType()->isSkipped());
@@ -124,6 +149,11 @@ class LogMessageTest extends Unit
      * @test
      *
      * @covers ::__construct
+     *
+     * @covers ::setTitle
+     * @covers ::setVerbose
+     * @covers ::addVerbose
+     *
      * @covers ::error
      * @covers ::parse
      * @covers ::parseVerbose
@@ -132,10 +162,14 @@ class LogMessageTest extends Unit
      */
     public function testError()
     {
-        $message = LogMessage::error('title', [
-            'A' => 'simple',
-            'B' => "line1\nline2\nline3\nline4"
-        ]);
+
+        $message = LogMessage::error()
+            ->setTitle('title')
+            ->setVerbose([
+                'A' => 'simple',
+                'B' => "line1\nline2\nline3\nline4"
+            ])
+            ->addVerbose('extra', 'simple');;
 
         $normal = $message->parse();
         $this->assertContains('<fg=red>title</>', $normal[0]);
@@ -149,6 +183,8 @@ class LogMessageTest extends Unit
         $this->assertContains('line1', $verbose[3]);
         $this->assertContains('line2', $verbose[4]);
         $this->assertContains('line3', $verbose[5]);
+        $this->assertContains('line4', $verbose[6]);
+        $this->assertContains('<fg=red>EXTRA:</> simple', $verbose[7]);
 
         $this->assertTrue($message->isError());
         $this->assertTrue($message->getType()->isError());

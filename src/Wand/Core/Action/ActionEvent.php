@@ -11,8 +11,6 @@
 
 namespace PlanB\Wand\Core\Action;
 
-use PlanB\Wand\Core\Action\Exception\InvalidActionException;
-use PlanB\Wand\Core\File\File;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -22,60 +20,39 @@ use Symfony\Component\EventDispatcher\Event;
  * @package PlanB\Wand\Core\Action
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
-class ActionEvent extends Event
+abstract class ActionEvent extends Event
 {
-    /**
-     * @var \PlanB\Wand\Core\Action\ActionInterface $action
-     */
-    private $action;
-
     /**
      * @var \PlanB\Wand\Core\Logger\Message\LogMessage $message
      */
-    private $message;
+    protected $message;
 
 
     /**
-     * ActionEvent constructor.
+     * Devuelve el nombre del evento
      *
-     * @param \PlanB\Wand\Core\Action\ActionInterface|null $action
+     * @return string
      */
-    public function __construct(?ActionInterface $action = null)
-    {
-        $this->action = $action;
-    }
+    abstract public function getName(): string;
 
     /**
-     * Devuelve la acción
+     * Configura el mensaje de log
      *
-     * @return \PlanB\Wand\Core\Action\ActionInterface
+     * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
      */
-    public function getAction(): ActionInterface
-    {
-        return $this->action;
-    }
-
-
-    public function getFile(): File
-    {
-        if (!$this->action instanceof File) {
-            throw InvalidActionException::expectedFile($this->action);
-        }
-
-        return $this->action;
-    }
+    abstract public function configureLog(LogMessage $message): void;
 
     /**
      * Crea un mensaje de log tipo success
      *
-     * @param string $title
-     * @param string[] $verbose
-     *
      * @return \PlanB\Wand\Core\Action\ActionEvent
      */
-    public function success(string $title, array $verbose = []): self
+    public function success(): self
     {
-        $this->message = LogMessage::success($title, $verbose);
+        $message = LogMessage::success();
+        $this->configureLog($message);
+
+        $this->message = $message;
         return $this;
     }
 
@@ -83,14 +60,14 @@ class ActionEvent extends Event
     /**
      * Crea un mensaje de log tipo skip
      *
-     * @param string $title
-     * @param string[] $verbose
-     *
      * @return \PlanB\Wand\Core\Action\ActionEvent
      */
-    public function skip(string $title, array $verbose = []): self
+    public function skip(): self
     {
-        $this->message = LogMessage::skip($title, $verbose);
+        $message = LogMessage::skip();
+        $this->configureLog($message);
+
+        $this->message = $message;
         return $this;
     }
 
@@ -98,16 +75,22 @@ class ActionEvent extends Event
     /**
      * Crea un mensaje de log tipo error
      *
-     * @param string $title
-     * @param string[] $verbose
-     *
+     * @param null|string $errorMessage
      * @return \PlanB\Wand\Core\Action\ActionEvent
      */
-    public function error(string $title, array $verbose = []): self
+    public function error(?string $errorMessage = null): self
     {
-        $this->message = LogMessage::error($title, $verbose);
+        $message = LogMessage::error();
+        $this->configureLog($message);
+
+        if (is_string($errorMessage)) {
+            $message->addVerbose('error', $errorMessage);
+        }
+
+        $this->message = $message;
         return $this;
     }
+
 
     /**
      * Indica que el mensaje NO es de tipo error
@@ -116,7 +99,7 @@ class ActionEvent extends Event
      */
     public function isNotError(): bool
     {
-        return !$this->message->isError();
+        return !$this->getMessage()->isError();
     }
 
     /**
@@ -126,6 +109,11 @@ class ActionEvent extends Event
      */
     public function getMessage(): LogMessage
     {
+        if (empty($this->message)) {
+            $this->message = LogMessage::error()
+                ->setTitle('No se ha asignado un estado despues de ejecutar la acción');
+        }
+
         return $this->message;
     }
 }

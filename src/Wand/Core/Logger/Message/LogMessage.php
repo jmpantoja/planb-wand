@@ -21,6 +21,11 @@ final class LogMessage
 {
 
     /**
+     * @var \PlanB\Wand\Core\Logger\Message\LogFormat $format
+     */
+    private $format;
+
+    /**
      * @var \PlanB\Wand\Core\Logger\Message\MessageType $type
      */
     private $type;
@@ -39,67 +44,95 @@ final class LogMessage
      * LogMessage constructor.
      *
      * @param \PlanB\Wand\Core\Logger\Message\LogFormat $format
-     * @param string $title
-     * @param string[] $verbose
      */
-    private function __construct(LogFormat $format, string $title, array $verbose = [])
+    private function __construct(LogFormat $format)
     {
+        $this->format = $format;
         $this->type = $format->getType();
-        $this->title = $format->title($title);
-        $this->verbose = $format->verbose($verbose);
+        $this->title = [];
+        $this->verbose = [];
+    }
+
+    /**
+     * Asigna el titulo
+     *
+     * @param string $title
+     * @return \PlanB\Wand\Core\Logger\Message\LogMessage
+     */
+    public function setTitle(string $title): LogMessage
+    {
+        $this->title = $this->format->title($title);
+        return $this;
+    }
+
+    /**
+     * Asigna las lineas de verbose
+     *
+     * @param string[] $verbose
+     * @return \PlanB\Wand\Core\Logger\Message\LogMessage
+     */
+    public function setVerbose(array $verbose): LogMessage
+    {
+        $this->verbose = $this->format->verbose($verbose);
+        return $this;
+    }
+
+    /**
+     * Añade una linea al verbose
+     *
+     * @param string $title
+     * @param string $body
+     *
+     * @return \PlanB\Wand\Core\Logger\Message\LogMessage
+     */
+    public function addVerbose(string $title, string $body): LogMessage
+    {
+        $verbose = $this->format->verbose([$title => $body]);
+        $this->verbose = array_merge($this->verbose, $verbose);
+
+        return $this;
     }
 
 
     /**
      *  Crea una nueva instancia de mensaje tipo "info"
      *
-     * @param string $title
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
-    public static function info(string $title): LogMessage
+    public static function info(): LogMessage
     {
-        $format = LogFormat::info();
-        return new self($format, $title);
+        return new self(LogFormat::info());
     }
 
     /**
      * Crea una nueva instancia de mensaje tipo  "success"
      *
-     * @param string $title
-     * @param string[] $verbose
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
-    public static function success(string $title, array $verbose = []): self
+    public static function success(): self
     {
-        $format = LogFormat::success();
-        return new self($format, $title, $verbose);
+        return new self(LogFormat::success());
     }
 
     /**
      * Crea una nueva instancia de mensaje tipo  "skip"
      *
-     * @param string $title
-     * @param string[] $verbose
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
-    public static function skip(string $title, array $verbose = []): self
+    public static function skip(): self
     {
-        $format = LogFormat::skip();
-        return new self($format, $title, $verbose);
+        return new self(LogFormat::skip());
     }
 
 
     /**
      * Crea una nueva instancia de mensaje tipo  "error"
      *
-     * @param string $title
-     * @param string[] $verbose
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
-    public static function error(string $title, array $verbose = []): self
+    public static function error(): self
     {
-        $format = LogFormat::error();
-        return new self($format, $title, $verbose);
+        return new self(LogFormat::error());
     }
 
     /**

@@ -9,10 +9,17 @@
  */
 
 
-namespace PlanB\Wand\Core\Action;
+namespace PlanB\Wand\MetaInfo\File;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use PlanB\Wand\Core\File\File;
 
-interface ActionInterface extends ContainerAwareInterface
+/**
+ * Representa al archivo LICENSE
+ *
+ * @package PlanB\Wand\MetaInfo\File
+ * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
+ */
+class License extends File
 {
+
 }

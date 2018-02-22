@@ -12,6 +12,11 @@
 namespace PlanB\Wand\Core\File;
 
 use PlanB\Utils\Dev\Tdd\Test\Unit;
+use PlanB\Wand\Core\Action\Action;
+use PlanB\Wand\Core\Path\PathManager;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 
 /**
  * Class TaskManagerTest
@@ -28,16 +33,27 @@ class FileTest extends Unit
      *
      * @covers ::__construct
      * @covers ::create
-     * @covers ::getEventName
      *
      * @covers ::getChmod
      * @covers ::getAction
      * @covers ::getTemplate
      * @covers ::getTarget
      * @covers ::getGroup
+     *
+     * @covers ::getPath
+     * @covers ::exists
+     *
      */
     public function create()
     {
+        $pathManager = $this->make(PathManager::class, [
+            'projectDir' => '/path/to/project'
+        ]);
+
+        $container = new ContainerBuilder();
+        $container->set('wand.path.manager', $pathManager);
+
+
         $file = File::create([
             'group' => 'metainfo',
             'params' => [
@@ -46,14 +62,16 @@ class FileTest extends Unit
             ]
         ]);
 
-        $this->assertInstanceOf(File::class, $file);
+        $file->setContainer($container);
 
-        $this->assertEquals('wand.file.execute', $file->getEventName());
+        $this->assertInstanceOf(File::class, $file);
 
         $this->assertEquals(0644, $file->getChmod());
         $this->assertEquals('create', $file->getAction());
         $this->assertEquals('@wand.metainfo.readme.twig', $file->getTemplate());
         $this->assertEquals('README.md', $file->getTarget());
+        $this->assertEquals('/path/to/project/README.md', $file->getPath());
+        $this->assertFalse($file->exists());
 
         $this->assertEquals('metainfo', $file->getGroup());
     }

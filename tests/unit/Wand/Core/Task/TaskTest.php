@@ -20,6 +20,7 @@ use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskBuilder;
 use PlanB\Wand\Core\Task\TaskInterface;
 use PlanB\Wand\Core\Task\TaskManager;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
 
@@ -49,7 +50,14 @@ class TaskTest extends Unit
         $tasks = $this->fromFile('complete');
 
         foreach ($tasks as $options) {
-            $builder = TaskBuilder::create();
+            $pathManager = $this->make(PathManager::class, [
+                'projectDir' => realpath('.')
+            ]);
+
+            $container = new ContainerBuilder();
+            $container->set('wand.path.manager', $pathManager);
+
+            $builder = new TaskBuilder($container);
             $task = $builder->buildTask($options);
             $task->setEventDispatcher($this->make(EventDispatcher::class));
             $task->setLogger($this->make(LogManager::class));
@@ -79,7 +87,14 @@ class TaskTest extends Unit
         $tasks = $this->fromFile('complete');
         $options = $tasks['taskA'];
 
-        $builder = TaskBuilder::create();
+        $pathManager = $this->make(PathManager::class, [
+            'projectDir' => realpath('.')
+        ]);
+
+        $container = new ContainerBuilder();
+        $container->set('wand.path.manager', $pathManager);
+
+        $builder = new TaskBuilder($container);
         $task = $builder->buildTask($options);
 
         $this->assertInstanceOf(Task::class, $task);
@@ -110,7 +125,15 @@ class TaskTest extends Unit
         $tasks = $this->fromFile('complete');
         $options = $tasks['taskA'];
 
-        $builder = TaskBuilder::create();
+        $pathManager = $this->make(PathManager::class, [
+            'projectDir' => realpath('.')
+        ]);
+
+        $container = new ContainerBuilder();
+        $container->set('wand.path.manager', $pathManager);
+
+        $builder = new TaskBuilder($container);
+
         $task = $builder->buildTask($options);
         $this->assertInstanceOf(Task::class, $task);
 

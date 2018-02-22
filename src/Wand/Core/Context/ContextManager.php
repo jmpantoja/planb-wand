@@ -11,7 +11,6 @@
 
 namespace PlanB\Wand\Core\Context;
 
-use PlanB\Wand\Core\Action\ActionEvent;
 use PlanB\Wand\Core\Context\Property\AuthorEmailProperty;
 use PlanB\Wand\Core\Context\Property\AuthorHomepageProperty;
 use PlanB\Wand\Core\Context\Property\AuthorNameProperty;
@@ -89,7 +88,7 @@ class ContextManager implements EventSubscriberInterface
      *
      * @param \PlanB\Wand\Core\Action\ActionEvent $event
      */
-    public function execute(ActionEvent $event): void
+    public function execute(): void
     {
 
         $this->logger->info('Checking composer.json info...');
@@ -98,8 +97,6 @@ class ContextManager implements EventSubscriberInterface
         }
 
         $this->info->save();
-
-        $event->success('ok');
     }
 
     /**
@@ -110,7 +107,7 @@ class ContextManager implements EventSubscriberInterface
     public function toArray(): array
     {
         if (empty($this->values)) {
-            $this->execute(new ActionEvent());
+            $this->execute();
         }
         return $this->values;
     }

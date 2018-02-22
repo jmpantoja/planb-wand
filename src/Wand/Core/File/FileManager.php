@@ -11,9 +11,9 @@
 
 namespace PlanB\Wand\Core\File;
 
-use PlanB\Wand\Core\Action\ActionEvent;
-use PlanB\Wand\Core\Logger\LogManager;
+use PlanB\Wand\Core\Context\ContextManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Gestiona los archivos
@@ -24,22 +24,21 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class FileManager implements EventSubscriberInterface
 {
 
-
-    /**
-     * @var \PlanB\Wand\Core\Logger\LogManager $logger
-     */
-    private $logger;
-
     /**
      * @var \Twig_Environment $twig
      */
     private $twig;
 
+    /**
+     * @var \PlanB\Wand\Core\Context\ContextManager $context
+     */
+    private $context;
 
-    public function __construct(LogManager $logger, \Twig_Environment $twig)
+
+    public function __construct(\Twig_Environment $twig, ContextManager $context)
     {
-        $this->logger = $logger;
         $this->twig = $twig;
+        $this->context = $context;
     }
 
     /**
@@ -50,28 +49,87 @@ class FileManager implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'wand.file.execute' => 'execute',
+            'wand.file.create' => 'create',
+            'wand.file.remove' => 'remove',
         ];
     }
 
     /**
-     * Crea / Elimina un archivo
+     * Crea un archivo
      *
-     * @param \PlanB\Wand\Core\Action\ActionEvent $event
+     * @param \PlanB\Wand\Core\File\FileEvent $event
      */
-    public function execute(ActionEvent $event): void
+    public function create(FileEvent $event): void
+    {
+        $file = $event->getFile();
+
+        if ($file->exists()) {
+            $event->skip();
+        } else {
+            $this->dumpFile($event);
+        }
+    }
+
+    /**
+     * Escribe el archivo en disco
+     *
+     * @param \PlanB\Wand\Core\File\FileEvent $event
+     */
+    private function dumpFile(FileEvent $event): void
+    {
+        $fileSystem = new Filesystem();
+        $file = $event->getFile();
+
+        $template = $file->getTemplate();
+        $params = $this->context->toArray();
+        $path = $file->getPath();
+        $chmod = $file->getChmod();
+
+        try {
+            $content = $this->twig->render($template, $params);
+
+            $fileSystem->dumpFile($path, $content);
+            $fileSystem->chmod($path, $chmod);
+
+            $event->success();
+        } catch (\Throwable $exception) {
+            $message = $exception->getMessage();
+            $event->error($message);
+        }
+    }
+
+    /**
+     * Elimina un archivo
+     *
+     * @param \PlanB\Wand\Core\File\FileEvent $event
+     */
+    public function remove(FileEvent $event): void
     {
 
         $file = $event->getFile();
 
-        $template = $file->getTemplate();
-        $content = $this->twig->render($template, []);
+        if (!$file->exists()) {
+            $event->skip();
+        } else {
+            $this->deleteFile($event);
+        }
+    }
 
-        $event->error($file->getTarget() . ' success', [
-            'path' => $file->getTarget(),
-            'trace' => $content,
-        ]);
+    /**
+     * Borra un archivo de disco
+     */
+    private function deleteFile(FileEvent $event): void
+    {
+        $fileSystem = new Filesystem();
+        $file = $event->getFile();
+        $path = $file->getPath();
 
-        $this->logger->log($event);
+        try {
+            $fileSystem->remove($path);
+            $event->success();
+        } catch (\Throwable $exception) {
+            $message = $exception->getMessage();
+            $event->error($message);
+        }
     }
 }

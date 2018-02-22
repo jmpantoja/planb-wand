@@ -109,6 +109,12 @@ class PathManager
         return $this->projectDir;
     }
 
+
+    /**
+     * Devuelve la ruta del archivo composer.json
+     *
+     * @return string
+     */
     public function composerJsonPath(): string
     {
         return Path::join($this->projectDir, 'composer.json');
