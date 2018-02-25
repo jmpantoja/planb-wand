@@ -11,10 +11,14 @@
 
 namespace PlanB\Wand\Core\Config;
 
-use PlanB\Utils\Dev\Tdd\Test\Data\Data;
-use PlanB\Utils\Dev\Tdd\Test\Data\Provider;
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Wand\Core\App\Exception\UndefinidedTaskNameException;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
+use PlanB\Utils\Dev\Tdd\Data\Data;
+use PlanB\Utils\Dev\Tdd\Data\Provider;
+
+
+use PlanB\Wand\Core\Config\Exception\UndefinidedActionNameException;
+use PlanB\Wand\Core\Config\Exception\UndefinidedTaskNameException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -26,6 +30,14 @@ use Symfony\Component\Yaml\Yaml;
  */
 class ConfigFilterTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var \UnitTester
+     */
+    protected $tester;
+
     /**
      * @test
      * @dataProvider providerProcess
@@ -33,17 +45,18 @@ class ConfigFilterTest extends Unit
      */
     public function testFilter(Data $data)
     {
-        $file = $data->file;
 
-        $default = $this->fromFile('original');
-        $custom = $this->fromFile($file);
-        $expected = $this->fromFile($file . '.expected');
+        $data->expectException($data->exception, function (Data $data) {
+            $default = $data->default;
+            $custom = $data->custom;
+            $expected = $data->expected;
 
-        $response = ConfigFilter::create($default, $custom)
-            ->process();
+            $response = ConfigFilter::create($default, $custom)
+                ->process();
 
+            $this->tester->assertEquals($expected['tasks'], $response);
+        }, $this->tester);
 
-        $this->assertEquals($expected['tasks'], $response);
 
     }
 
@@ -51,85 +64,47 @@ class ConfigFilterTest extends Unit
     {
         return Provider::create()
             ->add([
-                'file' => 'complete'
+                'default' => $this->fromFile('original'),
+                'custom' => $this->fromFile('complete'),
+                'expected' => $this->fromFile('complete.expected'),
+                'exception' => null
             ], 'complete')
             ->add([
-                'file' => 'task_unset'
-            ], 'task unset')
+                'default' => $this->fromFile('original'),
+                'custom' => $this->fromFile('task_unset'),
+                'expected' => $this->fromFile('task_unset.expected'),
+                'exception' => null
+            ], 'task_unset')
             ->add([
-                'file' => 'action_unset'
-            ], 'action unset')
-            ->end();
-    }
-
-
-    /**
-     * @test
-     *
-     * @dataProvider providerExtraTaskException
-     *
-     * @expectedException \PlanB\Wand\Core\Config\Exception\UndefinidedTaskNameException
-     */
-    public function testExtraTaskException(Data $data)
-    {
-
-        $file = $data->file;
-
-        $default = $this->fromFile('original');
-        $custom = $this->fromFile($file);
-        $expected = $this->fromFile($file . '.expected');
-
-        $response = ConfigFilter::create($default, $custom)
-            ->process();
-
-
-        $this->assertEquals($expected['tasks'], $response);
-
-    }
-
-    public function providerExtraTaskException()
-    {
-        return Provider::create()
+                'default' => $this->fromFile('original'),
+                'custom' => $this->fromFile('action_unset'),
+                'expected' => $this->fromFile('action_unset.expected'),
+                'exception' => null
+            ], 'action_unset')
             ->add([
-                'file' => 'extra_tasks'
-            ], 'extra tasks')
+                'default' => $this->fromFile('original'),
+                'custom' => $this->fromFile('extra_tasks'),
+                'expected' => $this->fromFile('extra_tasks.expected'),
+                'exception' => UndefinidedTaskNameException::class
+            ], 'extra_tasks')
             ->add([
-                'file' => 'extra_tasks_single'
-            ], 'extra tasks single')
-            ->end();
-    }
-
-    /**
-     * @test
-     *
-     * @dataProvider providerExtraActionException
-     *
-     * @expectedException \PlanB\Wand\Core\Config\Exception\UndefinidedActionNameException
-     */
-    public function testExtraActionException(Data $data)
-    {
-
-        $file = $data->file;
-
-        $default = $this->fromFile('original');
-        $custom = $this->fromFile($file);
-        $expected = $this->fromFile($file . '.expected');
-
-        $response = ConfigFilter::create($default, $custom)
-            ->process();
-
-        $this->assertEquals($expected['tasks'], $response);
-
-    }
-
-    public function providerExtraActionException(){
-        return Provider::create()
+                'default' => $this->fromFile('original'),
+                'custom' => $this->fromFile('extra_tasks_single'),
+                'expected' => $this->fromFile('extra_tasks_single.expected'),
+                'exception' => UndefinidedTaskNameException::class
+            ], 'extra_tasks_single')
             ->add([
-                'file' => 'extra_actions'
-            ], 'extra actions')
+                'default' => $this->fromFile('original'),
+                'custom' => $this->fromFile('extra_actions'),
+                'expected' => $this->fromFile('extra_actions.expected'),
+                'exception' => UndefinidedActionNameException::class
+            ], 'extra_actions')
             ->add([
-                'file' => 'extra_actions_single'
-            ], 'extra actions single')
+                'default' => $this->fromFile('original'),
+                'custom' => $this->fromFile('extra_actions_single'),
+                'expected' => $this->fromFile('extra_actions_single.expected'),
+                'exception' => UndefinidedActionNameException::class
+            ], 'extra_actions')
             ->end();
     }
 

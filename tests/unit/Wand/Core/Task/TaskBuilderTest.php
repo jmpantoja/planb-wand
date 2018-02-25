@@ -11,7 +11,8 @@
 
 namespace PlanB\Spine\Core\Task;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\ActionInterface;
 use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\Task;
@@ -29,6 +30,13 @@ use Symfony\Component\Yaml\Yaml;
 class TaskBuilderTest extends Unit
 {
 
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
     /**
      * @test
      *
@@ -43,7 +51,7 @@ class TaskBuilderTest extends Unit
     {
         $tasks = $this->fromFile('complete');
 
-        $pathManager = $this->make(PathManager::class, [
+        $pathManager = $this->stub(PathManager::class, [
             'projectDir' => realpath('.')
         ]);
 
@@ -54,10 +62,13 @@ class TaskBuilderTest extends Unit
 
             $builder = new TaskBuilder($container);
             $task = $builder->buildTask($options);
-            $this->assertInstanceOf(Task::class, $task);
+            $this->tester->assertInstanceOf(Task::class, $task);
 
             $this->assertContainsOnly(ActionInterface::class, $task->getActions());
+            $this->tester->assertCount(2, $task->getActions());
         }
+
+        $this->tester->assertCount(2, $tasks);
 
     }
 

@@ -11,11 +11,12 @@
 
 namespace PlanB\Wand\Core\File;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\Action;
 use PlanB\Wand\Core\Path\PathManager;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 /**
@@ -28,6 +29,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ActionTest extends Unit
 {
 
+    use Mocker;
+
+    /**
+     * @var \UnitTester
+     */
+    protected $tester;
+
     /**
      * @test
      *
@@ -37,15 +45,16 @@ class ActionTest extends Unit
     public function testContainer()
     {
 
-        $action = $this->make(Action::class);
 
-        $pathManager = $this->make(PathManager::class);
+
+        $action = $this->stub(Action::class);
+        $pathManager = $this->stub(PathManager::class);
 
         $container = new ContainerBuilder();
         $container->set('wand.path.manager', $pathManager);
 
         $action->setContainer($container);
-        $this->assertEquals($pathManager, $action->getPathManager());
+        $this->tester->assertEquals($pathManager, $action->getPathManager());
 
     }
 
@@ -63,7 +72,7 @@ class ActionTest extends Unit
     public function testPathManagerException()
     {
 
-        $action = $this->make(Action::class);
+        $action = $this->stub(Action::class);
 
         $pathManager = new \stdClass();
 

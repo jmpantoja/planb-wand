@@ -11,7 +11,8 @@
 
 namespace PlanB\Wand\Core\File;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 
 /**
  * Class TaskManagerTest
@@ -23,6 +24,13 @@ use PlanB\Utils\Dev\Tdd\Test\Unit;
 class FileEventTest extends Unit
 {
 
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
     /**
      * @test
      *
@@ -33,7 +41,7 @@ class FileEventTest extends Unit
      */
     public function testCreate()
     {
-        $file = $this->make(File::class, [
+        $file = $this->stub(File::class, [
             'getTarget' => 'filename',
             'getPath' => 'target',
             'getAction' => 'create',
@@ -45,10 +53,10 @@ class FileEventTest extends Unit
 
         $lines = $message->parseVerbose();
 
-        $this->assertContains('Create file filename', $lines[0]);
+        $this->tester->assertContains('Create file filename', $lines[0]);
 
-        $this->assertEquals('wand.file.create', $event->getName());
-        $this->assertEquals($file, $event->getFile());
+        $this->tester->assertEquals('wand.file.create', $event->getName());
+        $this->tester->assertEquals($file, $event->getFile());
 
     }
 }

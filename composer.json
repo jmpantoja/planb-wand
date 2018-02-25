@@ -21,6 +21,7 @@
         "twig/twig": "^2.4"
     },
     "require-dev": {
+        "codeception/aspect-mock": "dev-master",
         "planb/utils-dev": "dev-develop"
     },
     "autoload": {

@@ -11,10 +11,8 @@
 
 namespace PlanB\Wand\Core\Logger\Confirm;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Wand\Core\Logger\Message\LogMessage;
-use PlanB\Wand\Core\Logger\Question\QuestionEvent;
-use PlanB\Wand\Core\Logger\Question\QuestionMessage;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 
 
 /**
@@ -28,6 +26,13 @@ use PlanB\Wand\Core\Logger\Question\QuestionMessage;
 class ConfirmEventTest extends Unit
 {
 
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
     /**
      * @test
      *
@@ -40,16 +45,16 @@ class ConfirmEventTest extends Unit
      */
     public function testCreate()
     {
-        $confirm = $this->make(ConfirmMessage::class);
+        $confirm = $this->stub(ConfirmMessage::class);
         $event = new ConfirmEvent($confirm);
 
-        $this->assertEquals($confirm, $event->getConfirm());
+        $this->tester->assertEquals($confirm, $event->getConfirm());
 
         $event->setAnswer(true);
-        $this->assertTrue($event->getAnswer());
+        $this->tester->assertTrue($event->getAnswer());
 
         $event->setAnswer(false);
-        $this->assertFalse($event->getAnswer());
+        $this->tester->assertFalse($event->getAnswer());
     }
 
 

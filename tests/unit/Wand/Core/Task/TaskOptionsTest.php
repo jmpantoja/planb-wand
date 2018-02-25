@@ -11,7 +11,8 @@
 
 namespace PlanB\Spine\Core\Task;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\ActionInterface;
 use PlanB\Wand\Core\Task\TaskOptions;
 
@@ -24,6 +25,13 @@ use PlanB\Wand\Core\Task\TaskOptions;
  */
 class TaskOptionsTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -38,15 +46,15 @@ class TaskOptionsTest extends Unit
         $params = [
             'description' => 'la descripción de la tareas',
             'actions' => [
-                $this->make(ActionInterface::class),
-                $this->make(ActionInterface::class)
+                $this->stub(ActionInterface::class),
+                $this->stub(ActionInterface::class)
             ]
         ];
 
         $options = TaskOptions::create()
             ->resolve($params);
 
-        $this->assertEquals($params, $options);
+        $this->tester->assertEquals($params, $options);
     }
 
 
@@ -64,15 +72,15 @@ class TaskOptionsTest extends Unit
         $params = [
             'description' => ['no se admiten strings ', 'y eso es un array'],
             'actions' => [
-                $this->make(ActionInterface::class),
-                $this->make(ActionInterface::class)
+                $this->stub(ActionInterface::class),
+                $this->stub(ActionInterface::class)
             ]
         ];
 
         $options = TaskOptions::create()
             ->resolve($params);
 
-        $this->assertEquals($params, $options);
+        $this->tester->assertEquals($params, $options);
     }
 
     /**
@@ -91,13 +99,13 @@ class TaskOptionsTest extends Unit
             'description' =>'la descripción de la tareas',
             'actions' => [
                 'solo se admiten instancias de action',
-                $this->make(ActionInterface::class)
+                $this->stub(ActionInterface::class)
             ]
         ];
 
         $options = TaskOptions::create()
             ->resolve($params);
 
-        $this->assertEquals($params, $options);
+        $this->tester->assertEquals($params, $options);
     }
 }

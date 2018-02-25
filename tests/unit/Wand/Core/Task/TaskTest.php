@@ -11,15 +11,13 @@
 
 namespace PlanB\Spine\Core\Task;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Utils\Path\Path;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\ActionInterface;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskBuilder;
-use PlanB\Wand\Core\Task\TaskInterface;
-use PlanB\Wand\Core\Task\TaskManager;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
@@ -33,6 +31,13 @@ use Symfony\Component\Yaml\Yaml;
  */
 class TaskTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -50,7 +55,7 @@ class TaskTest extends Unit
         $tasks = $this->fromFile('complete');
 
         foreach ($tasks as $options) {
-            $pathManager = $this->make(PathManager::class, [
+            $pathManager = $this->stub(PathManager::class, [
                 'projectDir' => realpath('.')
             ]);
 
@@ -59,18 +64,18 @@ class TaskTest extends Unit
 
             $builder = new TaskBuilder($container);
             $task = $builder->buildTask($options);
-            $task->setEventDispatcher($this->make(EventDispatcher::class));
-            $task->setLogger($this->make(LogManager::class));
+            $task->setEventDispatcher($this->stub(EventDispatcher::class));
+            $task->setLogger($this->stub(LogManager::class));
 
 
-            $this->assertInstanceOf(Task::class, $task);
+            $this->tester->assertInstanceOf(Task::class, $task);
             $this->assertAttributeInstanceOf(EventDispatcher::class, 'dispatcher', $task);
             $this->assertAttributeInstanceOf(LogManager::class, 'logger', $task);
 
-            $this->assertInstanceOf(Task::class, $task);
+            $this->tester->assertInstanceOf(Task::class, $task);
 
             $this->assertContainsOnly(ActionInterface::class, $task->getActions());
-            $this->assertEquals('wubba lubba dub dub', $task->getDescription());
+            $this->tester->assertEquals('wubba lubba dub dub', $task->getDescription());
         }
 
     }
@@ -87,7 +92,7 @@ class TaskTest extends Unit
         $tasks = $this->fromFile('complete');
         $options = $tasks['taskA'];
 
-        $pathManager = $this->make(PathManager::class, [
+        $pathManager = $this->stub(PathManager::class, [
             'projectDir' => realpath('.')
         ]);
 
@@ -97,14 +102,16 @@ class TaskTest extends Unit
         $builder = new TaskBuilder($container);
         $task = $builder->buildTask($options);
 
-        $this->assertInstanceOf(Task::class, $task);
+        $this->tester->assertInstanceOf(Task::class, $task);
 
-        $this->assertTrue($task->exists('actionA'));
-        $this->assertTrue($task->exists('actionB'));
-        $this->assertFalse($task->exists('actionXXXX'));
+        $this->tester->assertTrue($task->exists('actionA'));
+        $this->tester->assertTrue($task->exists('actionB'));
+        $this->tester->assertFalse($task->exists('actionXXXX'));
 
-        $this->assertInstanceOf(ActionInterface::class, $task->get('actionA'));
-        $this->assertInstanceOf(ActionInterface::class, $task->get('actionB'));
+        $this->tester->assertInstanceOf(ActionInterface::class, $task->get('actionA'));
+        $this->tester->assertInstanceOf(ActionInterface::class, $task->get('actionB'));
+
+        $this->tester->assertCount(2, $task->getActions());
 
     }
 
@@ -125,7 +132,7 @@ class TaskTest extends Unit
         $tasks = $this->fromFile('complete');
         $options = $tasks['taskA'];
 
-        $pathManager = $this->make(PathManager::class, [
+        $pathManager = $this->stub(PathManager::class, [
             'projectDir' => realpath('.')
         ]);
 
@@ -135,7 +142,7 @@ class TaskTest extends Unit
         $builder = new TaskBuilder($container);
 
         $task = $builder->buildTask($options);
-        $this->assertInstanceOf(Task::class, $task);
+        $this->tester->assertInstanceOf(Task::class, $task);
 
         $task->get('actionXXXXXX');
     }

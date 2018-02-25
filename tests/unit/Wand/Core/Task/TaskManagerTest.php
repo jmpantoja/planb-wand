@@ -11,12 +11,11 @@
 
 namespace PlanB\Spine\Core\Task;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Utils\Path\Path;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\ActionInterface;
 use PlanB\Wand\Core\Action\ActionRunner;
 use PlanB\Wand\Core\Config\ConfigManager;
-use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskBuilder;
 use PlanB\Wand\Core\Task\TaskInterface;
@@ -33,6 +32,13 @@ use Symfony\Component\Yaml\Yaml;
 class TaskManagerTest extends Unit
 {
 
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
     /**
      * @test
      *
@@ -45,9 +51,9 @@ class TaskManagerTest extends Unit
     {
         $manager = $this->getTaskManager();
 
-        $this->assertTrue($manager->exists('taskA'));
-        $this->assertTrue($manager->exists('taskB'));
-        $this->assertFalse($manager->exists('taskXXX'));
+        $this->tester->assertTrue($manager->exists('taskA'));
+        $this->tester->assertTrue($manager->exists('taskB'));
+        $this->tester->assertFalse($manager->exists('taskXXX'));
 
     }
 
@@ -64,10 +70,10 @@ class TaskManagerTest extends Unit
         $manager = $this->getTaskManager();
 
         $task = $manager->get('taskA');
-        $this->assertInstanceOf(TaskInterface::class, $task);
+        $this->tester->assertInstanceOf(TaskInterface::class, $task);
 
         $this->assertContainsOnly(ActionInterface::class, $task->getActions());
-        $this->assertCount(2, $task->getActions());
+        $this->tester->assertCount(2, $task->getActions());
 
     }
 
@@ -92,6 +98,26 @@ class TaskManagerTest extends Unit
 
     }
 
+    private function getTaskManager(): TaskManager
+    {
+        $tasks = $this->fromFile('complete');
+
+        $builder = $this->stub(TaskBuilder::class, [
+            'buildTask' => $this->stub(Task::class, [
+                'getActions' => [
+                    $this->stub(ActionInterface::class),
+                    $this->stub(ActionInterface::class)
+                ]
+            ])
+        ]);
+
+        $config = $this->stub(ConfigManager::class, [
+            'getTasks' => $tasks
+        ]);
+
+        return new TaskManager($config, $builder);
+    }
+
     private function fromFile(string $name): array
     {
         $data = ['tasks' => []];
@@ -102,26 +128,6 @@ class TaskManagerTest extends Unit
 
         return $data['tasks'];
 
-    }
-
-    private function getTaskManager(): TaskManager
-    {
-        $tasks = $this->fromFile('complete');
-
-        $builder = $this->make(TaskBuilder::class, [
-            'buildTask' => $this->make(Task::class, [
-                'getActions' => [
-                    $this->make(ActionInterface::class),
-                    $this->make(ActionInterface::class)
-                ]
-            ])
-        ]);
-
-        $config = $this->make(ConfigManager::class, [
-            'getTasks' => $tasks
-        ]);
-
-        return new TaskManager($config, $builder);
     }
 
 }

@@ -2,10 +2,8 @@
 
 namespace PlanB\Wand\Core\Context\Property;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-
-use PlanB\Utils\Tdd\Mock\Double;
-
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Context\Property;
 
 /**
@@ -14,6 +12,13 @@ use PlanB\Wand\Core\Context\Property;
  */
 class LicensePropertyTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
 
     /**
@@ -33,13 +38,13 @@ class LicensePropertyTest extends Unit
         /** @var LicenseProperty $target */
         $target = LicenseProperty::create();
 
-        $this->assertInstanceOf(LicenseProperty::class, $target);
-        $this->assertInstanceOf(Property::class, $target);
+        $this->tester->assertInstanceOf(LicenseProperty::class, $target);
+        $this->tester->assertInstanceOf(Property::class, $target);
 
-        $this->assertEquals('[license]', $target->getPath());
-        $this->assertEquals('License: ', $target->getQuestion()->getMessage());
+        $this->tester->assertEquals('[license]', $target->getPath());
+        $this->tester->assertEquals('License: ', $target->getQuestion()->getMessage());
 
-        $this->assertEquals([
+        $this->tester->assertEquals([
             'MIT',
             'Apache-2.0',
             'Unlicense'
@@ -62,7 +67,7 @@ class LicensePropertyTest extends Unit
 
         $target->addWarning('value');
 
-        $this->assertContains("El valor 'value' no está entre los esperados (MIT|Apache-2.0|Unlicense)",
+        $this->tester->assertContains("El valor 'value' no está entre los esperados (MIT|Apache-2.0|Unlicense)",
             $target->getQuestion()->getMessage());
     }
 
@@ -76,7 +81,7 @@ class LicensePropertyTest extends Unit
         /** @var LicenseProperty $target */
         $target = LicenseProperty::create();
 
-        $this->assertEquals('answer', $target->normalize('answer'));
+        $this->tester->assertEquals('answer', $target->normalize('answer'));
     }
 
 
@@ -89,7 +94,7 @@ class LicensePropertyTest extends Unit
         /** @var LicenseProperty $target */
         $target = LicenseProperty::create();
 
-        $this->assertEquals('answer', $target->denormalize('answer'));
+        $this->tester->assertEquals('answer', $target->denormalize('answer'));
     }
 
     /**
@@ -101,7 +106,7 @@ class LicensePropertyTest extends Unit
         /** @var LicenseProperty $target */
         $target = LicenseProperty::create();
 
-        $this->assertEquals('answer', $target->resolve('answer'));
+        $this->tester->assertEquals('answer', $target->resolve('answer'));
     }
 
 
@@ -120,13 +125,13 @@ class LicensePropertyTest extends Unit
         /** @var LicenseProperty $target */
         $target = LicenseProperty::create();
 
-        $this->assertTrue($target->isValid('MIT'));
-        $this->assertTrue($target->isValid('Apache-2.0'));
-        $this->assertTrue($target->isValid('Unlicense'));
+        $this->tester->assertTrue($target->isValid('MIT'));
+        $this->tester->assertTrue($target->isValid('Apache-2.0'));
+        $this->tester->assertTrue($target->isValid('Unlicense'));
 
-        $this->assertFalse($target->isValid('texto'));
-        $this->assertFalse($target->isValid([]));
-        $this->assertFalse($target->isValid(4545));
+        $this->tester->assertFalse($target->isValid('texto'));
+        $this->tester->assertFalse($target->isValid([]));
+        $this->tester->assertFalse($target->isValid(4545));
     }
 
 

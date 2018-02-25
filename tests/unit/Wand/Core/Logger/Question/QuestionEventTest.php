@@ -11,8 +11,8 @@
 
 namespace PlanB\Wand\Core\Logger\Message;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Wand\Core\Logger\Message\LogMessage;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Logger\Question\QuestionEvent;
 use PlanB\Wand\Core\Logger\Question\QuestionMessage;
 
@@ -28,6 +28,13 @@ use PlanB\Wand\Core\Logger\Question\QuestionMessage;
 class QuestionEventTest extends Unit
 {
 
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
     /**
      * @test
      *
@@ -40,14 +47,15 @@ class QuestionEventTest extends Unit
      */
     public function testCreate()
     {
-        $question = $this->make(QuestionMessage::class);
+        $question = $this->double(QuestionMessage::class)->make();
+
         $event = new QuestionEvent($question);
 
-        $this->assertEquals($question, $event->getQuestion());
+        $this->tester->assertEquals($question, $event->getQuestion());
 
         $event->setAnswer('answer');
 
-        $this->assertEquals('answer', $event->getAnswer());
+        $this->tester->assertEquals('answer', $event->getAnswer());
     }
 
 

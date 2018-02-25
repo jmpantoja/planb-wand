@@ -2,8 +2,10 @@
 
 namespace PlanB\Wand\Core\Context;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Utils\Tdd\Mock\Double;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Data\Data;
+use PlanB\Utils\Dev\Tdd\Data\Provider;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 
 
 /**
@@ -13,6 +15,12 @@ use PlanB\Utils\Tdd\Mock\Double;
 class PropertyOptionsTest extends Unit
 {
 
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -28,7 +36,7 @@ class PropertyOptionsTest extends Unit
     {
         /** @var PropertyOptions $target */
         $target = PropertyOptions::create();
-        $this->assertInstanceOf(PropertyOptions::class, $target);
+        $this->tester->assertInstanceOf(PropertyOptions::class, $target);
 
         $options = [
             'path' => '[path]',
@@ -37,8 +45,8 @@ class PropertyOptionsTest extends Unit
 
         $params = $target->resolve($options);
 
-        $this->assertEquals('[path]', $params['path']);
-        $this->assertEquals('message: ', $params['message']);
+        $this->tester->assertEquals('[path]', $params['path']);
+        $this->tester->assertEquals('message: ', $params['message']);
 
     }
 
@@ -55,26 +63,60 @@ class PropertyOptionsTest extends Unit
      *
      * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
      */
-    public function testCreateException($options)
+    public function testCreateException(Data $data)
     {
         /** @var PropertyOptions $target */
         $target = PropertyOptions::create();
-        $this->assertInstanceOf(PropertyOptions::class, $target);
+        $this->tester->assertInstanceOf(PropertyOptions::class, $target);
 
-        $target->resolve($options);
+        $target->resolve($data->options);
 
     }
 
     public function providerCreate()
     {
+
+        return Provider::create()
+            ->add([
+                'options' => [null]
+            ])
+            ->add([
+                'options' => ['path' => 'path']
+            ])
+            ->add([
+                'options' => ['message' => 'message']
+            ])
+            ->add([
+                'options' => ['path' => 4545, 'message' => 'message']
+            ])
+            ->add([
+                'options' => ['path' => 'path', 'message' => 455748]
+            ])
+            ->add([
+                'options' => ['path' => [], 'message' => 'message']
+            ])
+            ->add([
+                'options' => ['path' => 'path', 'message' => []]
+            ])
+            ->add([
+                'options' => ['path' => null, 'message' => 'message']
+            ])
+            ->add([
+                'options' => ['path' => 'path', 'message' => null]
+            ])
+            ->end();
+
         return [
             [[null]],
             [['path' => 'path']],
             [['message' => 'message']],
+
             [['path' => 4545, 'message' => 'message']],
             [['path' => 'path', 'message' => 455748]],
             [['path' => [], 'message' => 'message']],
+
             [['path' => 'path', 'message' => []]],
+
             [['path' => null, 'message' => 'message']],
             [['path' => 'path', 'message' => null]],
 

@@ -3,15 +3,17 @@
 namespace PlanB\Wand\Core\Context;
 
 
-use PlanB\Utils\Dev\Tdd\Test\Data\Data;
-use PlanB\Utils\Dev\Tdd\Test\Data\Provider;
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Wand\Core\Action\ActionEvent;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
+use PlanB\Utils\Dev\Tdd\Data\Data;
+use PlanB\Utils\Dev\Tdd\Data\Provider;
+
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Logger\Question\QuestionMessage;
 use PlanB\Wand\Core\Path\PathManager;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Filesystem;
+
+use \Mockery as m;
 
 /**
  * ComposerInfo Class Test
@@ -19,6 +21,14 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class ContextManagerTest extends Unit
 {
+
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -36,18 +46,32 @@ class ContextManagerTest extends Unit
      */
     public function testExecute(Data $data)
     {
-        $responses = $data->responses;
-        $expected = $data->expected;
-        $fileName = $data->fileName;
 
-        $logger = $this->getLogger($responses);
-        $info = $this->getInfo($fileName);
+        $expected = $data->expected;
+
+        $info = $this->getInfo($data);
+        $logger = $this->stub(LogManager::class, [
+            'info' => null
+        ]);
+
+        $logger->allows()
+            ->question(m::any())
+            ->andReturnUsing(function (QuestionMessage $question) use ($data) {
+
+                $responses = $data->responses;
+
+                $message = $question->getMessage();
+                $pieces = explode(':', $message);
+                $message = trim($pieces[0]);
+                return $responses[$message];
+
+            });
 
         $manager = new ContextManager($logger, $info);
 
-        $this->assertEquals($expected, $manager->toArray());
+        $this->tester->assertEquals($expected, $manager->toArray());
 
-        $this->assertArrayHasKey('wand.context.execute', ContextManager::getSubscribedEvents());
+        $this->tester->assertArrayHasKey('wand.context.execute', ContextManager::getSubscribedEvents());
     }
 
     public function providerExecute()
@@ -55,7 +79,7 @@ class ContextManagerTest extends Unit
 
         return Provider::create()
             ->add([
-                'fileName' => realpath(__DIR__ . '/dummy/incomplete/composer.json'),
+                'fileName' => realpath(__DIR__ . '/dummy/empty/composer.json'),
                 'responses' => [
                     'Package Name' => 'package/name',
                     'Package Description' => 'package description',
@@ -117,33 +141,14 @@ class ContextManagerTest extends Unit
             ->end();
     }
 
-    /**
-     * @return mixed|\PlanB\Utils\Dev\Tdd\Mock\Proxy\ProxyInterface
-     */
-    protected function getLogger($responses)
+    private function getInfo(Data $data)
     {
-        $logger = $this->make(LogManager::class, [
-            'info' => null,
-            'question' => function (QuestionMessage $question) use ($responses) {
-                $message = $question->getMessage();
-
-                $pieces = explode(':', $message);
-                $message = trim($pieces[0]);
-
-                return $responses[$message];
-
-            }
-        ]);
-        return $logger;
-    }
-
-    private function getInfo($fileName)
-    {
-        $this->make(Filesystem::class, [
+        $fileName = $data->fileName;
+        $this->stub(Filesystem::class, [
             'dumpFile' => null
         ]);
 
-        $pathManager = $this->make(PathManager::class, [
+        $pathManager = $this->stub(PathManager::class, [
             'composerJsonPath' => $fileName
         ]);
 

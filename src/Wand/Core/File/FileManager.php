@@ -87,7 +87,6 @@ class FileManager implements EventSubscriberInterface
 
         try {
             $content = $this->twig->render($template, $params);
-
             $fileSystem->dumpFile($path, $content);
             $fileSystem->chmod($path, $chmod);
 

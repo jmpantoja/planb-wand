@@ -12,9 +12,9 @@
 namespace PlanB\Wand\Core\Path;
 
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\ActionEvent;
-use PlanB\Wand\Core\Action\ActionInterface;
 use PlanB\Wand\Core\Logger\Confirm\ConfirmEvent;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
@@ -34,6 +34,13 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 class LogManagerTest extends Unit
 {
 
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
     /**
      * @test
      * @covers ::__construct
@@ -45,11 +52,11 @@ class LogManagerTest extends Unit
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener('wand.log.message', function ($event) {
 
-            $this->assertInstanceOf(MessageEvent::class, $event);
-            $this->assertTrue($event->getMessage()->isInfo());
+            $this->tester->assertInstanceOf(MessageEvent::class, $event);
+            $this->tester->assertTrue($event->getMessage()->isInfo());
 
             $lines = $event->getMessage()->parse();
-            $this->assertContains('<fg=default>message</>', $lines[0]);
+            $this->tester->assertContains('<fg=default>message</>', $lines[0]);
 
         });
 
@@ -68,11 +75,11 @@ class LogManagerTest extends Unit
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener('wand.log.message', function ($event) {
 
-            $this->assertInstanceOf(MessageEvent::class, $event);
-            $this->assertTrue($event->getMessage()->isSuccessful());
+            $this->tester->assertInstanceOf(MessageEvent::class, $event);
+            $this->tester->assertTrue($event->getMessage()->isSuccessful());
 
             $lines = $event->getMessage()->parse();
-            $this->assertContains('<fg=green>message</>', $lines[0]);
+            $this->tester->assertContains('<fg=green>message</>', $lines[0]);
 
         });
 
@@ -92,11 +99,11 @@ class LogManagerTest extends Unit
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener('wand.log.message', function ($event) {
 
-            $this->assertInstanceOf(MessageEvent::class, $event);
-            $this->assertTrue($event->getMessage()->isSkipped());
+            $this->tester->assertInstanceOf(MessageEvent::class, $event);
+            $this->tester->assertTrue($event->getMessage()->isSkipped());
 
             $lines = $event->getMessage()->parse();
-            $this->assertContains('<fg=yellow>message</>', $lines[0]);
+            $this->tester->assertContains('<fg=yellow>message</>', $lines[0]);
 
         });
 
@@ -116,11 +123,11 @@ class LogManagerTest extends Unit
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener('wand.log.message', function ($event) {
 
-            $this->assertInstanceOf(MessageEvent::class, $event);
-            $this->assertTrue($event->getMessage()->isError());
+            $this->tester->assertInstanceOf(MessageEvent::class, $event);
+            $this->tester->assertTrue($event->getMessage()->isError());
 
             $lines = $event->getMessage()->parse();
-            $this->assertContains('<fg=red>message</>', $lines[0]);
+            $this->tester->assertContains('<fg=red>message</>', $lines[0]);
 
         });
 
@@ -141,16 +148,16 @@ class LogManagerTest extends Unit
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener('wand.log.message', function ($event) {
 
-            $this->assertInstanceOf(MessageEvent::class, $event);
-            $this->assertTrue($event->getMessage()->isInfo());
+            $this->tester->assertInstanceOf(MessageEvent::class, $event);
+            $this->tester->assertTrue($event->getMessage()->isInfo());
 
             $lines = $event->getMessage()->parse();
 
-            $this->assertContains('<fg=default>message</>', $lines[0]);
+            $this->tester->assertContains('<fg=default>message</>', $lines[0]);
 
         });
 
-        $event = $this->make(ActionEvent::class, [
+        $event = $this->stub(ActionEvent::class, [
             'getMessage' => LogMessage::info()
                 ->setTitle('message')
         ]);
@@ -171,11 +178,11 @@ class LogManagerTest extends Unit
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener('wand.log.question', function ($event) {
 
-            $this->assertInstanceOf(QuestionEvent::class, $event);
+            $this->tester->assertInstanceOf(QuestionEvent::class, $event);
             $event->setAnswer('answer');
 
             $message = $event->getQuestion()->getMessage();
-            $this->assertContains('message', $message);
+            $this->tester->assertContains('message', $message);
 
         });
 
@@ -194,11 +201,11 @@ class LogManagerTest extends Unit
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener('wand.log.confirm', function ($event) {
 
-            $this->assertInstanceOf(ConfirmEvent::class, $event);
+            $this->tester->assertInstanceOf(ConfirmEvent::class, $event);
             $event->setAnswer(true);
 
             $message = $event->getConfirm()->getMessage();
-            $this->assertContains('message (Y / n):', $message);
+            $this->tester->assertContains('message (Y / n):', $message);
 
         });
 

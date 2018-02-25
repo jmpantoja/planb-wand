@@ -11,8 +11,8 @@
 
 namespace PlanB\Wand\Core\Logger\Message;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Wand\Core\Logger\Message\LogMessage;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 
 
 /**
@@ -25,6 +25,13 @@ use PlanB\Wand\Core\Logger\Message\LogMessage;
  */
 class LogMessageTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -46,13 +53,13 @@ class LogMessageTest extends Unit
             ->setTitle('title');
 
         $normal = $message->parse();
-        $this->assertContains('<fg=default>title</>', $normal[0]);
+        $this->tester->assertContains('<fg=default>title</>', $normal[0]);
 
         $verbose = $message->parseVerbose();
-        $this->assertContains('<fg=default>title</>', $verbose[0]);
+        $this->tester->assertContains('<fg=default>title</>', $verbose[0]);
 
-        $this->assertTrue($message->isInfo());
-        $this->assertTrue($message->getType()->isInfo());
+        $this->tester->assertTrue($message->isInfo());
+        $this->tester->assertTrue($message->getType()->isInfo());
 
     }
 
@@ -82,22 +89,22 @@ class LogMessageTest extends Unit
             ->addVerbose('extra', 'simple');
 
         $normal = $message->parse();
-        $this->assertContains('<fg=green>title</>', $normal[0]);
-        $this->assertContains('<fg=green>OK</>', $normal[0]);
+        $this->tester->assertContains('<fg=green>title</>', $normal[0]);
+        $this->tester->assertContains('<fg=green>OK</>', $normal[0]);
 
         $verbose = $message->parseVerbose();
-        $this->assertContains('<fg=green>title</>', $verbose[0]);
-        $this->assertContains('<fg=green>OK</>', $verbose[0]);
-        $this->assertContains('<fg=green>A:</> simple', $verbose[1]);
-        $this->assertContains('<fg=green>B:</>', $verbose[2]);
-        $this->assertContains('line1', $verbose[3]);
-        $this->assertContains('line2', $verbose[4]);
-        $this->assertContains('line3', $verbose[5]);
-        $this->assertContains('line4', $verbose[6]);
-        $this->assertContains('<fg=green>EXTRA:</> simple', $verbose[7]);
+        $this->tester->assertContains('<fg=green>title</>', $verbose[0]);
+        $this->tester->assertContains('<fg=green>OK</>', $verbose[0]);
+        $this->tester->assertContains('<fg=green>A:</> simple', $verbose[1]);
+        $this->tester->assertContains('<fg=green>B:</>', $verbose[2]);
+        $this->tester->assertContains('line1', $verbose[3]);
+        $this->tester->assertContains('line2', $verbose[4]);
+        $this->tester->assertContains('line3', $verbose[5]);
+        $this->tester->assertContains('line4', $verbose[6]);
+        $this->tester->assertContains('<fg=green>EXTRA:</> simple', $verbose[7]);
 
-        $this->assertTrue($message->isSuccessful());
-        $this->assertTrue($message->getType()->isSuccessful());
+        $this->tester->assertTrue($message->isSuccessful());
+        $this->tester->assertTrue($message->getType()->isSuccessful());
     }
 
 
@@ -127,22 +134,22 @@ class LogMessageTest extends Unit
             ->addVerbose('extra', 'simple');;
 
         $normal = $message->parse();
-        $this->assertContains('<fg=yellow>title</>', $normal[0]);
-        $this->assertContains('<fg=yellow>SKIP</>', $normal[0]);
+        $this->tester->assertContains('<fg=yellow>title</>', $normal[0]);
+        $this->tester->assertContains('<fg=yellow>SKIP</>', $normal[0]);
 
         $verbose = $message->parseVerbose();
-        $this->assertContains('<fg=yellow>title</>', $verbose[0]);
-        $this->assertContains('<fg=yellow>SKIP</>', $verbose[0]);
-        $this->assertContains('<fg=yellow>A:</> simple', $verbose[1]);
-        $this->assertContains('<fg=yellow>B:</>', $verbose[2]);
-        $this->assertContains('line1', $verbose[3]);
-        $this->assertContains('line2', $verbose[4]);
-        $this->assertContains('line3', $verbose[5]);
-        $this->assertContains('line4', $verbose[6]);
-        $this->assertContains('<fg=yellow>EXTRA:</> simple', $verbose[7]);
+        $this->tester->assertContains('<fg=yellow>title</>', $verbose[0]);
+        $this->tester->assertContains('<fg=yellow>SKIP</>', $verbose[0]);
+        $this->tester->assertContains('<fg=yellow>A:</> simple', $verbose[1]);
+        $this->tester->assertContains('<fg=yellow>B:</>', $verbose[2]);
+        $this->tester->assertContains('line1', $verbose[3]);
+        $this->tester->assertContains('line2', $verbose[4]);
+        $this->tester->assertContains('line3', $verbose[5]);
+        $this->tester->assertContains('line4', $verbose[6]);
+        $this->tester->assertContains('<fg=yellow>EXTRA:</> simple', $verbose[7]);
 
-        $this->assertTrue($message->isSkipped());
-        $this->assertTrue($message->getType()->isSkipped());
+        $this->tester->assertTrue($message->isSkipped());
+        $this->tester->assertTrue($message->getType()->isSkipped());
     }
 
     /**
@@ -172,22 +179,22 @@ class LogMessageTest extends Unit
             ->addVerbose('extra', 'simple');;
 
         $normal = $message->parse();
-        $this->assertContains('<fg=red>title</>', $normal[0]);
-        $this->assertContains('<fg=red>ERROR</>', $normal[0]);
+        $this->tester->assertContains('<fg=red>title</>', $normal[0]);
+        $this->tester->assertContains('<fg=red>ERROR</>', $normal[0]);
 
         $verbose = $message->parseVerbose();
-        $this->assertContains('<fg=red>title</>', $verbose[0]);
-        $this->assertContains('<fg=red>ERROR</>', $verbose[0]);
-        $this->assertContains('<fg=red>A:</> simple', $verbose[1]);
-        $this->assertContains('<fg=red>B:</>', $verbose[2]);
-        $this->assertContains('line1', $verbose[3]);
-        $this->assertContains('line2', $verbose[4]);
-        $this->assertContains('line3', $verbose[5]);
-        $this->assertContains('line4', $verbose[6]);
-        $this->assertContains('<fg=red>EXTRA:</> simple', $verbose[7]);
+        $this->tester->assertContains('<fg=red>title</>', $verbose[0]);
+        $this->tester->assertContains('<fg=red>ERROR</>', $verbose[0]);
+        $this->tester->assertContains('<fg=red>A:</> simple', $verbose[1]);
+        $this->tester->assertContains('<fg=red>B:</>', $verbose[2]);
+        $this->tester->assertContains('line1', $verbose[3]);
+        $this->tester->assertContains('line2', $verbose[4]);
+        $this->tester->assertContains('line3', $verbose[5]);
+        $this->tester->assertContains('line4', $verbose[6]);
+        $this->tester->assertContains('<fg=red>EXTRA:</> simple', $verbose[7]);
 
-        $this->assertTrue($message->isError());
-        $this->assertTrue($message->getType()->isError());
+        $this->tester->assertTrue($message->isError());
+        $this->tester->assertTrue($message->getType()->isError());
 
     }
 

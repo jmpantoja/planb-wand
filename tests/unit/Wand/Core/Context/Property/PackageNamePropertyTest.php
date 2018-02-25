@@ -2,8 +2,9 @@
 
 namespace PlanB\Wand\Core\Context\Property;
 
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Context\Property;
-use PlanB\Utils\Dev\Tdd\Test\Unit;
 
 /**
  * PackageNameProperty Class Test
@@ -11,6 +12,13 @@ use PlanB\Utils\Dev\Tdd\Test\Unit;
  */
 class PackageNamePropertyTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
 
     /**
@@ -29,13 +37,13 @@ class PackageNamePropertyTest extends Unit
         /** @var PackageNameProperty $target */
         $target = PackageNameProperty::create();
 
-        $this->assertInstanceOf(PackageNameProperty::class, $target);
-        $this->assertInstanceOf(Property::class, $target);
+        $this->tester->assertInstanceOf(PackageNameProperty::class, $target);
+        $this->tester->assertInstanceOf(Property::class, $target);
 
-        $this->assertEquals('[name]', $target->getPath());
-        $this->assertEquals('Package Name: ', $target->getQuestion()->getMessage());
+        $this->tester->assertEquals('[name]', $target->getPath());
+        $this->tester->assertEquals('Package Name: ', $target->getQuestion()->getMessage());
 
-        $this->assertEquals([], $target->getOptions());
+        $this->tester->assertEquals([], $target->getOptions());
     }
 
 
@@ -55,7 +63,7 @@ class PackageNamePropertyTest extends Unit
 
         $target->addWarning('no-format');
 
-        $this->assertContains('El formato de nombre "no-format" no es correcto', $target->getQuestion()->getMessage());
+        $this->tester->assertContains('El formato de nombre "no-format" no es correcto', $target->getQuestion()->getMessage());
     }
 
 
@@ -68,7 +76,7 @@ class PackageNamePropertyTest extends Unit
         /** @var PackageNameProperty $target */
         $target = PackageNameProperty::create();
 
-        $this->assertEquals('answer', $target->normalize('answer'));
+        $this->tester->assertEquals('answer', $target->normalize('answer'));
     }
 
 
@@ -81,7 +89,7 @@ class PackageNamePropertyTest extends Unit
         /** @var PackageNameProperty $target */
         $target = PackageNameProperty::create();
 
-        $this->assertEquals('answer', $target->denormalize('answer'));
+        $this->tester->assertEquals('answer', $target->denormalize('answer'));
     }
 
     /**
@@ -93,7 +101,7 @@ class PackageNamePropertyTest extends Unit
         /** @var PackageNameProperty $target */
         $target = PackageNameProperty::create();
 
-        $this->assertEquals('answer', $target->resolve('answer'));
+        $this->tester->assertEquals('answer', $target->resolve('answer'));
     }
 
 
@@ -112,10 +120,10 @@ class PackageNamePropertyTest extends Unit
         /** @var PackageNameProperty $target */
         $target = PackageNameProperty::create();
 
-        $this->assertTrue($target->isValid('package/name'));
-        $this->assertFalse($target->isValid('no-format'));
-        $this->assertFalse($target->isValid([]));
-        $this->assertFalse($target->isValid(4545));
+        $this->tester->assertTrue($target->isValid('package/name'));
+        $this->tester->assertFalse($target->isValid('no-format'));
+        $this->tester->assertFalse($target->isValid([]));
+        $this->tester->assertFalse($target->isValid(4545));
     }
 
 

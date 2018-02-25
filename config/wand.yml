@@ -22,3 +22,13 @@ tasks:
           target: LICENSE
           action: remove #remove|create
           chmod: 0644
+
+  cmd:
+    classname: \PlanB\Wand\Core\Task\SimpleTask
+    description: wubba lubba dub dub
+    actions:
+      comando:
+        group: metainfo
+        classname: \PlanB\Wand\Core\Command\Command
+        params:
+          cmd: codecept

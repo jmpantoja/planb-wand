@@ -11,10 +11,13 @@
 
 namespace PlanB\Wand\Core\Config;
 
-use PlanB\Utils\Dev\Tdd\Test\Data\Data;
-use PlanB\Utils\Dev\Tdd\Test\Data\Provider;
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
+use PlanB\Utils\Dev\Tdd\Data\Data;
+use PlanB\Utils\Dev\Tdd\Data\Provider;
+
 use PlanB\Utils\Path\Path;
+use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -26,6 +29,15 @@ use Symfony\Component\Yaml\Yaml;
  */
 class CustomConfigTest extends Unit
 {
+
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
     /**
      * @test
      * @dataProvider providerProcess
@@ -33,62 +45,55 @@ class CustomConfigTest extends Unit
      * @covers ::getConfigTree
      * @covers ::defineTasks
      *
-     * @covers \PlanB\Wand\Core\Config\BaseConfig::__construct
-     * @covers \PlanB\Wand\Core\Config\BaseConfig::create
-     * @covers \PlanB\Wand\Core\Config\BaseConfig::process
-     * @covers \PlanB\Wand\Core\Config\BaseConfig::readFromFile
+     * @covers       \PlanB\Wand\Core\Config\BaseConfig::__construct
+     * @covers       \PlanB\Wand\Core\Config\BaseConfig::create
+     * @covers       \PlanB\Wand\Core\Config\BaseConfig::process
+     * @covers       \PlanB\Wand\Core\Config\BaseConfig::readFromFile
      */
     public function testProcess(Data $data)
     {
-        $file = $data->file;
+        $data->expectException($data->exception, function (Data $data) {
+            $path = $data->path;
+            $expected = $data->expected;
 
-        $path = Path::create(__DIR__, 'configs/custom', sprintf('%s.yml', $file));
-        $expectedPath = Path::create(__DIR__, 'configs/custom', sprintf('%s.expected.yml', $file));
-        $expected = Yaml::parseFile($expectedPath);
+            $config = CustomConfig::create($path)
+                ->process();
 
-        $config = CustomConfig::create($path)
-            ->process();
-
-        $this->assertEquals($expected, $config);
-
+            $this->tester->assertEquals($expected, $config);
+        }, $this->tester);
     }
 
     public function providerProcess()
     {
         return Provider::create()
             ->add([
-                'file' => 'valid'
+                'path' => Path::create(sprintf('%s/configs/custom/valid.yml', __DIR__)),
+                'expected' => $this->fromFile('valid.expected'),
+                'exception' => null
             ], 'valid')
             ->add([
-                'file' => 'default_values'
+                'path' => Path::create(sprintf('%s/configs/custom/default_values.yml', __DIR__)),
+                'expected' => $this->fromFile('default_values.expected'),
+                'exception' => null
+            ], 'default values')
+            ->add([
+                'path' => Path::create(sprintf('%s/configs/custom/invalid.yml', __DIR__)),
+                'expected' => null,
+                'exception' => InvalidTypeException::class
             ], 'default values')
             ->end();
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider providerProcess
-     *
-     * @covers ::getConfigTree
-     * @covers ::defineTasks
-     *
-     * @covers \PlanB\Wand\Core\Config\BaseConfig::__construct
-     * @covers \PlanB\Wand\Core\Config\BaseConfig::create
-     * @covers \PlanB\Wand\Core\Config\BaseConfig::process
-     * @covers \PlanB\Wand\Core\Config\BaseConfig::readFromFile
-     *
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidTypeException
-     * @expectedExceptionMessage Invalid type for path "custom.tasks.init.actionA". Expected boolean, but got string.
-     */
-    public function testProcessException(Data $data)
+
+    private function fromFile(string $name): array
     {
-        $file = $data->file;
+        $data = [];
+        $path = sprintf('%s/configs/custom/%s.yml', __DIR__, $name);
+        if (is_file($path)) {
+            $data = Yaml::parseFile($path);
+        }
 
-        $path = Path::create(__DIR__, 'configs/custom', sprintf('invalid.yml', $file));
-
-        CustomConfig::create($path)
-            ->process();
+        return $data;
 
     }
 

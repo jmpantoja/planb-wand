@@ -1,6 +1,11 @@
 {
-  "name": "package",
-  "description": "package description",
-  "type": "project",
-  "license": "XXX"
+    "name": "package",
+    "description": "package description",
+    "type": "project",
+    "license": "XXX",
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "apcu-autoloader": true
+    }
 }

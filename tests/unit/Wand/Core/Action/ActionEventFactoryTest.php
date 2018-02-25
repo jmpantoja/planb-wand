@@ -11,7 +11,11 @@
 
 namespace PlanB\Wand\Core\Action;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
+use PlanB\Wand\Core\Action\Exception\ActionEventFactoryException;
+use PlanB\Wand\Core\Command\Command;
 use PlanB\Wand\Core\File\File;
 use PlanB\Wand\Core\File\FileEvent;
 
@@ -24,34 +28,33 @@ use PlanB\Wand\Core\File\FileEvent;
  */
 class ActionEventFactoryTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var \UnitTester
+     */
+    protected $tester;
+
     /**
      * @test
      * @covers ::fromAction
      *
+     * @covers \PlanB\Wand\Core\Action\Exception\ActionEventFactoryException::create
      */
     public function testFromFile()
     {
-        $file = $this->make(File::class);
+        $file = $this->stub(File::class);
         $event = ActionEventFactory::fromAction($file);
 
-        $this->assertInstanceOf(FileEvent::class, $event);
-        $this->assertEquals($file, $event->getFile());
+        $this->tester->assertInstanceOf(FileEvent::class, $event);
+        $this->tester->assertEquals($file, $event->getFile());
+
+        $this->tester->expectException(ActionEventFactoryException::class, function () {
+            $badFile = $this->stub(Command::class);
+            ActionEventFactory::fromAction($badFile);
+        });
+
+
     }
-
-
-    /**
-     * @test
-     * @covers ::fromAction
-     *
-     * @covers \PlanB\Wand\Core\Action\Exception\ActionEventFactoryException::create()
-     *
-     * @expectedException \PlanB\Wand\Core\Action\Exception\ActionEventFactoryException
-     * @expectedExceptionMessageRegExp /No es posible crear un evento para la clase '\w+'/
-     */
-    public function testFromActionException()
-    {
-        $file = $this->make(ActionInterface::class);
-        ActionEventFactory::fromAction($file);
-    }
-
 }

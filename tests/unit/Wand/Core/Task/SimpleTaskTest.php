@@ -11,9 +11,9 @@
 
 namespace PlanB\Spine\Core\Task;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\ActionEvent;
-use PlanB\Wand\Core\File\FileManager;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\SimpleTask;
@@ -21,6 +21,8 @@ use PlanB\Wand\Core\Task\TaskBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
+
+use Mockery as m;
 
 /**
  * Class TaskManagerTest
@@ -31,6 +33,13 @@ use Symfony\Component\Yaml\Yaml;
  */
 class SimpleTaskTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -47,39 +56,35 @@ class SimpleTaskTest extends Unit
     public function testLaunch()
     {
 
-        $logger = $this->mock(LogManager::class, [
-            'info' => null,
-            'log' => null
-        ]);
+        $logger = $this->stub(LogManager::class);
+
+        $logger->expects()
+            ->info(m::any())
+            ->once();
+
+        $logger->expects()
+            ->log(m::any())
+            ->twice();
 
         $task = $this->getTask($logger, true);
 
-        $this->assertInstanceOf(SimpleTask::class, $task);
+        $this->tester->assertInstanceOf(SimpleTask::class, $task);
 
         $task->setName('init');
         $task->launch();
 
-        $logger->verify('info', 1, ['Running init task...']);
-        $logger->verify('log', 2);
     }
 
 
     private function getTask($logger, $validContext)
     {
-        $this->make(ActionEvent::class, [
+        $this->stub(ActionEvent::class, [
             'isError' => false
         ]);
 
         $dispatcher = new EventDispatcher();
 
-        $dispatcher->addListener('wand.context.execute', function () {});
-
-        $dispatcher->addListener('wand.file.execute', function (ActionEvent $event) {
-            $event->success('ok');
-        });
-
-
-        $pathManager = $this->make(PathManager::class, [
+        $pathManager = $this->stub(PathManager::class, [
             'projectDir' => realpath('.')
         ]);
 
@@ -94,7 +99,7 @@ class SimpleTaskTest extends Unit
         $task = $builder->buildTask($options);
 
         $task->setEventDispatcher($dispatcher);
-        $task->setLogger($logger->make());
+        $task->setLogger($logger);
 
         return $task;
     }

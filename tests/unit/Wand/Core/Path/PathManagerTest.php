@@ -11,7 +11,8 @@
 
 namespace PlanB\Wand\Core\Path;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 
 
 /**
@@ -23,6 +24,13 @@ use PlanB\Utils\Dev\Tdd\Test\Unit;
  */
 class PathManagerTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -94,10 +102,10 @@ class PathManagerTest extends Unit
 
 
         $manager->build(__FILE__);
-        $this->assertEquals(realpath('.'), $manager->projectDir());
+        $this->tester->assertEquals(realpath('.'), $manager->projectDir());
 
         $manager->build(realpath('.'));
-        $this->assertEquals(realpath('.'), $manager->projectDir());
+        $this->tester->assertEquals(realpath('.'), $manager->projectDir());
     }
 
 
@@ -115,10 +123,10 @@ class PathManagerTest extends Unit
 
         $target = sprintf('%s/composer.json', realpath('.'));
         $manager->build(__FILE__);
-        $this->assertEquals($target, $manager->composerJsonPath());
+        $this->tester->assertEquals($target, $manager->composerJsonPath());
 
         $manager->build(realpath('.'));
-        $this->assertEquals($target, $manager->composerJsonPath());
+        $this->tester->assertEquals($target, $manager->composerJsonPath());
     }
 
     /**
@@ -132,7 +140,7 @@ class PathManagerTest extends Unit
     public function testWandDir()
     {
         $manager = new PathManager();
-        $this->assertEquals(realpath('.'), $manager->wandDir());
+        $this->tester->assertEquals(realpath('.'), $manager->wandDir());
     }
 
 

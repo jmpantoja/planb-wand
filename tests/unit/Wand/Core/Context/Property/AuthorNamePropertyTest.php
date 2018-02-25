@@ -2,11 +2,10 @@
 
 namespace PlanB\Wand\Core\Context\Property;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-
-use PlanB\Utils\Tdd\Mock\Double;
-
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Context\Property;
+
 
 /**
  * AuthorNameProperty Class Test
@@ -14,6 +13,13 @@ use PlanB\Wand\Core\Context\Property;
  */
 class AuthorNamePropertyTest  extends Unit {
 
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
 
     /**
@@ -32,13 +38,13 @@ class AuthorNamePropertyTest  extends Unit {
         /** @var AuthorNameProperty $target */
         $target = AuthorNameProperty::create();
 
-        $this->assertInstanceOf(AuthorNameProperty::class, $target);
-        $this->assertInstanceOf(Property::class, $target);
+        $this->tester->assertInstanceOf(AuthorNameProperty::class, $target);
+        $this->tester->assertInstanceOf(Property::class, $target);
 
-        $this->assertEquals('[authors][0][name]', $target->getPath());
-        $this->assertEquals('Author Name: ', $target->getQuestion()->getMessage());
+        $this->tester->assertEquals('[authors][0][name]', $target->getPath());
+        $this->tester->assertEquals('Author Name: ', $target->getQuestion()->getMessage());
 
-        $this->assertEquals([], $target->getOptions());
+        $this->tester->assertEquals([], $target->getOptions());
     }
 
 
@@ -51,7 +57,7 @@ class AuthorNamePropertyTest  extends Unit {
         /** @var AuthorNameProperty $target */
         $target = AuthorNameProperty::create();
 
-        $this->assertEquals('answer', $target->normalize('answer'));
+        $this->tester->assertEquals('answer', $target->normalize('answer'));
     }
 
 
@@ -64,7 +70,7 @@ class AuthorNamePropertyTest  extends Unit {
         /** @var AuthorNameProperty $target */
         $target = AuthorNameProperty::create();
 
-        $this->assertEquals('answer', $target->denormalize('answer'));
+        $this->tester->assertEquals('answer', $target->denormalize('answer'));
     }
 
     /**
@@ -76,7 +82,7 @@ class AuthorNamePropertyTest  extends Unit {
         /** @var AuthorNameProperty $target */
         $target = AuthorNameProperty::create();
 
-        $this->assertEquals('answer', $target->resolve('answer'));
+        $this->tester->assertEquals('answer', $target->resolve('answer'));
     }
 
 
@@ -94,7 +100,7 @@ class AuthorNamePropertyTest  extends Unit {
         /** @var AuthorNameProperty $target */
         $target = AuthorNameProperty::create();
 
-        $this->assertTrue($target->isValid('package description'));
+        $this->tester->assertTrue($target->isValid('package description'));
     }
 
 

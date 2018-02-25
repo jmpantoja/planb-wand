@@ -2,10 +2,9 @@
 
 namespace PlanB\Wand\Core\Context\Property;
 
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Context\Property;
-use PlanB\Wand\Core\Context\ValidableProperty;
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Utils\Tdd\Mock\Double;
 
 
 /**
@@ -14,6 +13,13 @@ use PlanB\Utils\Tdd\Mock\Double;
  */
 class AuthorEmailPropertyTest  extends Unit {
 
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
 
     /**
@@ -32,13 +38,13 @@ class AuthorEmailPropertyTest  extends Unit {
         /** @var AuthorEmailProperty $target */
         $target = AuthorEmailProperty::create();
 
-        $this->assertInstanceOf(AuthorEmailProperty::class, $target);
-        $this->assertInstanceOf(Property::class, $target);
+        $this->tester->assertInstanceOf(AuthorEmailProperty::class, $target);
+        $this->tester->assertInstanceOf(Property::class, $target);
 
-        $this->assertEquals('[authors][0][email]', $target->getPath());
-        $this->assertEquals('Author Email: ', $target->getQuestion()->getMessage());
+        $this->tester->assertEquals('[authors][0][email]', $target->getPath());
+        $this->tester->assertEquals('Author Email: ', $target->getQuestion()->getMessage());
 
-        $this->assertEquals([], $target->getOptions());
+        $this->tester->assertEquals([], $target->getOptions());
     }
 
     /**
@@ -57,7 +63,7 @@ class AuthorEmailPropertyTest  extends Unit {
 
         $target->addWarning('no-format');
 
-        $this->assertContains('El formato de "no-format" no es correcto, se esperaba un email',
+        $this->tester->assertContains('El formato de "no-format" no es correcto, se esperaba un email',
             $target->getQuestion()->getMessage());
     }
 
@@ -71,7 +77,7 @@ class AuthorEmailPropertyTest  extends Unit {
         /** @var AuthorEmailProperty $target */
         $target = AuthorEmailProperty::create();
 
-        $this->assertEquals('answer', $target->normalize('answer'));
+        $this->tester->assertEquals('answer', $target->normalize('answer'));
     }
 
 
@@ -84,7 +90,7 @@ class AuthorEmailPropertyTest  extends Unit {
         /** @var AuthorEmailProperty $target */
         $target = AuthorEmailProperty::create();
 
-        $this->assertEquals('answer', $target->denormalize('answer'));
+        $this->tester->assertEquals('answer', $target->denormalize('answer'));
     }
 
     /**
@@ -96,7 +102,7 @@ class AuthorEmailPropertyTest  extends Unit {
         /** @var AuthorEmailProperty $target */
         $target = AuthorEmailProperty::create();
 
-        $this->assertEquals('answer', $target->resolve('answer'));
+        $this->tester->assertEquals('answer', $target->resolve('answer'));
     }
 
 
@@ -115,8 +121,8 @@ class AuthorEmailPropertyTest  extends Unit {
         /** @var AuthorEmailProperty $target */
         $target = AuthorEmailProperty::create();
 
-        $this->assertTrue($target->isValid('pepe@example.es'));
-        $this->assertFalse($target->isValid('no-email'));
+        $this->tester->assertTrue($target->isValid('pepe@example.es'));
+        $this->tester->assertFalse($target->isValid('no-email'));
     }
 
 

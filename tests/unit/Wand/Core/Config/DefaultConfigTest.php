@@ -11,9 +11,10 @@
 
 namespace PlanB\Wand\Core\Config;
 
-use PlanB\Utils\Dev\Tdd\Test\Data\Data;
-use PlanB\Utils\Dev\Tdd\Test\Data\Provider;
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
+use PlanB\Utils\Dev\Tdd\Data\Data;
+use PlanB\Utils\Dev\Tdd\Data\Provider;
 use PlanB\Utils\Path\Path;
 use Symfony\Component\Yaml\Yaml;
 
@@ -26,6 +27,15 @@ use Symfony\Component\Yaml\Yaml;
  */
 class DefaultConfigTest extends Unit
 {
+
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
     /**
      * @test
      * @dataProvider providerProcess
@@ -47,11 +57,8 @@ class DefaultConfigTest extends Unit
      */
     public function testProcess(Data $data)
     {
-        $file = $data->file;
-
-        $path = Path::create(__DIR__, 'configs/default', sprintf('%s.yml', $file));
-        $expectedPath = Path::create(__DIR__, 'configs/default', sprintf('%s.expected.yml', $file));
-        $expected = Yaml::parseFile($expectedPath);
+        $path = $data->path;
+        $expected = $data->expected;
 
         $config = DefaultConfig::create($path)
             ->processWithFilter([
@@ -63,21 +70,38 @@ class DefaultConfigTest extends Unit
                 ]
             ]);
 
-        $this->assertEquals($expected, $config);
+        $this->tester->assertEquals($expected, $config);
 
     }
+
 
     public function providerProcess()
     {
         return Provider::create()
             ->add([
-                'file' => 'valid'
-            ])
+                'path' => Path::create(sprintf('%s/configs/default/valid.yml', __DIR__)),
+                'expected' => $this->fromFile('valid.expected'),
+                'exception' => null
+            ], 'valid')
             ->add([
-                'file' => 'default_values'
-            ])
+                'path' => Path::create(sprintf('%s/configs/default/default_values.yml', __DIR__)),
+                'expected' => $this->fromFile('default_values.expected'),
+                'exception' => null
+            ], 'default values')
             ->end();
     }
 
+
+    private function fromFile(string $name): array
+    {
+        $data = [];
+        $path = sprintf('%s/configs/default/%s.yml', __DIR__, $name);
+        if (is_file($path)) {
+            $data = Yaml::parseFile($path);
+        }
+
+        return $data;
+
+    }
 
 }

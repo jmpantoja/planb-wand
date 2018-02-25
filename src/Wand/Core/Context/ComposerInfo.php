@@ -176,7 +176,7 @@ class ComposerInfo
         if (!$this->changed) {
             return;
         }
-
+        
         $this->dumpFile();
     }
 
@@ -188,6 +188,8 @@ class ComposerInfo
         $values = $this->getSortedValues();
         $content = json_encode($values, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $fileSystem = new Filesystem();
+
+
         $fileSystem->dumpFile($this->filename, $content);
     }
 

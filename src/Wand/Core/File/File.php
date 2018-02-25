@@ -66,7 +66,6 @@ class File extends Action
         $this->group = $params['group'];
     }
 
-
     /**
      * Crea una nueva instancia
      *

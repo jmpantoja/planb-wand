@@ -11,7 +11,8 @@
 
 namespace PlanB\Wand\Core\Logger\Message;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 
 
 /**
@@ -23,6 +24,13 @@ use PlanB\Utils\Dev\Tdd\Test\Unit;
  */
 class LogFormatTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -44,9 +52,9 @@ class LogFormatTest extends Unit
         $format = LogFormat::info();
 
         $title = $format->title('title');
-        $this->assertContains('<fg=default>title</>', $title[0]);
+        $this->tester->assertContains('<fg=default>title</>', $title[0]);
 
-        $this->assertTrue($format->getType()->isInfo());
+        $this->tester->assertTrue($format->getType()->isInfo());
     }
 
     /**
@@ -71,39 +79,39 @@ class LogFormatTest extends Unit
         $format = LogFormat::success();
 
         $title = $format->title('title');
-        $this->assertContains('<fg=green>title</>', $title[0]);
-        $this->assertContains('<fg=green>OK</>', $title[0]);
+        $this->tester->assertContains('<fg=green>title</>', $title[0]);
+        $this->tester->assertContains('<fg=green>OK</>', $title[0]);
 
         $verbose = $format->verbose([
             'A' => 'simple',
             'B' => "line1\nline2\nline3\n"
         ]);
 
-        $this->assertContains('<fg=green>A:</> simple', $verbose[0]);
-        $this->assertContains('<fg=green>B:</>', $verbose[1]);
+        $this->tester->assertContains('<fg=green>A:</> simple', $verbose[0]);
+        $this->tester->assertContains('<fg=green>B:</>', $verbose[1]);
 
-        $this->assertContains('line1', $verbose[2]);
-        $this->assertContains('line2', $verbose[3]);
-        $this->assertContains('line3', $verbose[4]);
+        $this->tester->assertContains('line1', $verbose[2]);
+        $this->tester->assertContains('line2', $verbose[3]);
+        $this->tester->assertContains('line3', $verbose[4]);
 
 
         $bigTitle = $format->title(str_repeat('X', LogFormat::PADDING_LENGTH - 1));
-        $this->assertContains('<fg=green>XXXXXXXXXXXXXXX', $bigTitle[0]);
-        $this->assertContains('<fg=green>OK</>', $bigTitle[0]);
-        $this->assertContains('.', $bigTitle[0]);
+        $this->tester->assertContains('<fg=green>XXXXXXXXXXXXXXX', $bigTitle[0]);
+        $this->tester->assertContains('<fg=green>OK</>', $bigTitle[0]);
+        $this->tester->assertContains('.', $bigTitle[0]);
 
 
         $bigTitle = $format->title(str_repeat('X', LogFormat::PADDING_LENGTH));
-        $this->assertContains('<fg=green>XXXXXXXXXXXXXXX', $bigTitle[0]);
-        $this->assertContains('<fg=green>OK</>', $bigTitle[0]);
-        $this->assertNotContains('.', $bigTitle[0]);
+        $this->tester->assertContains('<fg=green>XXXXXXXXXXXXXXX', $bigTitle[0]);
+        $this->tester->assertContains('<fg=green>OK</>', $bigTitle[0]);
+        $this->tester->assertNotContains('.', $bigTitle[0]);
 
         $bigTitle = $format->title(str_repeat('X', LogFormat::PADDING_LENGTH + 1));
-        $this->assertContains('<fg=green>XXXXXXXXXXXXXXX', $bigTitle[0]);
-        $this->assertContains('<fg=green>OK</>', $bigTitle[0]);
-        $this->assertNotContains('.', $bigTitle[0]);
+        $this->tester->assertContains('<fg=green>XXXXXXXXXXXXXXX', $bigTitle[0]);
+        $this->tester->assertContains('<fg=green>OK</>', $bigTitle[0]);
+        $this->tester->assertNotContains('.', $bigTitle[0]);
 
-        $this->assertTrue($format->getType()->isSuccessful());
+        $this->tester->assertTrue($format->getType()->isSuccessful());
     }
 
 
@@ -129,22 +137,22 @@ class LogFormatTest extends Unit
         $format = LogFormat::skip();
 
         $title = $format->title('title');
-        $this->assertContains('<fg=yellow>title</>', $title[0]);
-        $this->assertContains('<fg=yellow>SKIP</>', $title[0]);
+        $this->tester->assertContains('<fg=yellow>title</>', $title[0]);
+        $this->tester->assertContains('<fg=yellow>SKIP</>', $title[0]);
 
         $verbose = $format->verbose([
             'A' => 'simple',
             'B' => "line1\nline2\nline3\n"
         ]);
 
-        $this->assertContains('<fg=yellow>A:</> simple', $verbose[0]);
-        $this->assertContains('<fg=yellow>B:</>', $verbose[1]);
+        $this->tester->assertContains('<fg=yellow>A:</> simple', $verbose[0]);
+        $this->tester->assertContains('<fg=yellow>B:</>', $verbose[1]);
 
-        $this->assertContains('line1', $verbose[2]);
-        $this->assertContains('line2', $verbose[3]);
-        $this->assertContains('line3', $verbose[4]);
+        $this->tester->assertContains('line1', $verbose[2]);
+        $this->tester->assertContains('line2', $verbose[3]);
+        $this->tester->assertContains('line3', $verbose[4]);
 
-        $this->assertTrue($format->getType()->isSkipped());
+        $this->tester->assertTrue($format->getType()->isSkipped());
     }
 
 
@@ -170,21 +178,21 @@ class LogFormatTest extends Unit
         $format = LogFormat::error();
 
         $title = $format->title('title');
-        $this->assertContains('<fg=red>title</>', $title[0]);
-        $this->assertContains('<fg=red>ERROR</>', $title[0]);
+        $this->tester->assertContains('<fg=red>title</>', $title[0]);
+        $this->tester->assertContains('<fg=red>ERROR</>', $title[0]);
 
         $verbose = $format->verbose([
             'A' => 'simple',
             'B' => "line1\nline2\nline3\n"
         ]);
 
-        $this->assertContains('<fg=red>A:</> simple', $verbose[0]);
-        $this->assertContains('<fg=red>B:</>', $verbose[1]);
+        $this->tester->assertContains('<fg=red>A:</> simple', $verbose[0]);
+        $this->tester->assertContains('<fg=red>B:</>', $verbose[1]);
 
-        $this->assertContains('line1', $verbose[2]);
-        $this->assertContains('line2', $verbose[3]);
-        $this->assertContains('line3', $verbose[4]);
+        $this->tester->assertContains('line1', $verbose[2]);
+        $this->tester->assertContains('line2', $verbose[3]);
+        $this->tester->assertContains('line3', $verbose[4]);
 
-        $this->assertTrue($format->getType()->isError());
+        $this->tester->assertTrue($format->getType()->isError());
     }
 }

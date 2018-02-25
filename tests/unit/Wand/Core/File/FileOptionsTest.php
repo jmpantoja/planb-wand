@@ -11,9 +11,10 @@
 
 namespace PlanB\Wand\Core\File;
 
-use PlanB\Utils\Dev\Tdd\Test\Data\Data;
-use PlanB\Utils\Dev\Tdd\Test\Data\Provider;
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Data\Data;
+use PlanB\Utils\Dev\Tdd\Data\Provider;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 
 /**
  * Class FileOptionsTest
@@ -25,6 +26,13 @@ use PlanB\Utils\Dev\Tdd\Test\Unit;
  */
 class FileOptionsTest extends Unit
 {
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
 
     /**
      * @test
@@ -46,7 +54,7 @@ class FileOptionsTest extends Unit
             ]);
 
 
-        $this->assertEquals([
+        $this->tester->assertEquals([
             'action' => 'create',
             'chmod' => 420,
             'group' => 'metainfo',

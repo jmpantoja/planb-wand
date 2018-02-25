@@ -11,8 +11,8 @@
 
 namespace PlanB\Wand\Core\Logger\Message;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Wand\Core\Logger\Message\LogMessage;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Logger\Question\QuestionMessage;
 
 
@@ -26,6 +26,13 @@ use PlanB\Wand\Core\Logger\Question\QuestionMessage;
  */
 class QuestionMessageTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -58,26 +65,26 @@ class QuestionMessageTest extends Unit
             ->setNormalizer(function () {
             });
 
-        $this->assertInstanceOf(QuestionMessage::class, $question);
-        $this->assertEquals('message', $question->getMessage());
+        $this->tester->assertInstanceOf(QuestionMessage::class, $question);
+        $this->tester->assertEquals('message', $question->getMessage());
 
-        $this->assertInternalType('callable', $question->getValidator());
-        $this->assertInternalType('callable', $question->getNormalizer());
+        $this->tester->assertInternalType('callable', $question->getValidator());
+        $this->tester->assertInternalType('callable', $question->getNormalizer());
 
-        $this->assertFalse($question->hasOptions());
+        $this->tester->assertFalse($question->hasOptions());
 
 
         $options = ['A', 'B', 'C'];
         $question->setOptions($options);
 
-        $this->assertEquals($options, $question->getOptions());
-        $this->assertEquals('A', $question->getDefault());
+        $this->tester->assertEquals($options, $question->getOptions());
+        $this->tester->assertEquals('A', $question->getDefault());
 
         $question->setDefault('default');
-        $this->assertEquals('default', $question->getDefault());
+        $this->tester->assertEquals('default', $question->getDefault());
 
         $question->setWarning('warning');
-        $this->assertContains('message: <fg=yellow>warning</>', $question->getMessage());
+        $this->tester->assertContains('message: <fg=yellow>warning</>', $question->getMessage());
 
     }
 

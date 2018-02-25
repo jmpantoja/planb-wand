@@ -11,10 +11,8 @@
 
 namespace PlanB\Wand\Core\Logger\Confirm;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Wand\Core\Logger\Confirm\ConfirmMessage;
-use PlanB\Wand\Core\Logger\Message\LogMessage;
-use PlanB\Wand\Core\Logger\Question\QuestionMessage;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 
 
 /**
@@ -27,6 +25,13 @@ use PlanB\Wand\Core\Logger\Question\QuestionMessage;
  */
 class ConfirmMessageTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -43,18 +48,18 @@ class ConfirmMessageTest extends Unit
     {
         $confirm = ConfirmMessage::create('message');
 
-        $this->assertEquals('message (Y / n):', $confirm->getMessage());
+        $this->tester->assertEquals('message (Y / n):', $confirm->getMessage());
 
-        $this->assertTrue($confirm->getDefault());
+        $this->tester->assertTrue($confirm->getDefault());
 
         $confirm->setDefault(false);
-        $this->assertFalse($confirm->getDefault());
-        $this->assertEquals('message (y / N):', $confirm->getMessage());
+        $this->tester->assertFalse($confirm->getDefault());
+        $this->tester->assertEquals('message (y / N):', $confirm->getMessage());
 
 
         $confirm->setDefault(true);
-        $this->assertTrue($confirm->getDefault());
-        $this->assertEquals('message (Y / n):', $confirm->getMessage());
+        $this->tester->assertTrue($confirm->getDefault());
+        $this->tester->assertEquals('message (Y / n):', $confirm->getMessage());
 
     }
 

@@ -11,7 +11,8 @@
 
 namespace PlanB\Wand\Core\Logger\Message;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 
 
 /**
@@ -23,6 +24,13 @@ use PlanB\Utils\Dev\Tdd\Test\Unit;
  */
 class MessageTypeTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -36,10 +44,10 @@ class MessageTypeTest extends Unit
     {
         $type = MessageType::INFO();
 
-        $this->assertTrue($type->isInfo());
-        $this->assertFalse($type->isSuccessful());
-        $this->assertFalse($type->isSkipped());
-        $this->assertFalse($type->isError());
+        $this->tester->assertTrue($type->isInfo());
+        $this->tester->assertFalse($type->isSuccessful());
+        $this->tester->assertFalse($type->isSkipped());
+        $this->tester->assertFalse($type->isError());
     }
 
     /**
@@ -54,10 +62,10 @@ class MessageTypeTest extends Unit
     {
         $type = MessageType::SUCCESS();
 
-        $this->assertFalse($type->isInfo());
-        $this->assertTrue($type->isSuccessful());
-        $this->assertFalse($type->isSkipped());
-        $this->assertFalse($type->isError());
+        $this->tester->assertFalse($type->isInfo());
+        $this->tester->assertTrue($type->isSuccessful());
+        $this->tester->assertFalse($type->isSkipped());
+        $this->tester->assertFalse($type->isError());
     }
 
     /**
@@ -72,10 +80,10 @@ class MessageTypeTest extends Unit
     {
         $type = MessageType::SKIP();
 
-        $this->assertFalse($type->isInfo());
-        $this->assertFalse($type->isSuccessful());
-        $this->assertTrue($type->isSkipped());
-        $this->assertFalse($type->isError());
+        $this->tester->assertFalse($type->isInfo());
+        $this->tester->assertFalse($type->isSuccessful());
+        $this->tester->assertTrue($type->isSkipped());
+        $this->tester->assertFalse($type->isError());
     }
 
 
@@ -91,10 +99,10 @@ class MessageTypeTest extends Unit
     {
         $type = MessageType::ERROR();
 
-        $this->assertFalse($type->isInfo());
-        $this->assertFalse($type->isSuccessful());
-        $this->assertFalse($type->isSkipped());
-        $this->assertTrue($type->isError());
+        $this->tester->assertFalse($type->isInfo());
+        $this->tester->assertFalse($type->isSuccessful());
+        $this->tester->assertFalse($type->isSkipped());
+        $this->tester->assertTrue($type->isError());
     }
 
 }

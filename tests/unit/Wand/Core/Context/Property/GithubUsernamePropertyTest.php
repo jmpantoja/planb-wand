@@ -2,9 +2,8 @@
 
 namespace PlanB\Wand\Core\Context\Property;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-
-use PlanB\Utils\Tdd\Mock\Double;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 
 
 /**
@@ -14,6 +13,13 @@ use PlanB\Utils\Tdd\Mock\Double;
 class GithubUsernamePropertyTest extends Unit
 {
 
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -25,9 +31,9 @@ class GithubUsernamePropertyTest extends Unit
         /** @var GithubUsernameProperty $target */
         $target = GithubUsernameProperty::create();
 
-        $this->assertEquals('username', $target->resolve('https://github.com/username/'));
+        $this->tester->assertEquals('username', $target->resolve('https://github.com/username/'));
 
-        $this->assertNull($target->resolve('no-format'));
+        $this->tester->assertNull($target->resolve('no-format'));
 
 
     }

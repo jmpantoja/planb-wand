@@ -2,12 +2,9 @@
 
 namespace PlanB\Wand\Core\Context\Property;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-
-use PlanB\Utils\Tdd\Mock\Double;
-
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Context\Property;
-use PlanB\Wand\Core\Context\ValidableProperty;
 
 /**
  * AuthorHomepageProperty Class Test
@@ -15,6 +12,14 @@ use PlanB\Wand\Core\Context\ValidableProperty;
  */
 class AuthorHomepagePropertyTest extends Unit
 {
+
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
 
     /**
@@ -33,13 +38,13 @@ class AuthorHomepagePropertyTest extends Unit
         /** @var AuthorHomepageProperty $target */
         $target = AuthorHomepageProperty::create();
 
-        $this->assertInstanceOf(AuthorHomepageProperty::class, $target);
-        $this->assertInstanceOf(Property::class, $target);
+        $this->tester->assertInstanceOf(AuthorHomepageProperty::class, $target);
+        $this->tester->assertInstanceOf(Property::class, $target);
 
-        $this->assertEquals('[authors][0][homepage]', $target->getPath());
-        $this->assertEquals('Github Username: ', $target->getQuestion()->getMessage());
+        $this->tester->assertEquals('[authors][0][homepage]', $target->getPath());
+        $this->tester->assertEquals('Github Username: ', $target->getQuestion()->getMessage());
 
-        $this->assertEquals([], $target->getOptions());
+        $this->tester->assertEquals([], $target->getOptions());
     }
 
 
@@ -59,7 +64,7 @@ class AuthorHomepagePropertyTest extends Unit
 
         $target->addWarning('username');
 
-        $this->assertContains('El formato de author homepage "username" no es correcto, se esperaba "https://github.com/<username>/"',
+        $this->tester->assertContains('El formato de author homepage "username" no es correcto, se esperaba "https://github.com/<username>/"',
             $target->getQuestion()->getMessage());
     }
 
@@ -73,7 +78,7 @@ class AuthorHomepagePropertyTest extends Unit
         /** @var AuthorHomepageProperty $target */
         $target = AuthorHomepageProperty::create();
 
-        $this->assertEquals('https://github.com/username/', $target->normalize('username'));
+        $this->tester->assertEquals('https://github.com/username/', $target->normalize('username'));
     }
 
 
@@ -86,8 +91,8 @@ class AuthorHomepagePropertyTest extends Unit
         /** @var AuthorHomepageProperty $target */
         $target = AuthorHomepageProperty::create();
 
-        $this->assertEquals('username', $target->denormalize('https://github.com/username/'));
-        $this->assertNull($target->denormalize('username'));
+        $this->tester->assertEquals('username', $target->denormalize('https://github.com/username/'));
+        $this->tester->assertNull($target->denormalize('username'));
     }
 
     /**
@@ -99,7 +104,7 @@ class AuthorHomepagePropertyTest extends Unit
         /** @var AuthorHomepageProperty $target */
         $target = AuthorHomepageProperty::create();
 
-        $this->assertEquals('answer', $target->resolve('answer'));
+        $this->tester->assertEquals('answer', $target->resolve('answer'));
     }
 
 
@@ -118,10 +123,10 @@ class AuthorHomepagePropertyTest extends Unit
         /** @var AuthorHomepageProperty $target */
         $target = AuthorHomepageProperty::create();
 
-        $this->assertTrue($target->isValid('https://github.com/username/'));
-        $this->assertFalse($target->isValid('username'));
-        $this->assertFalse($target->isValid([]));
-        $this->assertFalse($target->isValid(4545));
+        $this->tester->assertTrue($target->isValid('https://github.com/username/'));
+        $this->tester->assertFalse($target->isValid('username'));
+        $this->tester->assertFalse($target->isValid([]));
+        $this->tester->assertFalse($target->isValid(4545));
     }
 
 

@@ -2,10 +2,8 @@
 
 namespace PlanB\Wand\Core\Context\Property;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-
-use PlanB\Utils\Tdd\Mock\Double;
-
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Context\Property;
 
 /**
@@ -14,6 +12,15 @@ use PlanB\Wand\Core\Context\Property;
  */
 class PackageTypePropertyTest extends Unit
 {
+
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
 
     /**
      * @test
@@ -32,13 +39,13 @@ class PackageTypePropertyTest extends Unit
         /** @var PackageTypeProperty $target */
         $target = PackageTypeProperty::create();
 
-        $this->assertInstanceOf(PackageTypeProperty::class, $target);
-        $this->assertInstanceOf(Property::class, $target);
+        $this->tester->assertInstanceOf(PackageTypeProperty::class, $target);
+        $this->tester->assertInstanceOf(Property::class, $target);
 
-        $this->assertEquals('[type]', $target->getPath());
-        $this->assertEquals('Package Type: ', $target->getQuestion()->getMessage());
+        $this->tester->assertEquals('[type]', $target->getPath());
+        $this->tester->assertEquals('Package Type: ', $target->getQuestion()->getMessage());
 
-        $this->assertEquals([
+        $this->tester->assertEquals([
             'library',
             'project',
             'metapackage',
@@ -63,7 +70,7 @@ class PackageTypePropertyTest extends Unit
 
         $target->addWarning('value');
 
-        $this->assertContains("El valor 'value' no está entre los esperados (library|project|metapackage|composer-plugin)",
+        $this->tester->assertContains("El valor 'value' no está entre los esperados (library|project|metapackage|composer-plugin)",
             $target->getQuestion()->getMessage());
     }
 
@@ -77,7 +84,7 @@ class PackageTypePropertyTest extends Unit
         /** @var PackageTypeProperty $target */
         $target = PackageTypeProperty::create();
 
-        $this->assertEquals('answer', $target->normalize('answer'));
+        $this->tester->assertEquals('answer', $target->normalize('answer'));
     }
 
 
@@ -90,7 +97,7 @@ class PackageTypePropertyTest extends Unit
         /** @var PackageTypeProperty $target */
         $target = PackageTypeProperty::create();
 
-        $this->assertEquals('answer', $target->denormalize('answer'));
+        $this->tester->assertEquals('answer', $target->denormalize('answer'));
     }
 
     /**
@@ -102,7 +109,7 @@ class PackageTypePropertyTest extends Unit
         /** @var PackageTypeProperty $target */
         $target = PackageTypeProperty::create();
 
-        $this->assertEquals('answer', $target->resolve('answer'));
+        $this->tester->assertEquals('answer', $target->resolve('answer'));
     }
 
 
@@ -121,14 +128,14 @@ class PackageTypePropertyTest extends Unit
         /** @var PackageTypeProperty $target */
         $target = PackageTypeProperty::create();
 
-        $this->assertTrue($target->isValid('library'));
-        $this->assertTrue($target->isValid('project'));
-        $this->assertTrue($target->isValid('metapackage'));
-        $this->assertTrue($target->isValid('composer-plugin'));
+        $this->tester->assertTrue($target->isValid('library'));
+        $this->tester->assertTrue($target->isValid('project'));
+        $this->tester->assertTrue($target->isValid('metapackage'));
+        $this->tester->assertTrue($target->isValid('composer-plugin'));
 
-        $this->assertFalse($target->isValid('texto'));
-        $this->assertFalse($target->isValid([]));
-        $this->assertFalse($target->isValid(4545));
+        $this->tester->assertFalse($target->isValid('texto'));
+        $this->tester->assertFalse($target->isValid([]));
+        $this->tester->assertFalse($target->isValid(4545));
     }
 
 

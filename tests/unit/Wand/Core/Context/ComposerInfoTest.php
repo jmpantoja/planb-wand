@@ -2,11 +2,15 @@
 
 namespace PlanB\Wand\Core\Context;
 
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Data\Data;
+use PlanB\Utils\Dev\Tdd\Data\Provider;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Context\Property\PackageDescriptionProperty;
 use PlanB\Wand\Core\Context\Property\PackageNameProperty;
-use PlanB\Utils\Dev\Tdd\Test\Unit;
 use PlanB\Wand\Core\Path\PathManager;
 use Symfony\Component\Filesystem\Filesystem;
+use \Mockery as m;
 
 /**
  * ComposerInfo Class Test
@@ -15,9 +19,16 @@ use Symfony\Component\Filesystem\Filesystem;
 class ComposerInfoTest extends Unit
 {
 
+    use Mocker;
+
+    /** @var
+     * \UnitTester $tester
+     */
+    protected $tester;
+
+
     /**
      * @test
-     * @dataProvider providerAccessor
      *
      * @covers ::__construct
      * @covers ::load
@@ -29,21 +40,22 @@ class ComposerInfoTest extends Unit
     {
         $composer = realpath(__DIR__ . '/dummy/optimized/composer.json');
 
-        $pathManager = $this->make(PathManager::class, [
+        $pathManager = $this->stub(PathManager::class, [
             'composerJsonPath' => $composer
         ]);
 
-        $fileSystem = $this->mock(Filesystem::class);
+        $this->stub(Filesystem::class)
+            ->expects()
+            ->dumpFile(m::any(), m::any())
+            ->never();
 
         $manager = new ComposerInfo($pathManager);
         $manager->save();
 
-        $fileSystem->verify('dumpFile', 0);
     }
 
     /**
      * @test
-     * @dataProvider providerAccessor
      *
      * @covers ::__construct
      * @covers ::load
@@ -54,18 +66,19 @@ class ComposerInfoTest extends Unit
      */
     public function testLoad()
     {
-        $composer = realpath(__DIR__ . '/dummy/incomplete/composer.json');
+        $composer = realpath(__DIR__ . '/dummy/empty/composer.json');
 
-        $pathManager = $this->make(PathManager::class, [
+        $pathManager = $this->stub(PathManager::class, [
             'composerJsonPath' => $composer
         ]);
 
-        $this->mock(Filesystem::class, [
-            'dumpFile' => null
-        ]);
-
+        $this->stub(Filesystem::class)
+            ->expects()
+            ->dumpFile(m::any(), m::any())
+            ->once();
 
         $target = new ComposerInfo($pathManager);
+
         $this->assertAttributeEquals([
             'name',
             'description',
@@ -114,42 +127,51 @@ class ComposerInfoTest extends Unit
      * @covers ::getSortedValues
      *
      */
-    public function testAccessor(Property $property, $expected)
+    public function testAccessor(Data $data)
     {
 
-        $composer = realpath(__DIR__ . '/dummy/incomplete/composer.json');
+        $pathManager = $data->pathManager;
+        $property = $data->property;
+        $path = $data->path;
 
-        $pathManager = $this->make(PathManager::class, [
-            'composerJsonPath' => $composer
-        ]);
-
-        $fileSystem = $this->mock(Filesystem::class, [
-            'dumpFile' => null
-        ]);
-
+        $this->stub(Filesystem::class)
+            ->expects()
+            ->dumpFile(m::any(), m::any())
+            ->twice();
 
         $target = new ComposerInfo($pathManager);
 
+        $this->tester->assertFalse($target->has($property));
 
-        $this->assertFalse($target->has($property));
+        $target->set($property->getPath(), $path);
+        $this->tester->assertTrue($target->has($property));
+        $this->tester->assertEquals($path, $target->get($property->getPath()));
 
-        $target->set($property->getPath(), $expected);
 
-        $this->assertTrue($target->has($property));
-
-        $this->assertEquals($expected, $target->get($property->getPath()));
-
-        $this->assertTrue($target->get('[config][optimize-autoloader]'));
-        $this->assertTrue($target->get('[config][sort-packages]'));
-        $this->assertTrue($target->get('[config][apcu-autoloader]'));
+        $this->tester->assertTrue($target->get('[config][optimize-autoloader]'));
+        $this->tester->assertTrue($target->get('[config][sort-packages]'));
+        $this->tester->assertTrue($target->get('[config][apcu-autoloader]'));
 
         $target->save();
 
-        $fileSystem->verify('dumpFile', 2, [$composer]);
     }
 
     public function providerAccessor()
     {
+        $composer = realpath(__DIR__ . '/dummy/empty/composer.json');
+
+        $pathManager = $this->stub(PathManager::class, [
+            'composerJsonPath' => $composer
+        ]);
+
+        return Provider::create()
+            ->add([
+                'path'=>'package/name',
+                'property'=>PackageNameProperty::create(),
+                'pathManager'=>$pathManager
+            ])
+            ->end();
+
         return [
             [PackageNameProperty::create(), 'package/name'],
             [PackageDescriptionProperty::create(), 'package description']

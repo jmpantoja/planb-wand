@@ -11,7 +11,8 @@
 
 namespace PlanB\Wand\Core\Logger\Message;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 
 
 /**
@@ -24,6 +25,13 @@ use PlanB\Utils\Dev\Tdd\Test\Unit;
 class MessageEventTest extends Unit
 {
 
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
     /**
      * @test
      *
@@ -32,10 +40,10 @@ class MessageEventTest extends Unit
      */
     public function testConstruct()
     {
-        $message = $this->make(LogMessage::class);
+        $message = $this->double(LogMessage::class)->make();
         $event = new MessageEvent($message);
 
-        $this->assertEquals($message, $event->getMessage());
+        $this->tester->assertEquals($message, $event->getMessage());
     }
 
 }

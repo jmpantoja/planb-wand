@@ -11,9 +11,9 @@
 
 namespace PlanB\Wand\Core\Config;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Path\PathManager;
-use PlanB\Wand\Core\Task\TaskManager;
 
 
 /**
@@ -27,6 +27,13 @@ use PlanB\Wand\Core\Task\TaskManager;
 class ConfigManagerTest extends Unit
 {
 
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
     /**
      * @test
      *
@@ -37,14 +44,20 @@ class ConfigManagerTest extends Unit
      */
     public function testInit()
     {
-        $pathManager = $this->make(PathManager::class);
-        $pathManager->build(null);
+        $pathManager = $this->stub(PathManager::class, [
+            'projectDir' => realpath('.')
+        ]);
+
 
         $manager = new ConfigManager($pathManager);
 
         $this->assertAttributeInstanceOf(PathManager::class, 'pathManager', $manager);
 
-        $manager->getTasks();
+        $tasks = $manager->getTasks();
+
+        $this->tester->assertEquals([
+            'init'
+        ], array_keys($tasks));
 
     }
 

@@ -11,8 +11,12 @@
 
 namespace PlanB\Wand\Core\File;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
+use Codeception\Test\Unit;
+use Mockery as m;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Context\ContextManager;
+use PlanB\Wand\Core\Logger\Message\LogMessage;
+use PlanB\Wand\Core\Logger\Message\MessageType;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -25,6 +29,13 @@ use Symfony\Component\Filesystem\Filesystem;
 class FileManagerTest extends Unit
 {
 
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
+
     /**
      * @test
      *
@@ -34,21 +45,20 @@ class FileManagerTest extends Unit
     public function testCreateSkip()
     {
 
-        $twig = $this->make(\Twig_Environment::class);
-        $context = $this->make(ContextManager::class);
+        $event = $this->getEvent('create', true);
 
-        $file = $this->make(File::class, [
-            'exists' => true,
-            'getTarget' => 'TARGET',
-            'getPath' => '/path/to/TARGET',
-            'getAction' => 'create'
-        ]);
-
-        $event = new FileEvent($file);
-        $manager = new FileManager($twig, $context);
+        $manager = $this->stub(FileManager::class);
         $manager->create($event);
 
-        $this->assertTrue($event->getMessage()->isSkipped());
+        $this->assertMessage('Create file TARGET', MessageType::SKIP(), $event->getMessage());
+    }
+
+
+    protected function assertMessage(string $text, MessageType $type, LogMessage $message)
+    {
+        $lines = $message->parseVerbose();
+        $this->tester->assertContains($text, $lines[0]);
+        $this->tester->assertTrue($message->getType()->is($type));
     }
 
     /**
@@ -58,38 +68,28 @@ class FileManagerTest extends Unit
      * @covers ::create
      * @covers ::dumpFile
      */
-    public function testCreate()
+    public function testCreateSuccess()
     {
 
-        $fileSystem = $this->mock(Filesystem::class, [
-            'dumpFile' => null,
-            'chmod' => null
-        ]);
+        $fileSystem = $this->stub(Filesystem::class);
 
-        $twig = $this->make(\Twig_Environment::class, [
-            'render' => 'content'
-        ]);
-        $context = $this->make(ContextManager::class, [
-            'toArray' => []
-        ]);
+        $fileSystem->expects()
+            ->dumpFile('/path/to/TARGET', m::any())
+            ->once()
+            ->andReturn(null);
 
-        $file = $this->make(File::class, [
-            'exists' => false,
-            'getTarget' => 'TARGET',
-            'getPath' => '/path/to/TARGET',
-            'getAction' => 'create',
-            'getTemplate' => 'template',
-            'getChmod' => 0644
-        ]);
+        $fileSystem->expects()
+            ->chmod('/path/to/TARGET', m::any(), m::any(), m::any())
+            ->once()
+            ->andReturn(null);
 
-        $event = new FileEvent($file);
-        $manager = new FileManager($twig, $context);
+        $event = $this->getEvent('create', false);
+
+        $manager = $this->getFileManager();
         $manager->create($event);
 
-        $this->assertTrue($event->getMessage()->isSuccessful());
+        $this->assertMessage('Create file TARGET', MessageType::SUCCESS(), $event->getMessage());
 
-        $fileSystem->verify('dumpFile', 1, ['/path/to/TARGET']);
-        $fileSystem->verify('chmod', 1, ['/path/to/TARGET']);
     }
 
     /**
@@ -102,39 +102,26 @@ class FileManagerTest extends Unit
     public function testCreateFail()
     {
 
-        $fileSystem = $this->mock(Filesystem::class, [
-            'dumpFile' => function () {
+        $fileSystem = $this->stub(Filesystem::class);
+
+        $fileSystem->allows()
+            ->dumpFile(m::any(), m::any())
+            ->once()
+            ->andReturnUsing(function () {
                 throw new \Exception('fallo al crear el archivo');
-            },
-            'chmod' => null
-        ]);
+            });
 
-        $twig = $this->make(\Twig_Environment::class, [
-            'render' => 'content'
-        ]);
-        $context = $this->make(ContextManager::class, [
-            'toArray' => []
-        ]);
+        $fileSystem->expects()
+            ->chmod(m::any(), m::any(), m::any(), m::any())
+            ->never();
 
-        $file = $this->make(File::class, [
-            'exists' => false,
-            'getTarget' => 'TARGET',
-            'getPath' => '/path/to/TARGET',
-            'getAction' => 'create',
-            'getTemplate' => 'template',
-            'getChmod' => 0644
-        ]);
-
-        $event = new FileEvent($file);
-        $manager = new FileManager($twig, $context);
+        $event = $this->getEvent('create', false);
+        $manager = $this->getFileManager();
         $manager->create($event);
 
-        $this->assertTrue($event->getMessage()->isError());
+        $this->assertMessage('Create file TARGET', MessageType::ERROR(), $event->getMessage());
 
-        $fileSystem->verify('dumpFile', 0, ['/path/to/TARGET']);
-        $fileSystem->verify('chmod', 0, ['/path/to/TARGET']);
     }
-
 
     /**
      * @test
@@ -146,25 +133,16 @@ class FileManagerTest extends Unit
     public function testRemoveSkip()
     {
 
-        $fileSystem = $this->mock(Filesystem::class);
-        $twig = $this->make(\Twig_Environment::class);
-        $context = $this->make(ContextManager::class);
+        $this->stub(Filesystem::class)
+            ->expects()
+            ->remove(m::any())
+            ->never();
 
-        $file = $this->make(File::class, [
-            'exists' => false,
-            'getTarget' => 'TARGET',
-            'getPath' => '/path/to/TARGET',
-            'getAction' => 'create',
-        ]);
-
-        $event = new FileEvent($file);
-        $manager = new FileManager($twig, $context);
+        $event = $this->getEvent('remove', false);
+        $manager = $this->getFileManager();
         $manager->remove($event);
 
-        $this->assertTrue($event->getMessage()->isSkipped());
-
-        $fileSystem->verify('remove', 0);
-
+        $this->assertMessage('Remove file TARGET', MessageType::SKIP(), $event->getMessage());
     }
 
     /**
@@ -174,31 +152,20 @@ class FileManagerTest extends Unit
      * @covers ::remove
      * @covers ::deleteFile
      */
-    public function testRemove()
+    public function testRemoveSuccess()
     {
 
-        $fileSystem = $this->mock(Filesystem::class, [
-            'remove' => null
-        ]);
+        $this->stub(Filesystem::class)
+            ->expects()
+            ->remove(m::any())
+            ->once();
 
-        $twig = $this->make(\Twig_Environment::class);
-
-        $context = $this->make(ContextManager::class);
-
-        $file = $this->make(File::class, [
-            'exists' => true,
-            'getTarget' => 'TARGET',
-            'getPath' => '/path/to/TARGET',
-            'getAction' => 'create',
-        ]);
-
-        $event = new FileEvent($file);
-        $manager = new FileManager($twig, $context);
+        $event = $this->getEvent('remove', true);
+        $manager = $this->getFileManager();
         $manager->remove($event);
 
-        $this->assertTrue($event->getMessage()->isSuccessful());
+        $this->assertMessage('Remove file TARGET', MessageType::SUCCESS(), $event->getMessage());
 
-        $fileSystem->verify('remove', 1, ['/path/to/TARGET']);
     }
 
 
@@ -212,37 +179,57 @@ class FileManagerTest extends Unit
     public function testRemoveFail()
     {
 
-        $fileSystem = $this->mock(Filesystem::class, [
-            'remove' => function () {
+        $fileSystem = $this->stub(Filesystem::class);
+
+        $fileSystem->allows()
+            ->remove(m::any())
+            ->andReturnUsing(function () {
                 throw new \Exception('Fallo al borrar el archivo');
-            }
-        ]);
+            });
 
-        $twig = $this->make(\Twig_Environment::class);
-
-        $context = $this->make(ContextManager::class);
-
-        $file = $this->make(File::class, [
-            'exists' => true,
-            'getTarget' => 'TARGET',
-            'getPath' => '/path/to/TARGET',
-            'getAction' => 'create',
-        ]);
-
-        $event = new FileEvent($file);
-        $manager = new FileManager($twig, $context);
+        $event = $this->getEvent('remove', true);
+        $manager = $this->getFileManager();
         $manager->remove($event);
 
-        $this->assertTrue($event->getMessage()->isError());
+        $this->assertMessage('Remove file TARGET', MessageType::ERROR(), $event->getMessage());
 
-        $fileSystem->verify('remove', 0, ['/path/to/TARGET']);
+
     }
 
     public function testSubscribedEvents()
     {
-        $this->assertEquals([
+        $this->tester->assertEquals([
             'wand.file.create' => 'create',
             'wand.file.remove' => 'remove',
         ], FileManager::getSubscribedEvents());
     }
+
+
+    protected function getEvent(string $action, $exists)
+    {
+        $file = $this->stub(File::class, [
+            'exists' => $exists,
+            'getTarget' => 'TARGET',
+            'getPath' => '/path/to/TARGET',
+            'getTemplate' => 'template',
+            'getAction' => $action,
+            'getChmod' => 0644
+        ]);
+
+        return new FileEvent($file);
+    }
+
+    protected function getFileManager()
+    {
+        $twig = $this->stub(\Twig_Environment::class, [
+            'render' => 'content'
+        ]);
+        $context = $this->stub(ContextManager::class, [
+            'toArray' => []
+        ]);
+
+        return new FileManager($twig, $context);
+    }
+
+
 }

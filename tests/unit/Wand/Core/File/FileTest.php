@@ -11,11 +11,10 @@
 
 namespace PlanB\Wand\Core\File;
 
-use PlanB\Utils\Dev\Tdd\Test\Unit;
-use PlanB\Wand\Core\Action\Action;
+use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Path\PathManager;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 /**
@@ -27,6 +26,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class FileTest extends Unit
 {
+
+    use Mocker;
+
+    /**
+     * @var  \UnitTester $tester
+     */
+    protected $tester;
 
     /**
      * @test
@@ -46,7 +52,7 @@ class FileTest extends Unit
      */
     public function create()
     {
-        $pathManager = $this->make(PathManager::class, [
+        $pathManager = $this->stub(PathManager::class, [
             'projectDir' => '/path/to/project'
         ]);
 
@@ -64,15 +70,15 @@ class FileTest extends Unit
 
         $file->setContainer($container);
 
-        $this->assertInstanceOf(File::class, $file);
+        $this->tester->assertInstanceOf(File::class, $file);
 
-        $this->assertEquals(0644, $file->getChmod());
-        $this->assertEquals('create', $file->getAction());
-        $this->assertEquals('@wand.metainfo.readme.twig', $file->getTemplate());
-        $this->assertEquals('README.md', $file->getTarget());
-        $this->assertEquals('/path/to/project/README.md', $file->getPath());
-        $this->assertFalse($file->exists());
+        $this->tester->assertEquals(0644, $file->getChmod());
+        $this->tester->assertEquals('create', $file->getAction());
+        $this->tester->assertEquals('@wand.metainfo.readme.twig', $file->getTemplate());
+        $this->tester->assertEquals('README.md', $file->getTarget());
+        $this->tester->assertEquals('/path/to/project/README.md', $file->getPath());
+        $this->tester->assertFalse($file->exists());
 
-        $this->assertEquals('metainfo', $file->getGroup());
+        $this->tester->assertEquals('metainfo', $file->getGroup());
     }
 }
