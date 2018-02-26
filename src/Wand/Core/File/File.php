@@ -132,10 +132,19 @@ class File extends Action
      */
     public function getPath(): string
     {
-        $projectDir = $this->getPathManager()
-            ->projectDir();
+        $projectDir = $this->context->getPath('project');
 
         return Path::join($projectDir, $this->target);
+    }
+
+    /**
+     * Devuelve las variables necesarias para renderizar el archivo
+     *
+     * @return string[]
+     */
+    public function getVars(): array
+    {
+        return $this->context->getParams();
     }
 
     /**

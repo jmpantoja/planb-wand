@@ -13,6 +13,7 @@ namespace PlanB\Wand\Core\File;
 
 use Codeception\Test\Unit;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
+use PlanB\Wand\Core\Context\Context;
 use PlanB\Wand\Core\Path\PathManager;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -45,6 +46,7 @@ class FileTest extends Unit
      * @covers ::getTemplate
      * @covers ::getTarget
      * @covers ::getGroup
+     * @covers ::getVars
      *
      * @covers ::getPath
      * @covers ::exists
@@ -56,8 +58,18 @@ class FileTest extends Unit
             'projectDir' => '/path/to/project'
         ]);
 
-        $container = new ContainerBuilder();
-        $container->set('wand.path.manager', $pathManager);
+        $context = $this->stub(Context::class, [
+            'getParams' => [
+                'keyA' => 'valueA',
+                'keyB' => 'valueB',
+                'keyC' => 'valueC',
+            ]
+
+        ]);
+        $context->expects()
+            ->getPath('project')
+            ->twice()
+            ->andReturn('/path/to/project/');
 
 
         $file = File::create([
@@ -68,7 +80,7 @@ class FileTest extends Unit
             ]
         ]);
 
-        $file->setContainer($container);
+        $file->setContext($context);
 
         $this->tester->assertInstanceOf(File::class, $file);
 
@@ -77,6 +89,13 @@ class FileTest extends Unit
         $this->tester->assertEquals('@wand.metainfo.readme.twig', $file->getTemplate());
         $this->tester->assertEquals('README.md', $file->getTarget());
         $this->tester->assertEquals('/path/to/project/README.md', $file->getPath());
+
+        $this->tester->assertEquals([
+            'keyA' => 'valueA',
+            'keyB' => 'valueB',
+            'keyC' => 'valueC',
+        ], $file->getVars());
+
         $this->tester->assertFalse($file->exists());
 
         $this->tester->assertEquals('metainfo', $file->getGroup());

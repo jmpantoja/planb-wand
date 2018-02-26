@@ -130,4 +130,18 @@ class PathManager
         return Path::create(__DIR__)
             ->parent(4);
     }
+
+    /**
+     * Devuelve un array con todas las rutas
+     *
+     * @return string[]
+     */
+    public function getPaths(): array
+    {
+        return [
+            'project' => $this->projectDir(),
+            'composer' => $this->composerJsonPath(),
+            'wand' => $this->wandDir(),
+        ];
+    }
 }

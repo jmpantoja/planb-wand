@@ -14,6 +14,8 @@ namespace PlanB\Spine\Core\Task;
 use Codeception\Test\Unit;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\ActionInterface;
+use PlanB\Wand\Core\Context\Context;
+use PlanB\Wand\Core\Context\ContextManager;
 use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskBuilder;
@@ -41,26 +43,22 @@ class TaskBuilderTest extends Unit
      * @test
      *
      * @covers ::__construct
-     * @covers ::setContainer
      *
      * @covers ::buildTask
      * @covers ::resolveActions
      * @covers ::buildAction
      */
-    public function create()
+    public function testCreate()
     {
         $tasks = $this->fromFile('complete');
 
-        $pathManager = $this->stub(PathManager::class, [
-            'projectDir' => realpath('.')
+        $context = $this->stub(ContextManager::class, [
+            'getContext' => $this->stub(Context::class)
         ]);
-
-        $container = new ContainerBuilder();
-        $container->set('wand.path.manager', $pathManager);
 
         foreach ($tasks as $options) {
 
-            $builder = new TaskBuilder($container);
+            $builder = new TaskBuilder($context);
             $task = $builder->buildTask($options);
             $this->tester->assertInstanceOf(Task::class, $task);
 

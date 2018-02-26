@@ -37,7 +37,10 @@ class ContextManagerTest extends Unit
      *
      * @covers ::__construct
      * @covers ::getSubscribedEvents
-     * @covers ::toArray
+     *
+     * @covers ::getValues
+     * @covers ::getContext
+     *
      * @covers ::execute
      * @covers ::resolve
      * @covers ::read
@@ -49,7 +52,7 @@ class ContextManagerTest extends Unit
 
         $expected = $data->expected;
 
-        $info = $this->getInfo($data);
+        $pathManager = $this->getPathManager($data);
         $logger = $this->stub(LogManager::class, [
             'info' => null
         ]);
@@ -67,9 +70,10 @@ class ContextManagerTest extends Unit
 
             });
 
-        $manager = new ContextManager($logger, $info);
+        $manager = new ContextManager($logger, $pathManager);
+        $context = $manager->getContext();
 
-        $this->tester->assertEquals($expected, $manager->toArray());
+        $this->tester->assertEquals($expected, $context->getParams());
 
         $this->tester->assertArrayHasKey('wand.context.execute', ContextManager::getSubscribedEvents());
     }
@@ -141,7 +145,7 @@ class ContextManagerTest extends Unit
             ->end();
     }
 
-    private function getInfo(Data $data)
+    private function getPathManager(Data $data)
     {
         $fileName = $data->fileName;
         $this->stub(Filesystem::class, [
@@ -149,10 +153,11 @@ class ContextManagerTest extends Unit
         ]);
 
         $pathManager = $this->stub(PathManager::class, [
-            'composerJsonPath' => $fileName
+            'composerJsonPath' => $fileName,
+            'getPaths' => []
         ]);
 
-        return new ComposerInfo($pathManager);
+        return $pathManager;
     }
 
 

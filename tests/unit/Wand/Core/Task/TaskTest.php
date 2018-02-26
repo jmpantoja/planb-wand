@@ -14,6 +14,8 @@ namespace PlanB\Spine\Core\Task;
 use Codeception\Test\Unit;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\ActionInterface;
+use PlanB\Wand\Core\Context\Context;
+use PlanB\Wand\Core\Context\ContextManager;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\Task;
@@ -54,15 +56,11 @@ class TaskTest extends Unit
     {
         $tasks = $this->fromFile('complete');
 
+        $builder = $this->getBuilder();
+
         foreach ($tasks as $options) {
-            $pathManager = $this->stub(PathManager::class, [
-                'projectDir' => realpath('.')
-            ]);
 
-            $container = new ContainerBuilder();
-            $container->set('wand.path.manager', $pathManager);
 
-            $builder = new TaskBuilder($container);
             $task = $builder->buildTask($options);
             $task->setEventDispatcher($this->stub(EventDispatcher::class));
             $task->setLogger($this->stub(LogManager::class));
@@ -92,14 +90,8 @@ class TaskTest extends Unit
         $tasks = $this->fromFile('complete');
         $options = $tasks['taskA'];
 
-        $pathManager = $this->stub(PathManager::class, [
-            'projectDir' => realpath('.')
-        ]);
+        $builder = $this->getBuilder();
 
-        $container = new ContainerBuilder();
-        $container->set('wand.path.manager', $pathManager);
-
-        $builder = new TaskBuilder($container);
         $task = $builder->buildTask($options);
 
         $this->tester->assertInstanceOf(Task::class, $task);
@@ -132,14 +124,7 @@ class TaskTest extends Unit
         $tasks = $this->fromFile('complete');
         $options = $tasks['taskA'];
 
-        $pathManager = $this->stub(PathManager::class, [
-            'projectDir' => realpath('.')
-        ]);
-
-        $container = new ContainerBuilder();
-        $container->set('wand.path.manager', $pathManager);
-
-        $builder = new TaskBuilder($container);
+        $builder = $this->getBuilder();
 
         $task = $builder->buildTask($options);
         $this->tester->assertInstanceOf(Task::class, $task);
@@ -157,6 +142,19 @@ class TaskTest extends Unit
 
         return $data['tasks'];
 
+    }
+
+    /**
+     * @return TaskBuilder
+     */
+    protected function getBuilder(): TaskBuilder
+    {
+        $context = $this->stub(ContextManager::class, [
+            'getContext' => $this->stub(Context::class)
+        ]);
+
+        $builder = new TaskBuilder($context);
+        return $builder;
     }
 
 

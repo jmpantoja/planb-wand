@@ -11,7 +11,6 @@
 
 namespace PlanB\Wand\Core\File;
 
-use PlanB\Wand\Core\Context\ContextManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -29,16 +28,15 @@ class FileManager implements EventSubscriberInterface
      */
     private $twig;
 
+
     /**
-     * @var \PlanB\Wand\Core\Context\ContextManager $context
+     * FileManager constructor.
+     *
+     * @param \Twig_Environment $twig
      */
-    private $context;
-
-
-    public function __construct(\Twig_Environment $twig, ContextManager $context)
+    public function __construct(\Twig_Environment $twig)
     {
         $this->twig = $twig;
-        $this->context = $context;
     }
 
     /**
@@ -81,7 +79,9 @@ class FileManager implements EventSubscriberInterface
         $file = $event->getFile();
 
         $template = $file->getTemplate();
-        $params = $this->context->toArray();
+        $params = $file->getVars();
+
+
         $path = $file->getPath();
         $chmod = $file->getChmod();
 

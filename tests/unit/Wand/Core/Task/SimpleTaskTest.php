@@ -14,6 +14,8 @@ namespace PlanB\Spine\Core\Task;
 use Codeception\Test\Unit;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\ActionEvent;
+use PlanB\Wand\Core\Context\Context;
+use PlanB\Wand\Core\Context\ContextManager;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\SimpleTask;
@@ -84,18 +86,14 @@ class SimpleTaskTest extends Unit
 
         $dispatcher = new EventDispatcher();
 
-        $pathManager = $this->stub(PathManager::class, [
-            'projectDir' => realpath('.')
+        $context = $this->stub(ContextManager::class, [
+            'getContext' => $this->stub(Context::class)
         ]);
-
-        $container = new ContainerBuilder();
-        $container->set('wand.path.manager', $pathManager);
-
 
         $tasks = $this->fromFile('complete');
         $options = $tasks['taskA'];
 
-        $builder = new TaskBuilder($container);
+        $builder = new TaskBuilder($context);
         $task = $builder->buildTask($options);
 
         $task->setEventDispatcher($dispatcher);

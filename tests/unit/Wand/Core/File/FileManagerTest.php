@@ -213,7 +213,8 @@ class FileManagerTest extends Unit
             'getPath' => '/path/to/TARGET',
             'getTemplate' => 'template',
             'getAction' => $action,
-            'getChmod' => 0644
+            'getChmod' => 0644,
+            'getVars' => []
         ]);
 
         return new FileEvent($file);

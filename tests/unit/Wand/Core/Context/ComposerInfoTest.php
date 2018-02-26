@@ -32,24 +32,23 @@ class ComposerInfoTest extends Unit
      *
      * @covers ::__construct
      * @covers ::load
+     * @covers ::initialize
+     * @covers ::populateSortedKeys
      * @covers ::optimize
+     *
      * @covers ::save
      *
      */
     public function testUnnecessarySave()
     {
-        $composer = realpath(__DIR__ . '/dummy/optimized/composer.json');
-
-        $pathManager = $this->stub(PathManager::class, [
-            'composerJsonPath' => $composer
-        ]);
+        $pathManager = $this->getPathManager('optimized');
 
         $this->stub(Filesystem::class)
             ->expects()
             ->dumpFile(m::any(), m::any())
             ->never();
 
-        $manager = new ComposerInfo($pathManager);
+        $manager = ComposerInfo::load($pathManager);
         $manager->save();
 
     }
@@ -59,25 +58,23 @@ class ComposerInfoTest extends Unit
      *
      * @covers ::__construct
      * @covers ::load
+     * @covers ::initialize
      * @covers ::populateSortedKeys
      * @covers ::optimize
+     *
      * @covers ::save
      *
      */
     public function testLoad()
     {
-        $composer = realpath(__DIR__ . '/dummy/empty/composer.json');
-
-        $pathManager = $this->stub(PathManager::class, [
-            'composerJsonPath' => $composer
-        ]);
+        $pathManager = $this->getPathManager('empty');
 
         $this->stub(Filesystem::class)
             ->expects()
             ->dumpFile(m::any(), m::any())
             ->once();
 
-        $target = new ComposerInfo($pathManager);
+        $target = ComposerInfo::load($pathManager);
 
         $this->assertAttributeEquals([
             'name',
@@ -116,8 +113,10 @@ class ComposerInfoTest extends Unit
      *
      * @covers ::__construct
      * @covers ::load
+     * @covers ::initialize
      * @covers ::populateSortedKeys
      * @covers ::optimize
+     *
      * @covers ::has
      * @covers ::get
      * @covers ::set
@@ -139,7 +138,7 @@ class ComposerInfoTest extends Unit
             ->dumpFile(m::any(), m::any())
             ->twice();
 
-        $target = new ComposerInfo($pathManager);
+        $target = ComposerInfo::load($pathManager);
 
         $this->tester->assertFalse($target->has($property));
 
@@ -158,25 +157,33 @@ class ComposerInfoTest extends Unit
 
     public function providerAccessor()
     {
-        $composer = realpath(__DIR__ . '/dummy/empty/composer.json');
 
-        $pathManager = $this->stub(PathManager::class, [
-            'composerJsonPath' => $composer
-        ]);
-
+        $pathManager = $this->getPathManager('empty');
         return Provider::create()
             ->add([
-                'path'=>'package/name',
-                'property'=>PackageNameProperty::create(),
-                'pathManager'=>$pathManager
+                'path' => 'package/name',
+                'property' => PackageNameProperty::create(),
+                'pathManager' => $pathManager
+            ])
+            ->add([
+                'path' => 'package/description',
+                'property' => PackageDescriptionProperty::create(),
+                'pathManager' => $pathManager
             ])
             ->end();
-
-        return [
-            [PackageNameProperty::create(), 'package/name'],
-            [PackageDescriptionProperty::create(), 'package description']
-        ];
     }
 
+
+    private function getPathManager(string $composer): PathManager
+    {
+
+        $path = realpath(sprintf('%s/dummy/%s/composer.json', __DIR__, $composer));
+
+        $pathManager = $this->stub(PathManager::class, [
+            'composerJsonPath' => $path
+        ]);
+
+        return $pathManager;
+    }
 
 }

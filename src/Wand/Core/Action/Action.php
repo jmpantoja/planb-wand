@@ -11,9 +11,7 @@
 
 namespace PlanB\Wand\Core\Action;
 
-use PlanB\Wand\Core\Action\Exception\InvalidServiceTypeException;
-use PlanB\Wand\Core\Path\PathManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use PlanB\Wand\Core\Context\Context;
 
 /**
  * Clase Base para acciones
@@ -24,34 +22,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class Action implements ActionInterface
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @var \PlanB\Wand\Core\Context\Context $context
      */
-    private $container;
+    protected $context;
 
     /**
-     * @inheritdoc
+     * Asigna el contexto
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface|null $container
+     * @param \PlanB\Wand\Core\Context\Context $context
+     * @return \PlanB\Wand\Core\Action\Action
      */
-    public function setContainer(?ContainerInterface $container = null)
+    public function setContext(Context $context): self
     {
-        $this->container = $container;
-    }
-
-    /**
-     * Devuelve el PathManager
-     *
-     * @return \PlanB\Wand\Core\Path\PathManager
-     */
-    public function getPathManager(): PathManager
-    {
-        $name = 'wand.path.manager';
-        $manager = $this->container->get($name);
-
-        if (!($manager instanceof PathManager)) {
-            throw InvalidServiceTypeException::create($name, PathManager::class, get_class($manager));
-        }
-
-        return $manager;
+        $this->context = $context;
+        return $this;
     }
 }

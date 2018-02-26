@@ -19,7 +19,6 @@
         <parameter key="wand.task.manager.class">\PlanB\Wand\Core\Task\TaskManager</parameter>
 
         <!--context-->
-        <parameter key="wand.context.composer.info.class">\PlanB\Wand\Core\Context\ComposerInfo</parameter>
         <parameter key="wand.context.manager.class">\PlanB\Wand\Core\Context\ContextManager</parameter>
 
         <!--file-->
@@ -43,7 +42,7 @@
 
         <!--tasks-->
         <service id="wand.task.builder" class="%wand.task.builder.class%">
-            <argument type="service" id="service_container"/>
+            <argument type="service" id="wand.context.manager"/>
         </service>
 
         <service id="wand.task.manager" class="%wand.task.manager.class%">
@@ -52,19 +51,14 @@
         </service>
 
         <!--context-->
-        <service id="wand.context.composer.info" class="%wand.context.composer.info.class%">
-            <argument type="service" id="wand.path.manager"/>
-        </service>
-
         <service id="wand.context.manager" class="%wand.context.manager.class%">
             <argument type="service" id="wand.log.manager"/>
-            <argument type="service" id="wand.context.composer.info"/>
+            <argument type="service" id="wand.path.manager"/>
         </service>
 
         <!--file-->
         <service id="wand.file.manager" class="%wand.file.manager.class%">
             <argument type="service" id="wand.twig"/>
-            <argument type="service" id="wand.context.manager"/>
         </service>
 
     </services>

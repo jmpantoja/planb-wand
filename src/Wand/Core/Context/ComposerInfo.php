@@ -35,9 +35,9 @@ class ComposerInfo
     private $contents;
 
     /**
-     * @var string $filename
+     * @var string $composerPath
      */
-    private $filename;
+    private $composerPath;
 
     /**
      * @var bool $changed
@@ -52,27 +52,38 @@ class ComposerInfo
     /**
      * ComposerInfo constructor.
      */
-    public function __construct(PathManager $pathManager)
+    public function __construct(string $composerPath)
     {
+        $this->initialize($composerPath);
+        $this->optimize();
+
         $this->populateSortedKeys();
-        $this->load($pathManager->composerJsonPath());
     }
 
     /**
      * Inicializa todos las propiedades de la clase,
-     * segun el contenido del fichero composer.json pasado
+     * segun el contenido del fichero composer.json del proyecto
      *
-     * @param string $filename
+     * @param \PlanB\Wand\Core\Path\PathManager $pathManager
+     * @return \PlanB\Wand\Core\Context\ComposerInfo
      */
-    public function load(string $filename): void
+    public static function load(PathManager $pathManager): self
     {
-        $json = file_get_contents($filename);
+        return new self($pathManager->composerJsonPath());
+    }
 
-        $this->filename = $filename;
+    /**
+     * Inicia los atributos del objeto
+     *
+     * @param string $composerPath
+     */
+    private function initialize(string $composerPath): void
+    {
+        $json = file_get_contents($composerPath);
+
+        $this->composerPath = $composerPath;
         $this->contents = json_decode($json, true);
         $this->propertyAccess = PropertyAccess::createPropertyAccessor();
-
-        $this->optimize();
     }
 
     /**
@@ -176,7 +187,7 @@ class ComposerInfo
         if (!$this->changed) {
             return;
         }
-        
+
         $this->dumpFile();
     }
 
@@ -190,7 +201,7 @@ class ComposerInfo
         $fileSystem = new Filesystem();
 
 
-        $fileSystem->dumpFile($this->filename, $content);
+        $fileSystem->dumpFile($this->composerPath, $content);
     }
 
 

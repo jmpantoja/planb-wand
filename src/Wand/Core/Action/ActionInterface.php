@@ -11,8 +11,6 @@
 
 namespace PlanB\Wand\Core\Action;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
-interface ActionInterface extends ContainerAwareInterface
+interface ActionInterface
 {
 }

@@ -12,8 +12,7 @@
 namespace PlanB\Wand\Core\Task;
 
 use PlanB\Wand\Core\Action\ActionInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use PlanB\Wand\Core\Context\ContextManager;
 
 /**
  * Se encarga de instancias tareas
@@ -21,28 +20,21 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @package PlanB\Wand\Core\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
-class TaskBuilder implements ContainerAwareInterface
+class TaskBuilder
 {
+
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @var \PlanB\Wand\Core\Context\ContextManager $contextManager
      */
-    private $container;
+    private $contextManager;
 
     /**
      * TaskBuilder constructor.
-     *
-     * TaskBuilder constructor.
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param \PlanB\Wand\Core\Context\ContextManager $contextManager
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContextManager $contextManager)
     {
-        $this->setContainer($container);
-    }
-
-
-    public function setContainer(?ContainerInterface $container = null): void
-    {
-        $this->container = $container;
+        $this->contextManager = $contextManager;
     }
 
     /**
@@ -91,8 +83,10 @@ class TaskBuilder implements ContainerAwareInterface
         $className = $options['classname'];
         unset($options['classname']);
 
+        $context = $this->contextManager->getContext();
+
         $action = $className::create($options);
-        $action->setContainer($this->container);
+        $action->setContext($context);
 
         return $action;
     }

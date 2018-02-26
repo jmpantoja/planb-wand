@@ -15,6 +15,7 @@ namespace PlanB\Wand\Core\File;
 use Codeception\Test\Unit;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\Action;
+use PlanB\Wand\Core\Context\Context;
 use PlanB\Wand\Core\Path\PathManager;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -39,50 +40,17 @@ class ActionTest extends Unit
     /**
      * @test
      *
-     * @covers ::setContainer
-     * @covers ::getPathManager
+     * @covers ::setContext
      */
     public function testContainer()
     {
 
-
-
+        $context = $this->stub(Context::class);
         $action = $this->stub(Action::class);
-        $pathManager = $this->stub(PathManager::class);
+        $action->setContext($context);
 
-        $container = new ContainerBuilder();
-        $container->set('wand.path.manager', $pathManager);
-
-        $action->setContainer($container);
-        $this->tester->assertEquals($pathManager, $action->getPathManager());
+        $this->assertAttributeEquals($context, 'context', $action);
 
     }
-
-    /**
-     * @test
-     *
-     * @covers ::setContainer
-     * @covers ::getPathManager
-     *
-     * @covers \PlanB\Wand\Core\Action\Exception\InvalidServiceTypeException::create
-     *
-     * @expectedException \PlanB\Wand\Core\Action\Exception\InvalidServiceTypeException
-     * @expectedExceptionMessage Se esperaba que el servicio 'wand.path.manager' fuera del tipo 'PlanB\Wand\Core\Path\PathManager', pero ha devuelto un 'stdClass'
-     */
-    public function testPathManagerException()
-    {
-
-        $action = $this->stub(Action::class);
-
-        $pathManager = new \stdClass();
-
-        $container = new ContainerBuilder();
-        $container->set('wand.path.manager', $pathManager);
-
-        $action->setContainer($container);
-        $action->getPathManager();
-
-    }
-
 
 }

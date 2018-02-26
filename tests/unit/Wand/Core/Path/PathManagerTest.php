@@ -90,7 +90,7 @@ class PathManagerTest extends Unit
 
     /**
      * @test
-     * 
+     *
      * @covers ::__construct
      * @covers ::build
      * @covers ::sanitizePathArgument
@@ -141,6 +141,25 @@ class PathManagerTest extends Unit
     {
         $manager = new PathManager();
         $this->tester->assertEquals(realpath('.'), $manager->wandDir());
+    }
+
+
+    /**
+     * @test
+     *
+     * @covers ::__construct
+     * @covers ::getPaths
+     */
+    public function testGetPaths()
+    {
+        $manager = new PathManager();
+
+        $this->assertEquals([
+            'project' => sprintf('%s', realpath('.')),
+            'composer' => sprintf('%s/composer.json', realpath('.')),
+            'wand' => sprintf('%s', realpath('.'))
+
+        ], $manager->getPaths());
     }
 
 

@@ -20,6 +20,7 @@ use PlanB\Wand\Core\Context\Property\PackageDescriptionProperty;
 use PlanB\Wand\Core\Context\Property\PackageNameProperty;
 use PlanB\Wand\Core\Context\Property\PackageTypeProperty;
 use PlanB\Wand\Core\Logger\LogManager;
+use PlanB\Wand\Core\Path\PathManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -34,6 +35,11 @@ class ContextManager implements EventSubscriberInterface
      * @var \PlanB\Wand\Core\Logger\LogManager $logger
      */
     private $logger;
+
+    /**
+     * @var \PlanB\Wand\Core\Path\PathManager $pathManager
+     */
+    private $pathManager;
 
     /**
      * @var \PlanB\Wand\Core\Context\ComposerInfo $info
@@ -56,10 +62,11 @@ class ContextManager implements EventSubscriberInterface
      * @param \PlanB\Wand\Core\Logger\LogManager $logger
      * @param \PlanB\Wand\Core\Context\ComposerInfo $info
      */
-    public function __construct(LogManager $logger, ComposerInfo $info)
+    public function __construct(LogManager $logger, PathManager $pathManager)
     {
         $this->logger = $logger;
-        $this->info = $info;
+        $this->pathManager = $pathManager;
+        $this->info = ComposerInfo::load($pathManager);
 
         $this->properties['package_name'] = PackageNameProperty::create();
         $this->properties['package_description'] = PackageDescriptionProperty::create();
@@ -85,8 +92,6 @@ class ContextManager implements EventSubscriberInterface
 
     /**
      * Comprueba que el archivo composer.json sea correcto
-     *
-     * @param \PlanB\Wand\Core\Action\ActionEvent $event
      */
     public function execute(): void
     {
@@ -99,12 +104,27 @@ class ContextManager implements EventSubscriberInterface
         $this->info->save();
     }
 
+
+    /**
+     * Devuelve el contexto de la aplicación
+     *
+     * @return \PlanB\Wand\Core\Context\Context
+     */
+    public function getContext(): Context
+    {
+        $params = $this->getValues();
+        $paths = $this->pathManager->getPaths();
+
+        return Context::create($params, $paths);
+    }
+
+
     /**
      * Devuelve los valores almacenados en composer.json
      *
      * @return mixed[]
      */
-    public function toArray(): array
+    private function getValues(): array
     {
         if (empty($this->values)) {
             $this->execute();
