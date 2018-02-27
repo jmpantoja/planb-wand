@@ -30,6 +30,11 @@ class PathManager
     private $projectDir;
 
     /**
+     * @var string $targetPath
+     */
+    private $targetPath;
+
+    /**
      * PathManager constructor.
      */
     public function __construct()
@@ -47,6 +52,8 @@ class PathManager
     public function build(?string $projectDir): void
     {
         $projectDir = $this->sanitizePathArgument($projectDir);
+
+        $this->targetPath = $projectDir;
         $this->projectDir = $this->findProjectDir($projectDir);
     }
 
@@ -111,6 +118,17 @@ class PathManager
 
 
     /**
+     * Devuelve la ruta indicada como argumento
+     *
+     * @return string
+     */
+    public function targetPath(): string
+    {
+        return $this->targetPath;
+    }
+
+
+    /**
      * Devuelve la ruta del archivo composer.json
      *
      * @return string
@@ -127,8 +145,14 @@ class PathManager
      */
     public function wandDir(): string
     {
-        return Path::create(__DIR__)
+        $wandDir = Path::create(__DIR__)
             ->parent(4);
+
+        if ($wandDir->extension() === 'phar') {
+            $wandDir = Path::create(__DIR__)
+                ->parent(5);
+        }
+        return $wandDir;
     }
 
     /**
@@ -140,6 +164,9 @@ class PathManager
     {
         return [
             'project' => $this->projectDir(),
+            'vendor/bin' => Path::join($this->projectDir(), 'vendor/bin'),
+            'wand-vendor/bin' => Path::join($this->wandDir(), 'vendor/bin'),
+            'target' => $this->targetPath(),
             'composer' => $this->composerJsonPath(),
             'wand' => $this->wandDir(),
         ];

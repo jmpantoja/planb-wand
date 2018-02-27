@@ -31,4 +31,6 @@ tasks:
         group: metainfo
         classname: \PlanB\Wand\Core\Command\Command
         params:
-          cmd: codecept
+          cwd: vendor/bin
+          pattern: codecept bootstrap %project%
+

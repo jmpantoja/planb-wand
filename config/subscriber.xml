@@ -15,6 +15,9 @@
                 <argument type="service" id="wand.file.manager"/>
             </call>
             <call method="addSubscriber">
+                <argument type="service" id="wand.command.manager"/>
+            </call>
+            <call method="addSubscriber">
                 <argument type="service" id="wand.context.manager"/>
             </call>
         </service>

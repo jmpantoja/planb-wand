@@ -56,7 +56,8 @@ class ConfigManagerTest extends Unit
         $tasks = $manager->getTasks();
 
         $this->tester->assertEquals([
-            'init'
+            'init',
+            'cmd'
         ], array_keys($tasks));
 
     }

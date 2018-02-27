@@ -12,6 +12,8 @@
 namespace PlanB\Wand\Core\Action;
 
 use PlanB\Wand\Core\Action\Exception\ActionEventFactoryException;
+use PlanB\Wand\Core\Command\Command;
+use PlanB\Wand\Core\Command\CommandEvent;
 use PlanB\Wand\Core\File\File;
 use PlanB\Wand\Core\File\FileEvent;
 
@@ -31,12 +33,13 @@ class ActionEventFactory
      */
     public static function fromAction(ActionInterface $action): ActionEvent
     {
-        if (!($action instanceof File)) {
+        if ($action instanceof File) {
+            $event = new FileEvent($action);
+        } elseif ($action instanceof Command) {
+            $event = new CommandEvent($action);
+        } else {
             throw ActionEventFactoryException::create($action);
         }
-
-        $event = new FileEvent($action);
-
         return $event;
     }
 }

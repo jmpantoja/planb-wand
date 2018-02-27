@@ -38,3 +38,5 @@ tasks:
         group: metainfo
         classname: \PlanB\Wand\Core\Command\Command
         params:
+          pattern: ls -la
+          cwd: vendor/bin

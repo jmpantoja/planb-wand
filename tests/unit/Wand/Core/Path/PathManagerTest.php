@@ -13,6 +13,7 @@ namespace PlanB\Wand\Core\Path;
 
 use Codeception\Test\Unit;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
+use PlanB\Utils\Path\Path;
 
 
 /**
@@ -141,6 +142,45 @@ class PathManagerTest extends Unit
     {
         $manager = new PathManager();
         $this->tester->assertEquals(realpath('.'), $manager->wandDir());
+
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::__construct
+     * @covers ::build
+     * @covers ::sanitizePathArgument
+     * @covers ::wandDir
+     */
+    public function testWandDirPharMode()
+    {
+        $this->double(Path::class, [
+            'parent' => function ($level) {
+                if ($level == 4) {
+                    return self::create(sprintf('%s/wand.phar', realpath('.')));
+                } else {
+                    return self::create(realpath('.'));
+                }
+            }
+        ]);
+
+        $manager = new PathManager();
+        $this->tester->assertEquals(realpath('.'), $manager->wandDir());
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::__construct
+     * @covers ::build
+     * @covers ::sanitizePathArgument
+     * @covers ::targetPath
+     */
+    public function targetPath()
+    {
+        $manager = new PathManager();
+        $this->tester->assertEquals(realpath('.'), $manager->targetPath());
     }
 
 
@@ -157,7 +197,11 @@ class PathManagerTest extends Unit
         $this->assertEquals([
             'project' => sprintf('%s', realpath('.')),
             'composer' => sprintf('%s/composer.json', realpath('.')),
-            'wand' => sprintf('%s', realpath('.'))
+            'wand' => sprintf('%s', realpath('.')),
+            'vendor/bin' => sprintf('%s/vendor/bin', realpath('.')),
+            'wand-vendor/bin' => sprintf('%s/vendor/bin', realpath('.')),
+            'target' => sprintf('%s', realpath('.')),
+
 
         ], $manager->getPaths());
     }

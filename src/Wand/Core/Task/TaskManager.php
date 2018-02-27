@@ -61,11 +61,9 @@ class TaskManager
      */
     public function setTasks(array $tasks): self
     {
-
         foreach ($tasks as $name => $task) {
             $this->addTask($name, $this->builder->buildTask($task));
         }
-
         return $this;
     }
 

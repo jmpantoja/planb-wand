@@ -23,6 +23,11 @@
 
         <!--file-->
         <parameter key="wand.file.manager.class">\PlanB\Wand\Core\File\FileManager</parameter>
+
+        <!--command-->
+        <parameter key="wand.command.manager.class">\PlanB\Wand\Core\Command\CommandManager</parameter>
+
+
     </parameters>
 
     <services>
@@ -60,6 +65,9 @@
         <service id="wand.file.manager" class="%wand.file.manager.class%">
             <argument type="service" id="wand.twig"/>
         </service>
+
+        <!--command-->
+        <service id="wand.command.manager" class="%wand.command.manager.class%"/>
 
     </services>
 </container>

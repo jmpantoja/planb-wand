@@ -14,6 +14,12 @@ namespace PlanB\Wand\Core\File;
 use PlanB\Utils\Options\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Verifica las opciones de un objeto File
+ *
+ * @package PlanB\Wand\Core\File
+ * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
+ */
 class FileOptions extends Options
 {
 

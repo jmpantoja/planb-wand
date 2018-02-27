@@ -1,0 +1,30 @@
+{
+  "alias": "wand.phar",
+  "chmod": "0755",
+  "directories": [
+    "src",
+    "config"
+  ],
+  "files": [
+    "LICENSE"
+  ],
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": [
+        "Tests"
+      ],
+      "in": "vendor"
+    },
+    {
+      "name": "*.xsd",
+      "exclude": [
+        "Tests"
+      ],
+      "in": "vendor"
+    }
+  ],
+  "main": "bin/wand.php",
+  "output": "wand.phar",
+  "stub": true
+}
