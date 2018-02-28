@@ -11,6 +11,7 @@
 
 namespace PlanB\Wand\Core\Context;
 
+use PlanB\Wand\Core\Context\Exception\UnknowParamException;
 use PlanB\Wand\Core\Context\Exception\UnknowPathException;
 
 /**
@@ -79,5 +80,20 @@ class Context
     public function getParams(): array
     {
         return $this->params;
+    }
+
+    /**
+     * Devuelve el valor de un parámetro
+     *
+     * @param string $name
+     * @return string
+     */
+    public function getParam(string $name): string
+    {
+        if (!isset($this->params[$name])) {
+            $availables = array_keys($this->params);
+            throw  UnknowParamException::create($name, $availables);
+        }
+        return $this->params[$name];
     }
 }

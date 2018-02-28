@@ -34,6 +34,11 @@ class FileOptions extends Options
         $this->defineChmod($resolver);
         $this->defineGroup($resolver);
         $this->defineTarget($resolver);
+
+        if ($this->getProfile() === 'without-template') {
+            return;
+        }
+
         $this->defineTemplate($resolver);
     }
 

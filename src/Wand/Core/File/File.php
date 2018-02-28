@@ -57,11 +57,11 @@ class File extends Action
      *
      * @param mixed[] $params
      */
-    private function __construct(array $params)
+    protected function __construct(array $params)
     {
         $this->action = $params['action'];
         $this->chmod = $params['chmod'];
-        $this->template = $params['template'];
+        $this->template = $params['template'] ?? null;
         $this->target = $params['target'];
         $this->group = $params['group'];
     }

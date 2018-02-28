@@ -1,3 +1,18 @@
+---
+tasks:
+  init:
+    classname: \PlanB\Wand\Core\Task\SimpleTask
+    description: wubba lubba dub dub
+    actions:
+      travis:
+      scrutinizer:
+      readme:
+      changelog:
+      conduct:
+      contributing:
+      license:
+      editorconfig:
+
 actions:
   travis:
         group: ci
@@ -17,14 +32,55 @@ actions:
           action: create
           chmod: 0644
 
+  readme:
+        group: projectInfo
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.projectInfo/readme.twig'
+          target: README.md
+          action: create
+          chmod: 0644
 
+  changelog:
+        group: projectInfo
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.projectInfo/changelog.twig'
+          target: CHANGELOG.md
+          action: create
+          chmod: 0644
 
+  conduct:
+        group: projectInfo
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.projectInfo/code_of_conduct.twig'
+          target: CODE_OF_CONDUCT.md
+          action: create
+          chmod: 0644
 
+  contributing:
+        group: projectInfo
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.projectInfo/contributing.twig'
+          target: CONTRIBUTING.md
+          action: create
+          chmod: 0644
 
-tasks:
-  init:
-    classname: \PlanB\Wand\Core\Task\SimpleTask
-    description: wubba lubba dub dub
-    actions:
-      travis:
-      scrutinizer:
+  license:
+        group: projectInfo
+        classname: \PlanB\Wand\ProjectInfo\File\License
+        params:
+          target: LICENSE
+          action: create
+          chmod: 0644
+
+  editorconfig:
+        group: projectInfo
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.projectInfo/editorconfig.twig'
+          target: .editorconfig
+          action: create
+          chmod: 0644

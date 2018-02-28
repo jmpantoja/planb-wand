@@ -14,6 +14,7 @@ namespace PlanB\Wand\Core\Context;
 
 use Codeception\Test\Unit;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
+use PlanB\Wand\Core\Context\Exception\UnknowParamException;
 use PlanB\Wand\Core\Context\Exception\UnknowPathException;
 
 /**
@@ -40,9 +41,12 @@ class ContextTest extends Unit
      * @covers ::create
      *
      * @covers ::getParams
+     * @covers ::getParam
+     *
      * @covers ::getPath
      *
      * @covers \PlanB\Wand\Core\Context\Exception\UnknowPathException::create
+     * @covers \PlanB\Wand\Core\Context\Exception\UnknowParamException::create
      */
     public function testCreate()
     {
@@ -63,6 +67,15 @@ class ContextTest extends Unit
         $context = Context::create($params, $paths);
 
         $this->tester->assertEquals($params, $context->getParams());
+
+        $this->tester->assertEquals('valueA', $context->getParam('keyA'));
+        $this->tester->assertEquals('valueB', $context->getParam('keyB'));
+        $this->tester->assertEquals('valueC', $context->getParam('keyC'));
+
+        $this->tester->expectException(UnknowParamException::class, function () use ($context) {
+            $context->getParam('paramXXX');
+        });
+
         $this->tester->assertEquals('valueA', $context->getPath('pathA'));
         $this->tester->assertEquals('valueB', $context->getPath('pathB'));
         $this->tester->assertEquals('valueC', $context->getPath('pathC'));
