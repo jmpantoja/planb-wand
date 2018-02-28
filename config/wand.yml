@@ -1,36 +1,30 @@
+actions:
+  travis:
+        group: ci
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.ci/travis.twig'
+          target: .travis.yml
+          action: create
+          chmod: 0644
+
+  scrutinizer:
+        group: ci
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.ci/scrutinizer.twig'
+          target: .scrutinizer.yml
+          action: create
+          chmod: 0644
+
+
+
+
+
 tasks:
   init:
     classname: \PlanB\Wand\Core\Task\SimpleTask
     description: wubba lubba dub dub
     actions:
-      context:
-        group: context
-        classname: \PlanB\Wand\Core\File\File
-      readme:
-        group: metainfo
-        classname: \PlanB\Wand\Core\File\File
-        params:
-          template: '@wand.metainfo/readme.twig'
-          target: README.md
-          action: create #remove|create
-          chmod: 0644
-      license:
-        group: metainfo
-        classname: \PlanB\Wand\MetaInfo\File\License
-        params:
-          template: '@wand.metainfo/readme.twig'
-          target: LICENSE
-          action: remove #remove|create
-          chmod: 0644
-
-  cmd:
-    classname: \PlanB\Wand\Core\Task\SimpleTask
-    description: wubba lubba dub dub
-    actions:
-      comando:
-        group: metainfo
-        classname: \PlanB\Wand\Core\Command\Command
-        params:
-          cwd: vendor/bin
-          pattern: codecept bootstrap %project%
-
+      travis:
+      scrutinizer:

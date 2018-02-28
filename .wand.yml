@@ -1,8 +1,5 @@
 ---
 tasks:
   init:
-   readme: true
-   license: true
-  cmd:
-   comando: true
+   travis: true
 

@@ -33,20 +33,31 @@ final class DefaultConfig extends BaseConfig
         $root = $treeBuilder->root('default')
             ->children();
 
+        $this->defineActions($root);
         $this->defineTasks($root);
         $root->end();
 
         return $treeBuilder;
     }
 
-    private function defineTasks(NodeBuilder $root): void
+    private function defineActions(NodeBuilder $root): void
     {
-        $root->arrayNode('tasks')
+        $root->arrayNode('actions')
             ->arrayPrototype()
-            ->append($this->getClassNameNode(TaskInterface::class, Task::class))
-            ->append($this->getDescriptionNode())
-            ->append($this->getActionsNode())
+            ->children()
+            ->append($this->getActionGroupNode())
+            ->append($this->getClassNameNode(ActionInterface::class))
+            ->append($this->getParamsNode())
             ->end();
+    }
+
+    private function getActionGroupNode(): ScalarNodeDefinition
+    {
+        $node = new ScalarNodeDefinition('group');
+        $node->cannotBeEmpty()
+            ->end();
+
+        return $node;
     }
 
     private function getClassNameNode(string $interface, ?string $default = null): ScalarNodeDefinition
@@ -67,6 +78,29 @@ final class DefaultConfig extends BaseConfig
         return $node;
     }
 
+
+    private function getParamsNode(): ArrayNodeDefinition
+    {
+        $node = new ArrayNodeDefinition('params');
+
+        $node->scalarPrototype()
+            ->end();
+
+        return $node;
+    }
+
+
+    private function defineTasks(NodeBuilder $root): void
+    {
+        $root->arrayNode('tasks')
+            ->arrayPrototype()
+            ->append($this->getClassNameNode(TaskInterface::class, Task::class))
+            ->append($this->getDescriptionNode())
+            ->append($this->getActionsNode())
+            ->end();
+    }
+
+
     private function getDescriptionNode(): ScalarNodeDefinition
     {
         $node = new ScalarNodeDefinition('description');
@@ -81,31 +115,9 @@ final class DefaultConfig extends BaseConfig
         $node = new ArrayNodeDefinition('actions');
 
         $node->arrayPrototype()
-            ->children()
-            ->append($this->getActionGroupNode())
-            ->append($this->getClassNameNode(ActionInterface::class))
-            ->append($this->getParamsNode())
-            ->end();
+        ->children()
 
-        return $node;
-    }
-
-
-    private function getActionGroupNode(): ScalarNodeDefinition
-    {
-        $node = new ScalarNodeDefinition('group');
-        $node->cannotBeEmpty()
-            ->end();
-
-        return $node;
-    }
-
-    private function getParamsNode(): ArrayNodeDefinition
-    {
-        $node = new ArrayNodeDefinition('params');
-
-        $node->scalarPrototype()
-            ->end();
+        ->end();
 
         return $node;
     }

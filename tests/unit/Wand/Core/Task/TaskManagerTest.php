@@ -16,6 +16,8 @@ use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\ActionInterface;
 use PlanB\Wand\Core\Action\ActionRunner;
 use PlanB\Wand\Core\Config\ConfigManager;
+use PlanB\Wand\Core\Context\Context;
+use PlanB\Wand\Core\Context\ContextManager;
 use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskBuilder;
 use PlanB\Wand\Core\Task\TaskInterface;
@@ -100,19 +102,14 @@ class TaskManagerTest extends Unit
 
     private function getTaskManager(): TaskManager
     {
-        $tasks = $this->fromFile('complete');
-
-        $builder = $this->stub(TaskBuilder::class, [
-            'buildTask' => $this->stub(Task::class, [
-                'getActions' => [
-                    $this->stub(ActionInterface::class),
-                    $this->stub(ActionInterface::class)
-                ]
-            ])
+        $context = $this->stub(ContextManager::class, [
+            'getContext' => $this->stub(Context::class)
         ]);
 
+        $builder = new TaskBuilder($context);
+
         $config = $this->stub(ConfigManager::class, [
-            'getTasks' => $tasks
+            'getConfig' => $this->fromFile('complete')
         ]);
 
         return new TaskManager($config, $builder);
@@ -120,14 +117,13 @@ class TaskManagerTest extends Unit
 
     private function fromFile(string $name): array
     {
-        $data = ['tasks' => []];
+        $data = ['tasks' => [], 'actions' => []];
         $path = sprintf('%s/configs/%s.yml', __DIR__, $name);
         if (is_file($path)) {
             $data = Yaml::parseFile($path);
         }
 
-        return $data['tasks'];
-
+        return $data;
     }
 
 }

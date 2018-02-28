@@ -1,26 +1,21 @@
 ---
+actions:
+  readme:
+    group: metainfo
+    classname: \PlanB\Wand\Core\File\File
+    params:
+      template: '@wand.metainfo.readme.twig'
+      target: README.md
+      action: create # delete, create
+      chmod: 0644
 tasks:
   init:
     description: wubba lubba dub dub
     actions:
       readme:
-        group: metainfo
-        classname: \PlanB\Wand\Core\File\File
-        params:
-          template: '@wand.metainfo.readme.twig'
-          target: README.md
-          action: create # delete, create
-          chmod: 0644
 
   taskB:
     classname: \PlanB\Wand\Core\Task\Task
     description: wubba lubba dub dub
     actions:
       readme:
-        group: metainfo
-        classname: \PlanB\Wand\Core\File\File
-        params:
-          template: '@wand.metainfo.readme.twig'
-          target: README.md
-          action: create # delete, create
-          chmod: 0644

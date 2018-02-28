@@ -151,30 +151,6 @@ class PathManagerTest extends Unit
      * @covers ::__construct
      * @covers ::build
      * @covers ::sanitizePathArgument
-     * @covers ::wandDir
-     */
-    public function testWandDirPharMode()
-    {
-        $this->double(Path::class, [
-            'parent' => function ($level) {
-                if ($level == 4) {
-                    return self::create(sprintf('%s/wand.phar', realpath('.')));
-                } else {
-                    return self::create(realpath('.'));
-                }
-            }
-        ]);
-
-        $manager = new PathManager();
-        $this->tester->assertEquals(realpath('.'), $manager->wandDir());
-    }
-
-    /**
-     * @test
-     *
-     * @covers ::__construct
-     * @covers ::build
-     * @covers ::sanitizePathArgument
      * @covers ::targetPath
      */
     public function targetPath()
@@ -182,7 +158,6 @@ class PathManagerTest extends Unit
         $manager = new PathManager();
         $this->tester->assertEquals(realpath('.'), $manager->targetPath());
     }
-
 
     /**
      * @test

@@ -40,6 +40,8 @@ class UndefinidedTaskNameException extends \RuntimeException
             $message = sprintf("La tarea '%s' no existe (disponibles: %s)", $name, $availablesText);
         }
 
+        $message = sprintf("%s\nEs necesario revisar el archivo de configuración '.wand.yml'", $message);
+
         return new self($message, 0, $previous);
     }
 }

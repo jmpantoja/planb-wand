@@ -41,12 +41,13 @@ class ConfigManager
         $this->pathManager = $pathManager;
     }
 
+
     /**
-     * Devuelve el array de tareas validado y bien formado
+     * Devuelve el array de configuración validado y bien formado
      *
      * @return mixed[]
      */
-    public function getTasks(): array
+    public function getConfig(): array
     {
 
         $customPath = $this->getCustomPath();
@@ -57,11 +58,9 @@ class ConfigManager
         $defaultPath = $this->getDefaultPath();
         $config = DefaultConfig::create($defaultPath)
             ->processWithFilter($custom);
-
-
-        return $config['tasks'];
+        
+        return $config;
     }
-
 
     /**
      * Devuelve la ruta de la configuración por defecto

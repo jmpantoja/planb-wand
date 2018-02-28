@@ -54,14 +54,11 @@ class TaskTest extends Unit
      */
     public function testCreate()
     {
-        $tasks = $this->fromFile('complete');
-
         $builder = $this->getBuilder();
 
-        foreach ($tasks as $options) {
+        $tasks = $builder->getTasks();
+        foreach ($tasks as $task) {
 
-
-            $task = $builder->buildTask($options);
             $task->setEventDispatcher($this->stub(EventDispatcher::class));
             $task->setLogger($this->stub(LogManager::class));
 
@@ -87,24 +84,21 @@ class TaskTest extends Unit
      */
     public function testGet()
     {
-        $tasks = $this->fromFile('complete');
-        $options = $tasks['taskA'];
-
         $builder = $this->getBuilder();
+        $tasks = $builder->getTasks();
 
-        $task = $builder->buildTask($options);
+        foreach ($tasks as $task) {
+            $this->tester->assertInstanceOf(Task::class, $task);
 
-        $this->tester->assertInstanceOf(Task::class, $task);
+            $this->tester->assertTrue($task->exists('actionA'));
+            $this->tester->assertTrue($task->exists('actionB'));
+            $this->tester->assertFalse($task->exists('actionXXXX'));
 
-        $this->tester->assertTrue($task->exists('actionA'));
-        $this->tester->assertTrue($task->exists('actionB'));
-        $this->tester->assertFalse($task->exists('actionXXXX'));
+            $this->tester->assertInstanceOf(ActionInterface::class, $task->get('actionA'));
+            $this->tester->assertInstanceOf(ActionInterface::class, $task->get('actionB'));
 
-        $this->tester->assertInstanceOf(ActionInterface::class, $task->get('actionA'));
-        $this->tester->assertInstanceOf(ActionInterface::class, $task->get('actionB'));
-
-        $this->tester->assertCount(2, $task->getActions());
-
+            $this->tester->assertCount(2, $task->getActions());
+        }
     }
 
 
@@ -121,27 +115,14 @@ class TaskTest extends Unit
      */
     public function testGetException()
     {
-        $tasks = $this->fromFile('complete');
-        $options = $tasks['taskA'];
-
         $builder = $this->getBuilder();
 
-        $task = $builder->buildTask($options);
-        $this->tester->assertInstanceOf(Task::class, $task);
+        $tasks = $builder->getTasks();
 
-        $task->get('actionXXXXXX');
-    }
-
-    private function fromFile(string $name): array
-    {
-        $data = ['tasks' => []];
-        $path = sprintf('%s/configs/%s.yml', __DIR__, $name);
-        if (is_file($path)) {
-            $data = Yaml::parseFile($path);
+        foreach ($tasks as $task) {
+            $this->tester->assertInstanceOf(Task::class, $task);
+            $task->get('actionXXXXXX');
         }
-
-        return $data['tasks'];
-
     }
 
     /**
@@ -149,13 +130,26 @@ class TaskTest extends Unit
      */
     protected function getBuilder(): TaskBuilder
     {
+        $config = $this->fromFile('complete');
         $context = $this->stub(ContextManager::class, [
             'getContext' => $this->stub(Context::class)
         ]);
 
         $builder = new TaskBuilder($context);
+        $builder->setConfig($config);
+
         return $builder;
     }
 
+    private function fromFile(string $name): array
+    {
+        $data = ['tasks' => [], 'actions' => []];
+        $path = sprintf('%s/configs/%s.yml', __DIR__, $name);
+        if (is_file($path)) {
+            $data = Yaml::parseFile($path);
+        }
+
+        return $data;
+    }
 
 }

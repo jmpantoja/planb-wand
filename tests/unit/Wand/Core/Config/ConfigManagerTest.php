@@ -38,7 +38,7 @@ class ConfigManagerTest extends Unit
      * @test
      *
      * @covers ::__construct
-     * @covers ::getTasks
+     * @covers ::getConfig
      * @covers ::getDefaultPath
      * @covers ::getCustomPath
      */
@@ -53,11 +53,12 @@ class ConfigManagerTest extends Unit
 
         $this->assertAttributeInstanceOf(PathManager::class, 'pathManager', $manager);
 
-        $tasks = $manager->getTasks();
+        $config = $manager->getConfig();
+        $tasks = $config['tasks'];
 
         $this->tester->assertEquals([
-            'init',
-            'cmd'
+            'init'
+
         ], array_keys($tasks));
 
     }

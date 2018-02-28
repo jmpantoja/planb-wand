@@ -41,6 +41,7 @@ class DefaultConfigTest extends Unit
      * @dataProvider providerProcess
      *
      * @covers ::getConfigTree
+     * @covers ::defineActions
      * @covers ::defineTasks
      * @covers ::getClassNameNode
      * @covers ::getDescriptionNode
@@ -70,6 +71,8 @@ class DefaultConfigTest extends Unit
                 ]
             ]);
 
+        unset($config['actions']);
+
         $this->tester->assertEquals($expected, $config);
 
     }
@@ -81,12 +84,10 @@ class DefaultConfigTest extends Unit
             ->add([
                 'path' => Path::create(sprintf('%s/configs/default/valid.yml', __DIR__)),
                 'expected' => $this->fromFile('valid.expected'),
-                'exception' => null
             ], 'valid')
             ->add([
                 'path' => Path::create(sprintf('%s/configs/default/default_values.yml', __DIR__)),
                 'expected' => $this->fromFile('default_values.expected'),
-                'exception' => null
             ], 'default values')
             ->end();
     }

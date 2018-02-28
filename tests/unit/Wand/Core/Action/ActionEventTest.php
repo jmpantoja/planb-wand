@@ -97,6 +97,7 @@ class ActionEventTest extends Unit
             'getTarget' => 'target',
             'getPath' => 'target',
             'getAction' => 'action',
+            'getGroup'=>'group'
         ]);
         $event = new FileEvent($file);
         return $event;

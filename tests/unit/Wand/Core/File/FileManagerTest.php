@@ -50,7 +50,7 @@ class FileManagerTest extends Unit
         $manager = $this->stub(FileManager::class);
         $manager->create($event);
 
-        $this->assertMessage('Create file TARGET', MessageType::SKIP(), $event->getMessage());
+        $this->assertMessage('[group] Create file TARGET', MessageType::SKIP(), $event->getMessage());
     }
 
 
@@ -88,7 +88,7 @@ class FileManagerTest extends Unit
         $manager = $this->getFileManager();
         $manager->create($event);
 
-        $this->assertMessage('Create file TARGET', MessageType::SUCCESS(), $event->getMessage());
+        $this->assertMessage('[group] Create file TARGET', MessageType::SUCCESS(), $event->getMessage());
 
     }
 
@@ -119,7 +119,7 @@ class FileManagerTest extends Unit
         $manager = $this->getFileManager();
         $manager->create($event);
 
-        $this->assertMessage('Create file TARGET', MessageType::ERROR(), $event->getMessage());
+        $this->assertMessage('[group] Create file TARGET', MessageType::ERROR(), $event->getMessage());
 
     }
 
@@ -142,7 +142,7 @@ class FileManagerTest extends Unit
         $manager = $this->getFileManager();
         $manager->remove($event);
 
-        $this->assertMessage('Remove file TARGET', MessageType::SKIP(), $event->getMessage());
+        $this->assertMessage('[group] Remove file TARGET', MessageType::SKIP(), $event->getMessage());
     }
 
     /**
@@ -164,7 +164,7 @@ class FileManagerTest extends Unit
         $manager = $this->getFileManager();
         $manager->remove($event);
 
-        $this->assertMessage('Remove file TARGET', MessageType::SUCCESS(), $event->getMessage());
+        $this->assertMessage('[group] Remove file TARGET', MessageType::SUCCESS(), $event->getMessage());
 
     }
 
@@ -191,7 +191,7 @@ class FileManagerTest extends Unit
         $manager = $this->getFileManager();
         $manager->remove($event);
 
-        $this->assertMessage('Remove file TARGET', MessageType::ERROR(), $event->getMessage());
+        $this->assertMessage('[group] Remove file TARGET', MessageType::ERROR(), $event->getMessage());
 
 
     }
@@ -212,6 +212,7 @@ class FileManagerTest extends Unit
             'getTarget' => 'TARGET',
             'getPath' => '/path/to/TARGET',
             'getTemplate' => 'template',
+            'getGroup' => 'group',
             'getAction' => $action,
             'getChmod' => 0644,
             'getVars' => []

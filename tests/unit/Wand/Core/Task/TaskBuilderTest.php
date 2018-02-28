@@ -44,22 +44,27 @@ class TaskBuilderTest extends Unit
      *
      * @covers ::__construct
      *
+     * @covers ::setConfig
+     * @covers ::getTasks
      * @covers ::buildTask
      * @covers ::resolveActions
      * @covers ::buildAction
      */
     public function testCreate()
     {
-        $tasks = $this->fromFile('complete');
+        $config = $this->fromFile('complete');
 
         $context = $this->stub(ContextManager::class, [
             'getContext' => $this->stub(Context::class)
         ]);
 
-        foreach ($tasks as $options) {
 
-            $builder = new TaskBuilder($context);
-            $task = $builder->buildTask($options);
+        $builder = new TaskBuilder($context);
+        $builder->setConfig($config);
+
+        $tasks = $builder->getTasks();
+
+        foreach ($tasks as $task) {
             $this->tester->assertInstanceOf(Task::class, $task);
 
             $this->assertContainsOnly(ActionInterface::class, $task->getActions());
@@ -67,18 +72,17 @@ class TaskBuilderTest extends Unit
         }
 
         $this->tester->assertCount(2, $tasks);
-
     }
 
     private function fromFile(string $name): array
     {
-        $data = ['tasks' => []];
+        $data = ['tasks' => [], 'actions' => []];
         $path = sprintf('%s/configs/%s.yml', __DIR__, $name);
         if (is_file($path)) {
             $data = Yaml::parseFile($path);
         }
 
-        return $data['tasks'];
+        return $data;
 
     }
 

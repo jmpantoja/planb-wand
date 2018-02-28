@@ -10,8 +10,12 @@
 
         <service id="wand.twig_loader" class="Twig_Loader_Filesystem">
             <call method="addPath">
-                <argument type="string">src/Wand/MetaInfo/config/views</argument>
+                <argument type="string">%root_dir%/src/Wand/MetaInfo/config/views</argument>
                 <argument type="string">wand.metainfo</argument>
+            </call>
+            <call method="addPath">
+                <argument type="string">%root_dir%/src/Wand/Ci/config/views</argument>
+                <argument type="string">wand.ci</argument>
             </call>
         </service>
 

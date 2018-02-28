@@ -44,6 +44,8 @@ class UndefinidedActionNameException extends \RuntimeException
             $name = array_shift($names);
             $message = sprintf("La acción '%s' no existe (disponibles: %s)", $name, $availablesText);
         }
+        
+        $message = sprintf("%s\nEs necesario revisar el archivo de configuración '.wand.yml'", $message);
 
         return new self($message, 0, $previous);
     }

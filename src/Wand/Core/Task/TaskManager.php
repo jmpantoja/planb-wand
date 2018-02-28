@@ -33,10 +33,6 @@ class TaskManager
      */
     private $configManager;
 
-    /**
-     * @var \PlanB\Wand\Core\Task\TaskBuilder $builder
-     */
-    private $builder;
 
     /**
      * TaskManager constructor.
@@ -47,10 +43,11 @@ class TaskManager
     public function __construct(ConfigManager $configManager, TaskBuilder $builder)
     {
         $this->configManager = $configManager;
-        $this->builder = $builder;
+        $config = $this->configManager->getConfig();
 
-        $tasks = $this->configManager->getTasks();
-        $this->setTasks($tasks);
+        $builder->setConfig($config);
+
+        $this->setTasks($builder->getTasks());
     }
 
     /**
@@ -62,7 +59,7 @@ class TaskManager
     public function setTasks(array $tasks): self
     {
         foreach ($tasks as $name => $task) {
-            $this->addTask($name, $this->builder->buildTask($task));
+            $this->addTask($name, $task);
         }
         return $this;
     }
@@ -99,6 +96,7 @@ class TaskManager
      */
     public function get(string $task): TaskInterface
     {
+
         if (!$this->exists($task)) {
             $availables = array_keys($this->tasks);
             throw TaskMissingException::create($task, $availables);

@@ -45,6 +45,7 @@ class FileEventTest extends Unit
             'getTarget' => 'filename',
             'getPath' => 'target',
             'getAction' => 'create',
+            'getGroup' => 'group',
         ]);
         $event = new FileEvent($file);
 
@@ -53,7 +54,7 @@ class FileEventTest extends Unit
 
         $lines = $message->parseVerbose();
 
-        $this->tester->assertContains('Create file filename', $lines[0]);
+        $this->tester->assertContains('[group] Create file filename', $lines[0]);
 
         $this->tester->assertEquals('wand.file.create', $event->getName());
         $this->tester->assertEquals($file, $event->getFile());

@@ -29,6 +29,16 @@ class TaskBuilder
     private $contextManager;
 
     /**
+     * @var mixed[] $tasks
+     */
+    private $tasks;
+
+    /**
+     * @var mixed[] $actions
+     */
+    private $actions;
+
+    /**
      * TaskBuilder constructor.
      * @param \PlanB\Wand\Core\Context\ContextManager $contextManager
      */
@@ -38,13 +48,44 @@ class TaskBuilder
     }
 
     /**
+     * Asigna el array de configuración
+     *
+     * @param mixed[] $config
+     * @return \PlanB\Wand\Core\Task\TaskBuilder
+     */
+    public function setConfig(array $config): self
+    {
+        $this->tasks = $config['tasks'];
+        $this->actions = $config['actions'];
+
+        return $this;
+    }
+
+
+    /**
+     * Devuelve una lista de los objetos task definidos
+     *
+     * @return \PlanB\Wand\Core\Task\TaskInterface[]
+     */
+    public function getTasks(): array
+    {
+        $tasks = [];
+        foreach ($this->tasks as $name => $options) {
+            $tasks[$name] = $this->buildTask($options);
+        }
+
+        return $tasks;
+    }
+
+
+    /**
      * Crea una nueva tarea
      *
      * @param mixed[] $options
      *
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
-    public function buildTask(array $options): TaskInterface
+    private function buildTask(array $options): TaskInterface
     {
         $className = $options['classname'];
         unset($options['classname']);
@@ -65,8 +106,9 @@ class TaskBuilder
     {
         $actions = $options['actions'] ?? [];
 
-        array_walk($actions, function (&$action): void {
-            $action = $this->buildAction($action);
+        array_walk($actions, function (&$action, $name): void {
+            $options = $this->actions[$name] ?? [];
+            $action = $this->buildAction($options);
         });
 
         return $actions;
@@ -80,6 +122,7 @@ class TaskBuilder
      */
     private function buildAction(array $options): ActionInterface
     {
+
         $className = $options['classname'];
         unset($options['classname']);
 

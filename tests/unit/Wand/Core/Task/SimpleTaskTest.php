@@ -90,11 +90,13 @@ class SimpleTaskTest extends Unit
             'getContext' => $this->stub(Context::class)
         ]);
 
-        $tasks = $this->fromFile('complete');
-        $options = $tasks['taskA'];
+        $config = $this->fromFile('complete');
 
         $builder = new TaskBuilder($context);
-        $task = $builder->buildTask($options);
+        $builder->setConfig($config);
+
+        $tasks = $builder->getTasks();
+        $task = $tasks['taskA'];
 
         $task->setEventDispatcher($dispatcher);
         $task->setLogger($logger);
@@ -105,13 +107,13 @@ class SimpleTaskTest extends Unit
 
     private function fromFile(string $name): array
     {
-        $data = ['tasks' => []];
+        $data = ['tasks' => [], 'actions' => []];
         $path = sprintf('%s/configs/%s.yml', __DIR__, $name);
         if (is_file($path)) {
             $data = Yaml::parseFile($path);
         }
 
-        return $data['tasks'];
+        return $data;
 
     }
 }

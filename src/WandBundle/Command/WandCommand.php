@@ -88,6 +88,7 @@ class WandCommand extends BaseCommand
         $task->setEventDispatcher($dispatcher);
         $task->setLogger($this->getLogger());
 
+
         return $task;
     }
 }

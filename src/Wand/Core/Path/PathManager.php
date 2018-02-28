@@ -148,10 +148,6 @@ class PathManager
         $wandDir = Path::create(__DIR__)
             ->parent(4);
 
-        if ($wandDir->extension() === 'phar') {
-            $wandDir = Path::create(__DIR__)
-                ->parent(5);
-        }
         return $wandDir;
     }
 
