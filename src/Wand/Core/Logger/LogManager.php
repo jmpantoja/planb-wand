@@ -19,6 +19,7 @@ use PlanB\Wand\Core\Logger\Message\LogMessage;
 use PlanB\Wand\Core\Logger\Message\MessageEvent;
 use PlanB\Wand\Core\Logger\Question\QuestionEvent;
 use PlanB\Wand\Core\Logger\Question\QuestionMessage;
+use PlanB\Wand\Core\Task\TaskInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
@@ -29,6 +30,11 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 class LogManager
 {
+
+    /**
+     * @var int $level
+     */
+    private $level = 0;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
@@ -45,6 +51,24 @@ class LogManager
         $this->dispatcher = $dispatcher;
     }
 
+    public function setLevel(int $level): LogManager
+    {
+        $this->level = $level;
+        return $this;
+    }
+
+    public function begin(TaskInterface $task): void
+    {
+        $level = $task->getLevel();
+
+        $title = sprintf("Running %s task...", $task->getName());
+        $message = LogMessage::info()
+            ->setLevel($level)
+            ->setTitle($title);
+
+        $this->message($message);
+    }
+
     /**
      * Muestra un mensaje tipo info por consola
      *
@@ -53,6 +77,7 @@ class LogManager
     public function info(string $title): void
     {
         $message = LogMessage::info()
+            ->setLevel($this->level)
             ->setTitle($title);
 
         $this->message($message);
@@ -67,6 +92,7 @@ class LogManager
     public function success(string $title, array $verbose = []): void
     {
         $message = LogMessage::success()
+            ->setLevel($this->level)
             ->setTitle($title)
             ->setVerbose($verbose);
         $this->message($message);
@@ -81,6 +107,7 @@ class LogManager
     public function skip(string $title, array $verbose = []): void
     {
         $message = LogMessage::skip()
+            ->setLevel($this->level)
             ->setTitle($title)
             ->setVerbose($verbose);
 
@@ -96,6 +123,7 @@ class LogManager
     public function error(string $title, array $verbose = []): void
     {
         $message = LogMessage::error()
+            ->setLevel($this->level)
             ->setTitle($title)
             ->setVerbose($verbose);
 

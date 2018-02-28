@@ -47,11 +47,13 @@
 
         <!--tasks-->
         <service id="wand.task.builder" class="%wand.task.builder.class%">
-            <argument type="service" id="wand.context.manager"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="wand.log.manager"/>
         </service>
 
         <service id="wand.task.manager" class="%wand.task.manager.class%">
             <argument type="service" id="wand.config.manager"/>
+            <argument type="service" id="wand.context.manager"/>
             <argument type="service" id="wand.task.builder"/>
         </service>
 

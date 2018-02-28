@@ -16,10 +16,12 @@ use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\ActionInterface;
 use PlanB\Wand\Core\Context\Context;
 use PlanB\Wand\Core\Context\ContextManager;
+use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Path\PathManager;
 use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -48,18 +50,17 @@ class TaskBuilderTest extends Unit
      * @covers ::getTasks
      * @covers ::buildTask
      * @covers ::resolveActions
+     * @covers ::getTaskRef
      * @covers ::buildAction
      */
     public function testCreate()
     {
         $config = $this->fromFile('complete');
 
-        $context = $this->stub(ContextManager::class, [
-            'getContext' => $this->stub(Context::class)
-        ]);
+        $logger = $this->stub(LogManager::class);
+        $dispatcher = new EventDispatcher();
 
-
-        $builder = new TaskBuilder($context);
+        $builder = new TaskBuilder($dispatcher, $logger);
         $builder->setConfig($config);
 
         $tasks = $builder->getTasks();
@@ -68,7 +69,7 @@ class TaskBuilderTest extends Unit
             $this->tester->assertInstanceOf(Task::class, $task);
 
             $this->assertContainsOnly(ActionInterface::class, $task->getActions());
-            $this->tester->assertCount(2, $task->getActions());
+            $this->tester->assertCount(3, $task->getActions());
         }
 
         $this->tester->assertCount(2, $tasks);

@@ -39,7 +39,7 @@ class ConfigManagerTest extends Unit
      *
      * @covers ::__construct
      * @covers ::getConfig
-     * @covers ::getDefaultPath
+     * @covers ::getDefaultPaths
      * @covers ::getCustomPath
      */
     public function testInit()

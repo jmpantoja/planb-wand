@@ -54,7 +54,7 @@ class CommandTest extends Unit
         $this->tester->assertEquals($commandLine, $command->getCommandLine());
 
         $this->tester->assertEquals('vendor/bin/ls -la', $command->getTitle());
-        $this->tester->assertEquals('group', $command->getGroup());
+        $this->tester->assertEquals('Group', $command->getGroup());
 
         $cwd = sprintf('%s/vendor/bin', $base);
         $this->tester->assertEquals($cwd, $command->getCwd());

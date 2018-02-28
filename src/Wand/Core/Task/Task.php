@@ -11,12 +11,16 @@
 
 namespace PlanB\Wand\Core\Task;
 
+use PlanB\Wand\Core\Action\Action;
 use PlanB\Wand\Core\Action\ActionEvent;
 use PlanB\Wand\Core\Action\ActionEventFactory;
 use PlanB\Wand\Core\Action\ActionInterface;
+use PlanB\Wand\Core\Context\Context;
+use PlanB\Wand\Core\File\File;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
 use PlanB\Wand\Core\Task\Exception\ActionMissingException;
+use PlanB\Wand\Core\Task\Exception\InvalidTypeActionException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
@@ -25,8 +29,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  * @package PlanB\Wand\Core\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
-abstract class Task implements TaskInterface
+abstract class Task extends Action implements TaskInterface
 {
+
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
      */
@@ -40,7 +45,7 @@ abstract class Task implements TaskInterface
     /**
      * @var \PlanB\Wand\Core\Logger\LogManager $logger
      */
-    private $logger;
+    protected $logger;
 
     /**
      * @var string $description
@@ -50,7 +55,7 @@ abstract class Task implements TaskInterface
     /**
      * @var \PlanB\Wand\Core\Action\ActionInterface[] $actions ;
      */
-    private $actions;
+    private $actions = [];
 
     /**
      * Task constructor.
@@ -93,6 +98,16 @@ abstract class Task implements TaskInterface
     /**
      * @inheritdoc
      *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @inheritdoc
+     *
      * @param \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
@@ -114,6 +129,37 @@ abstract class Task implements TaskInterface
         return $this;
     }
 
+    /**
+     * @inheritDoc
+     * @param \PlanB\Wand\Core\Context\Context $context
+     * @return \PlanB\Wand\Core\Action\ActionInterface
+     */
+    public function setContext(Context $context): ActionInterface
+    {
+        $this->context = $context;
+
+        foreach ($this->actions as $action) {
+            $action->setContext($context);
+        }
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @param int $level
+     * @return \PlanB\Wand\Core\Action\ActionInterface
+     */
+    public function setLevel(int $level): ActionInterface
+    {
+        $this->level = $level;
+
+        $this->logger->setLevel($level);
+        foreach ($this->actions as $action) {
+            $action->setLevel($level);
+        }
+        return $this;
+    }
 
     /**
      * @inheritdoc
@@ -159,7 +205,41 @@ abstract class Task implements TaskInterface
             throw ActionMissingException::create($name, $availables);
         }
 
-        return $this->actions[$name];
+        $action = $this->actions[$name];
+        $this->configureActionLevel($action);
+
+        return $action;
+    }
+
+    /**
+     * Devuelve una acción tipo file
+     *
+     * @param string $name
+     * @return \PlanB\Wand\Core\File\File
+     */
+    public function file(string $name): File
+    {
+        $file = $this->get($name);
+        if (!($file instanceof File)) {
+            throw InvalidTypeActionException::create($name, File::class);
+        }
+        return $file;
+    }
+
+
+    /**
+     * Asigna el nivel a una acción
+     *
+     * @param \PlanB\Wand\Core\Action\ActionInterface $action
+     */
+    private function configureActionLevel(ActionInterface $action): void
+    {
+        $level = $this->getLevel();
+
+        if ($action instanceof Task) {
+            $level = $this->getLevel() + 1;
+        }
+        $action->setLevel($level);
     }
 
     /**
@@ -194,25 +274,13 @@ abstract class Task implements TaskInterface
     }
 
     /**
-     * Lanza la tarea
+     * @inheritdoc
+     * @return null|\PlanB\Wand\Core\Logger\Message\LogMessage
      */
     public function launch(): void
     {
-        $this->validateContext();
-
-        $title = sprintf('Running %s task...', $this->name);
-        $this->logger->info($title);
+        $this->logger->begin($this);
         $this->execute();
-    }
-
-    /**
-     * Comprueba que los valores del composer.json sean correctos
-     * antes de ejecutar la tarea
-     *
-     */
-    protected function validateContext(): void
-    {
-        $this->dispatcher->dispatch('wand.context.execute');
     }
 
     /**

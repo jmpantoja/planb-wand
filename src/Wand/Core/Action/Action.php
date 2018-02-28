@@ -22,17 +22,45 @@ use PlanB\Wand\Core\Context\Context;
 abstract class Action implements ActionInterface
 {
     /**
+     * @var int $level
+     */
+    protected $level = 0;
+
+    /**
      * @var \PlanB\Wand\Core\Context\Context $context
      */
     protected $context;
 
     /**
-     * Asigna el contexto
+     * Devuelve el nivel de esta acción
+     *
+     * @return int
+     */
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @param int $level
+     * @return \PlanB\Wand\Core\Action\ActionInterface
+     */
+    public function setLevel(int $level): ActionInterface
+    {
+        $this->level = $level;
+        return $this;
+    }
+
+
+    /**
+     * @inheritdoc
      *
      * @param \PlanB\Wand\Core\Context\Context $context
-     * @return \PlanB\Wand\Core\Action\Action
+     * @return \PlanB\Wand\Core\Action\ActionInterface
      */
-    public function setContext(Context $context): self
+    public function setContext(Context $context): ActionInterface
     {
         $this->context = $context;
         return $this;

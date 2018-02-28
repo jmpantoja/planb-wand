@@ -18,10 +18,13 @@ use PlanB\Wand\Core\Action\ActionRunner;
 use PlanB\Wand\Core\Config\ConfigManager;
 use PlanB\Wand\Core\Context\Context;
 use PlanB\Wand\Core\Context\ContextManager;
+use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskBuilder;
+use PlanB\Wand\Core\Task\TaskEvent;
 use PlanB\Wand\Core\Task\TaskInterface;
 use PlanB\Wand\Core\Task\TaskManager;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -65,6 +68,8 @@ class TaskManagerTest extends Unit
      *
      * @covers ::__construct
      * @covers ::get
+     * @covers ::getContext
+     *
      * @covers ::exists
      */
     public function testGetTask()
@@ -75,7 +80,7 @@ class TaskManagerTest extends Unit
         $this->tester->assertInstanceOf(TaskInterface::class, $task);
 
         $this->assertContainsOnly(ActionInterface::class, $task->getActions());
-        $this->tester->assertCount(2, $task->getActions());
+        $this->tester->assertCount(3, $task->getActions());
 
     }
 
@@ -100,19 +105,86 @@ class TaskManagerTest extends Unit
 
     }
 
+
+    /**
+     * @test
+     *
+     * @covers ::__construct
+     * @covers ::execute
+     */
+    public function testExecute()
+    {
+        $manager = $this->getTaskManager();
+
+        $task = $this->stub(Task::class);
+        $task->allows()
+            ->launch()
+            ->once();
+
+        $event = $this->stub(TaskEvent::class, [
+            'getTask' => $task
+        ]);
+
+        $event->allows()
+            ->blank()
+            ->once();
+
+        $manager->execute($event);
+
+    }
+
+
+    /**
+     * @test
+     *
+     * @covers ::__construct
+     * @covers ::executeByName
+     */
+    public function testExecuteByName()
+    {
+        $manager = $this->getTaskManager();
+
+        $task = $this->stub(Task::class);
+
+
+        $task->allows()
+            ->launch()
+            ->once();
+
+        $event = $this->stub(TaskEvent::class, [
+            'getTask' => $task
+        ]);
+
+        $event->allows()
+            ->blank();
+
+        $manager->executeByName('taskA');
+    }
+
+
+    public function testSubscribedEvents()
+    {
+        $this->tester->assertEquals([
+            'wand.task.execute' => 'execute'
+        ], TaskManager::getSubscribedEvents());
+    }
+
     private function getTaskManager(): TaskManager
     {
         $context = $this->stub(ContextManager::class, [
             'getContext' => $this->stub(Context::class)
         ]);
 
-        $builder = new TaskBuilder($context);
+        $logger = $this->stub(LogManager::class);
+        $dispatcher = new EventDispatcher();
+
+        $builder = new TaskBuilder($dispatcher, $logger);
 
         $config = $this->stub(ConfigManager::class, [
             'getConfig' => $this->fromFile('complete')
         ]);
 
-        return new TaskManager($config, $builder);
+        return new TaskManager($config, $context, $builder);
     }
 
     private function fromFile(string $name): array

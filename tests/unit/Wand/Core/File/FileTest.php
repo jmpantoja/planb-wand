@@ -52,7 +52,7 @@ class FileTest extends Unit
      * @covers ::exists
      *
      */
-    public function create()
+    public function testCreate()
     {
         $pathManager = $this->stub(PathManager::class, [
             'projectDir' => '/path/to/project'
@@ -98,6 +98,6 @@ class FileTest extends Unit
 
         $this->tester->assertFalse($file->exists());
 
-        $this->tester->assertEquals('metainfo', $file->getGroup());
+        $this->tester->assertEquals('Metainfo', $file->getGroup());
     }
 }

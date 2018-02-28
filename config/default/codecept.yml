@@ -1,0 +1,55 @@
+---
+tasks:
+  codecept:
+    classname: \PlanB\Wand\Tdd\Task\CodeceptTask
+    description: wubba lubba dub dub
+    actions:
+      codeception:
+      codecept_bootstrap:
+      unit_bootstrap:
+      acceptance_bootstrap:
+      functional_bootstrap:
+
+actions:
+  codeception:
+        group: tdd
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.tdd/codeception.twig'
+          target: codeception.yml
+          action: overwrite
+          chmod: 0644
+
+  codecept_bootstrap:
+        group: tdd
+        classname: \PlanB\Wand\Core\Command\Command
+        params:
+          pattern: codecept bootstrap %project%
+          cwd: vendor/bin
+
+  unit_bootstrap:
+        group: tdd
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.tdd/unit_bootstrap.twig'
+          target: tests/unit/_bootstrap.php
+          action: create
+          chmod: 0644
+
+  acceptance_bootstrap:
+        group: tdd
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.tdd/acceptance_bootstrap.twig'
+          target: tests/acceptance/_bootstrap.php
+          action: create
+          chmod: 0644
+
+  functional_bootstrap:
+        group: tdd
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.tdd/functional_bootstrap.twig'
+          target: tests/functional/_bootstrap.php
+          action: create
+          chmod: 0644

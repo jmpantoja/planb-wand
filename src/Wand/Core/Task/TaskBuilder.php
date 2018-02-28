@@ -12,7 +12,8 @@
 namespace PlanB\Wand\Core\Task;
 
 use PlanB\Wand\Core\Action\ActionInterface;
-use PlanB\Wand\Core\Context\ContextManager;
+use PlanB\Wand\Core\Logger\LogManager;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Se encarga de instancias tareas
@@ -22,11 +23,15 @@ use PlanB\Wand\Core\Context\ContextManager;
  */
 class TaskBuilder
 {
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
+     */
+    private $dispatcher;
 
     /**
-     * @var \PlanB\Wand\Core\Context\ContextManager $contextManager
+     * @var \PlanB\Wand\Core\Logger\LogManager $logger
      */
-    private $contextManager;
+    private $logger;
 
     /**
      * @var mixed[] $tasks
@@ -40,11 +45,14 @@ class TaskBuilder
 
     /**
      * TaskBuilder constructor.
-     * @param \PlanB\Wand\Core\Context\ContextManager $contextManager
+     *
+     * @param \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
+     * @param \PlanB\Wand\Core\Logger\LogManager $logger
      */
-    public function __construct(ContextManager $contextManager)
+    public function __construct(EventDispatcher $dispatcher, LogManager $logger)
     {
-        $this->contextManager = $contextManager;
+        $this->dispatcher = $dispatcher;
+        $this->logger = $logger;
     }
 
     /**
@@ -71,7 +79,7 @@ class TaskBuilder
     {
         $tasks = [];
         foreach ($this->tasks as $name => $options) {
-            $tasks[$name] = $this->buildTask($options);
+            $tasks[$name] = $this->buildTask($name, $options);
         }
 
         return $tasks;
@@ -81,18 +89,25 @@ class TaskBuilder
     /**
      * Crea una nueva tarea
      *
+     * @param string $name
      * @param mixed[] $options
      *
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
-    private function buildTask(array $options): TaskInterface
+    private function buildTask(string $name, array $options): TaskInterface
     {
         $className = $options['classname'];
         unset($options['classname']);
 
         $options['actions'] = $this->resolveActions($options);
 
-        return $className::create($options);
+        $task = $className::create($options);
+
+        $task->setName($name);
+        $task->setEventDispatcher($this->dispatcher);
+        $task->setLogger($this->logger);
+
+        return $task;
     }
 
 
@@ -100,18 +115,42 @@ class TaskBuilder
      * Resuelve la lista de acciones de una tarea
      *
      * @param mixed[] $options
-     * @return \PlanB\Wand\Core\Task\Action[]
+     * @return \PlanB\Wand\Core\Action\ActionInterface[]
      */
     private function resolveActions(array $options): array
     {
         $actions = $options['actions'] ?? [];
 
         array_walk($actions, function (&$action, $name): void {
-            $options = $this->actions[$name] ?? [];
-            $action = $this->buildAction($options);
+
+            $ref = $this->getTaskRef($name);
+
+            if (is_null($ref)) {
+                $options = $this->actions[$name] ?? [];
+                $action = $this->buildAction($options);
+            } else {
+                $options = $this->tasks[$ref] ?? [];
+                $action = $this->buildTask($ref, $options);
+            }
         });
 
         return $actions;
+    }
+
+    /**
+     * Devuelve null si es el nombre de una acción, o el nombre de una tarea
+     *
+     * @param string $name
+     * @return string
+     */
+    private function getTaskRef(string $name): ?string
+    {
+        $matches = [];
+        if (preg_match('/^@(.*)/', $name, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
     }
 
     /**
@@ -122,15 +161,10 @@ class TaskBuilder
      */
     private function buildAction(array $options): ActionInterface
     {
-
         $className = $options['classname'];
         unset($options['classname']);
 
-        $context = $this->contextManager->getContext();
-
         $action = $className::create($options);
-        $action->setContext($context);
-
         return $action;
     }
 }

@@ -51,7 +51,7 @@ class FileOptions extends Options
     {
         $resolver->setDefined('action');
         $resolver->addAllowedTypes('action', ['string', 'null']);
-        $resolver->addAllowedValues('action', [File::ACTION_CREATE, File::ACTION_REMOVE]);
+        $resolver->addAllowedValues('action', [File::ACTION_CREATE, File::ACTION_REMOVE, File::ACTION_OVERWRITE]);
 
         $resolver->setDefault('action', File::ACTION_CREATE);
     }

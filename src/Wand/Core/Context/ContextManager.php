@@ -21,7 +21,6 @@ use PlanB\Wand\Core\Context\Property\PackageNameProperty;
 use PlanB\Wand\Core\Context\Property\PackageTypeProperty;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Path\PathManager;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Gestiona el contenido de composer.json
@@ -29,7 +28,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @package PlanB\Wand\Core\Context
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
-class ContextManager implements EventSubscriberInterface
+class ContextManager
 {
     /**
      * @var \PlanB\Wand\Core\Logger\LogManager $logger
@@ -54,13 +53,14 @@ class ContextManager implements EventSubscriberInterface
     /**
      * @var mixed[] $values ;
      */
-    private $values;
+    private $values = [];
+
 
     /**
      * ContextManager constructor.
      *
      * @param \PlanB\Wand\Core\Logger\LogManager $logger
-     * @param \PlanB\Wand\Core\Context\ComposerInfo $info
+     * @param \PlanB\Wand\Core\Path\PathManager $pathManager
      */
     public function __construct(LogManager $logger, PathManager $pathManager)
     {
@@ -79,23 +79,10 @@ class ContextManager implements EventSubscriberInterface
     }
 
     /**
-     * @inheritdoc
-     *
-     * @return array The event names to listen to
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            'wand.context.execute' => 'execute',
-        ];
-    }
-
-    /**
      * Comprueba que el archivo composer.json sea correcto
      */
     public function execute(): void
     {
-
         $this->logger->info('Checking composer.json info...');
         foreach ($this->properties as $key => $property) {
             $this->values[$key] = $this->resolve($property);

@@ -18,8 +18,10 @@ use PlanB\Wand\Core\Context\Context;
 use PlanB\Wand\Core\Context\ContextManager;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Path\PathManager;
+use PlanB\Wand\Core\Task\Exception\InvalidTypeActionException;
 use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskBuilder;
+use PlanB\Wand\Core\Task\TaskInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
@@ -80,6 +82,7 @@ class TaskTest extends Unit
      *
      * @covers ::exists
      * @covers ::get
+     * @covers ::configureActionLevel
      *
      */
     public function testGet()
@@ -94,11 +97,50 @@ class TaskTest extends Unit
             $this->tester->assertTrue($task->exists('actionB'));
             $this->tester->assertFalse($task->exists('actionXXXX'));
 
-            $this->tester->assertInstanceOf(ActionInterface::class, $task->get('actionA'));
-            $this->tester->assertInstanceOf(ActionInterface::class, $task->get('actionB'));
+            $actions = $task->getActions();
 
-            $this->tester->assertCount(2, $task->getActions());
+            foreach (array_keys($actions) as $name) {
+
+                $action = $task->get($name);
+                $this->tester->assertInstanceOf(ActionInterface::class, $action);
+                $level = 0;
+
+                if ('@taskA' === $name) {
+                    $this->tester->assertInstanceOf(TaskInterface::class, $action);
+                    $level = 1;
+                }
+
+                $this->tester->assertEquals($level, $action->getLevel());
+            }
+
+            $this->tester->assertCount(3, $task->getActions());
         }
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::file
+     *
+     * @covers \PlanB\Wand\Core\Task\Exception\InvalidTypeActionException::create
+     */
+    public function testFile()
+    {
+        $builder = $this->getBuilder();
+        $tasks = $builder->getTasks();
+
+        $task = $tasks['taskA'];
+
+        $task->file('actionA');
+
+        $this->tester->expectException(InvalidTypeActionException::class, function () use ($task) {
+            $task->file('actionB');
+        });
+
+        $this->tester->expectException(InvalidTypeActionException::class, function () use ($task) {
+            $task->file('actionC');
+        });
+
     }
 
 
@@ -111,7 +153,6 @@ class TaskTest extends Unit
      * @covers \PlanB\Wand\Core\Task\Exception\ActionMissingException::create()
      *
      * @expectedException \PlanB\Wand\Core\Task\Exception\ActionMissingException
-     * @expectedExceptionMessage  La acción 'actionXXXXXX' no está definida (disponibles actionA|actionB)
      */
     public function testGetException()
     {
@@ -131,11 +172,11 @@ class TaskTest extends Unit
     protected function getBuilder(): TaskBuilder
     {
         $config = $this->fromFile('complete');
-        $context = $this->stub(ContextManager::class, [
-            'getContext' => $this->stub(Context::class)
-        ]);
+        $logger = $this->stub(LogManager::class);
+        $dispatcher = new EventDispatcher();
 
-        $builder = new TaskBuilder($context);
+        $builder = new TaskBuilder($dispatcher, $logger);
+
         $builder->setConfig($config);
 
         return $builder;

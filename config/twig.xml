@@ -17,6 +17,10 @@
                 <argument type="string">%root_dir%/src/Wand/Ci/config/views</argument>
                 <argument type="string">wand.ci</argument>
             </call>
+            <call method="addPath">
+                <argument type="string">%root_dir%/src/Wand/Tdd/config/views</argument>
+                <argument type="string">wand.tdd</argument>
+            </call>
         </service>
 
         <service id="wand.twig" class="Twig_Environment">

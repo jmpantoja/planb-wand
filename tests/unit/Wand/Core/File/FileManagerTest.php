@@ -199,8 +199,11 @@ class FileManagerTest extends Unit
     public function testSubscribedEvents()
     {
         $this->tester->assertEquals([
+
             'wand.file.create' => 'create',
             'wand.file.remove' => 'remove',
+            'wand.file.overwrite' => 'dumpFile'
+
         ], FileManager::getSubscribedEvents());
     }
 

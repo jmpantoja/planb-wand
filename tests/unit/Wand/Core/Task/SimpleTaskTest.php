@@ -50,29 +50,43 @@ class SimpleTaskTest extends Unit
      *
      * @covers \PlanB\Wand\Core\Task\Task::run
      * @covers \PlanB\Wand\Core\Task\Task::launch
+     * @covers \PlanB\Wand\Core\Task\Task::configureActionLevel
+     *
      * @covers \PlanB\Wand\Core\Task\Task::getEvent
      * @covers \PlanB\Wand\Core\Task\Task::setName
-     * @covers \PlanB\Wand\Core\Task\Task::validateContext
+     * @covers \PlanB\Wand\Core\Task\Task::getName
+     *
+     * @covers \PlanB\Wand\Core\Task\Task::setContext
+     * @covers \PlanB\Wand\Core\Task\Task::setLevel
      *
      */
     public function testLaunch()
     {
 
-        $logger = $this->stub(LogManager::class);
+        $context = $this->stub(Context::class);
 
+        $logger = $this->stub(LogManager::class);
         $logger->expects()
-            ->info(m::any())
+            ->begin(m::any())
             ->once();
 
         $logger->expects()
             ->log(m::any())
-            ->twice();
+            ->times(3);
 
         $task = $this->getTask($logger, true);
-
         $this->tester->assertInstanceOf(SimpleTask::class, $task);
 
         $task->setName('init');
+        $this->tester->assertEquals('init', $task->getName());
+
+        $task->setContext($context);
+        $this->assertAttributeEquals($context, 'context', $task);
+
+        $task->setLevel(5);
+        $this->assertAttributeEquals(5, 'level', $task);
+        $this->tester->assertEquals(5, $task->getLevel());
+
         $task->launch();
 
     }
@@ -86,20 +100,13 @@ class SimpleTaskTest extends Unit
 
         $dispatcher = new EventDispatcher();
 
-        $context = $this->stub(ContextManager::class, [
-            'getContext' => $this->stub(Context::class)
-        ]);
-
         $config = $this->fromFile('complete');
 
-        $builder = new TaskBuilder($context);
+        $builder = new TaskBuilder($dispatcher, $logger);
         $builder->setConfig($config);
 
         $tasks = $builder->getTasks();
         $task = $tasks['taskA'];
-
-        $task->setEventDispatcher($dispatcher);
-        $task->setLogger($logger);
 
         return $task;
     }

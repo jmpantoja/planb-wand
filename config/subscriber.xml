@@ -18,7 +18,7 @@
                 <argument type="service" id="wand.command.manager"/>
             </call>
             <call method="addSubscriber">
-                <argument type="service" id="wand.context.manager"/>
+                <argument type="service" id="wand.task.manager"/>
             </call>
         </service>
 

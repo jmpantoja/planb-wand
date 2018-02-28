@@ -55,22 +55,22 @@ class ConfigManager
             ->process();
 
 
-        $defaultPath = $this->getDefaultPath();
-        $config = DefaultConfig::create($defaultPath)
+        $paths = $this->getDefaultPaths();
+        $config = DefaultConfig::create(...$paths)
             ->processWithFilter($custom);
-        
+
         return $config;
     }
 
     /**
      * Devuelve la ruta de la configuración por defecto
      *
-     * @return \PlanB\Utils\Path\Path
+     * @return \PlanB\Utils\Path\Path[]
      */
-    private function getDefaultPath(): Path
+    private function getDefaultPaths(): array
     {
         $base = $this->pathManager->wandDir();
-        return Path::create($base, 'config/wand.yml');
+        return Path::glob($base, 'config/default', '*.yml');
     }
 
 

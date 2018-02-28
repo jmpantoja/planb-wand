@@ -11,6 +11,29 @@
 
 namespace PlanB\Wand\Core\Action;
 
+use PlanB\Wand\Core\Context\Context;
+
+/**
+ * Modela una acción
+ *
+ * @package PlanB\Wand\Core\Action
+ * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
+ */
 interface ActionInterface
 {
+    /**
+     * Asigna el nivel en la jerarquia de tareas/acciones
+     *
+     * @param int $level
+     * @return \PlanB\Wand\Core\Action\ActionInterface
+     */
+    public function setLevel(int $level): ActionInterface;
+
+    /**
+     * Asigna el contexto
+     *
+     * @param \PlanB\Wand\Core\Context\Context $context
+     * @return \PlanB\Wand\Core\Action\ActionInterface
+     */
+    public function setContext(Context $context): ActionInterface;
 }

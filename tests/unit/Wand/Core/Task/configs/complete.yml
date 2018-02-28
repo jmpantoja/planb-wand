@@ -14,6 +14,12 @@ actions:
     params:
       pattern: ls -la
       cwd: vendor/bin
+  actionC:
+    group: metainfo
+    classname: \PlanB\Wand\Core\Command\Command
+    params:
+      pattern: ls -la
+      cwd: vendor/bin
 
 
 tasks:
@@ -23,6 +29,7 @@ tasks:
     actions:
       actionA:
       actionB:
+      actionC:
 
   taskB:
     classname: \PlanB\Wand\Core\Task\SimpleTask
@@ -30,3 +37,4 @@ tasks:
     actions:
       actionA:
       actionB:
+      "@taskA":

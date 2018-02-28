@@ -16,6 +16,8 @@ use PlanB\Wand\Core\Command\Command;
 use PlanB\Wand\Core\Command\CommandEvent;
 use PlanB\Wand\Core\File\File;
 use PlanB\Wand\Core\File\FileEvent;
+use PlanB\Wand\Core\Task\Task;
+use PlanB\Wand\Core\Task\TaskEvent;
 
 /**
  * Crea objetos ActionEvent
@@ -37,6 +39,8 @@ class ActionEventFactory
             $event = new FileEvent($action);
         } elseif ($action instanceof Command) {
             $event = new CommandEvent($action);
+        } elseif ($action instanceof Task) {
+            $event = new TaskEvent($action);
         } else {
             throw ActionEventFactoryException::create($action);
         }

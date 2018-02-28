@@ -36,7 +36,6 @@ class ContextManagerTest extends Unit
      * @dataProvider providerExecute
      *
      * @covers ::__construct
-     * @covers ::getSubscribedEvents
      *
      * @covers ::getValues
      * @covers ::getContext
@@ -74,8 +73,6 @@ class ContextManagerTest extends Unit
         $context = $manager->getContext();
 
         $this->tester->assertEquals($expected, $context->getParams());
-
-        $this->tester->assertArrayHasKey('wand.context.execute', ContextManager::getSubscribedEvents());
     }
 
     public function providerExecute()

@@ -25,6 +25,7 @@ class File extends Action
 
     public const ACTION_CREATE = 'create';
     public const ACTION_REMOVE = 'remove';
+    public const ACTION_OVERWRITE = 'overwrite';
 
     /**
      * @var int $chmod
@@ -167,6 +168,6 @@ class File extends Action
      */
     public function getGroup(): string
     {
-        return $this->group;
+        return ucfirst($this->group);
     }
 }

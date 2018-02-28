@@ -10,6 +10,7 @@
 
 namespace PlanB\WandBundle\Command;
 
+use PlanB\Wand\Core\Context\ContextManager;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Path\PathManager;
 
@@ -91,6 +92,17 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     {
         return $this->container->get('wand.path.manager');
     }
+
+    /**
+     * Devuelve el gestor de contexto
+     *
+     * @return \PlanB\Wand\Core\Context\ContextManager
+     */
+    public function getContextManager(): ContextManager
+    {
+        return $this->container->get('wand.context.manager');
+    }
+
 
     /**
      * Devuelve el dispatcher

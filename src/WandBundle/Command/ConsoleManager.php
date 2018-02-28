@@ -97,6 +97,7 @@ class ConsoleManager implements EventSubscriberInterface
         return $this->helperSet->get('question');
     }
 
+
     /**
      * Muestra un mensaje por consola
      *

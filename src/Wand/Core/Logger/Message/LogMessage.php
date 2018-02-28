@@ -20,6 +20,13 @@ namespace PlanB\Wand\Core\Logger\Message;
 final class LogMessage
 {
 
+    private const TAB = '  ';
+
+    /**
+     * @var int $level
+     */
+    private $level = 0;
+
     /**
      * @var \PlanB\Wand\Core\Logger\Message\LogFormat $format
      */
@@ -52,6 +59,19 @@ final class LogMessage
         $this->title = [];
         $this->verbose = [];
     }
+
+    /**
+     * Asigna el nivel en la jerarquia de logs
+     *
+     * @param int $level
+     * @return \PlanB\Wand\Core\Logger\Message\LogMessage
+     */
+    public function setLevel(int $level): LogMessage
+    {
+        $this->level = $level;
+        return $this;
+    }
+
 
     /**
      * Asigna el titulo
@@ -196,14 +216,30 @@ final class LogMessage
      */
     public function parse(): array
     {
+        $lines = $this->addTabs($this->title);
 
-        $lines = $this->title;
         if ($this->type->is(MessageType::ERROR)) {
             $lines = $this->parseVerbose();
         }
 
         return $lines;
     }
+
+
+    /**
+     * Añade tabulaciones al principio de cada linea
+     *
+     * @param string[] $lines
+     * @return string[]
+     */
+    private function addTabs(array $lines): array
+    {
+        $tabs = str_repeat(self::TAB, $this->level);
+        return array_map(function (string $line) use ($tabs) {
+            return sprintf('%s%s', $tabs, trim($line));
+        }, $lines);
+    }
+
 
     /**
      * Devuelve el mensage en forma de lineas de texto
@@ -212,6 +248,7 @@ final class LogMessage
      */
     public function parseVerbose(): array
     {
-        return array_merge($this->title, $this->verbose);
+        $lines = array_merge($this->title, $this->verbose);
+        return $this->addTabs($lines);
     }
 }

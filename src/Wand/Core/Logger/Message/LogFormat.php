@@ -21,7 +21,6 @@ final class LogFormat
 {
 
     public const PADDING_LENGTH = 80;
-    private const TAB = '  ';
 
     /**
      * @var \PlanB\Wand\Core\Logger\Message\MessageType $type
@@ -115,8 +114,10 @@ final class LogFormat
      */
     public function title(string $title): array
     {
-        $line = $this->format($title);
-        return [$line];
+        $lines = [];
+
+        $lines[] = $this->format($title);
+        return $lines;
     }
 
     /**
@@ -218,25 +219,11 @@ final class LogFormat
         } else {
             $lines[] = $head;
 
-            $lines = array_merge($lines, $this->addTabs($body));
+            $lines = array_merge($lines, $body);
         }
 
+        $lines[] = "\n";
         return (array)$lines;
-    }
-
-    /**
-     * Añade tabulaciones al principio de cada linea
-     *
-     * @param string[] $lines
-     * @param int $level
-     * @return string[]
-     */
-    private function addTabs(array $lines, int $level = 1): array
-    {
-        $tabs = str_repeat(self::TAB, $level);
-        return array_map(function (string $line) use ($tabs) {
-            return sprintf('%s%s', $tabs, trim($line));
-        }, $lines);
     }
 
 

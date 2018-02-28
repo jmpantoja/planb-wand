@@ -21,6 +21,8 @@ use PlanB\Wand\Core\Command\Command;
 use PlanB\Wand\Core\Command\CommandEvent;
 use PlanB\Wand\Core\File\File;
 use PlanB\Wand\Core\File\FileEvent;
+use PlanB\Wand\Core\Task\Task;
+use PlanB\Wand\Core\Task\TaskEvent;
 
 /**
  * Class CustomConfigTest
@@ -45,7 +47,7 @@ class ActionEventFactoryTest extends Unit
      *
      * @covers ::fromAction
      *
-     * @covers \PlanB\Wand\Core\Action\Exception\ActionEventFactoryException::create
+     * @covers       \PlanB\Wand\Core\Action\Exception\ActionEventFactoryException::create
      */
     public function testFromAction(Data $data)
     {
@@ -64,13 +66,16 @@ class ActionEventFactoryTest extends Unit
         return Provider::create()
             ->add([
                 'action' => $this->stub(File::class),
-                'expected'=>FileEvent::class
+                'expected' => FileEvent::class
             ])
             ->add([
                 'action' => $this->stub(Command::class),
-                'expected'=>CommandEvent::class
+                'expected' => CommandEvent::class
             ])
-
+            ->add([
+                'action' => $this->stub(Task::class),
+                'expected' => TaskEvent::class
+            ])
             ->end();
     }
 }

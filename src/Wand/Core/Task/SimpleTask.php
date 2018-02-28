@@ -27,7 +27,6 @@ class SimpleTask extends Task
     {
         $actions = array_keys($this->getActions());
 
-
         foreach ($actions as $action) {
             $this->run($action);
         }

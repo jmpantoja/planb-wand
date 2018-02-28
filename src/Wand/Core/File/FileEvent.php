@@ -62,10 +62,12 @@ class FileEvent extends ActionEvent
         $target = $this->file->getTarget();
         $action = $this->file->getAction();
         $group = $this->file->getGroup();
+        $level = $this->file->getLevel();
 
         $title = sprintf('[%s] %s file %s', $group, ucfirst($action), $target);
-        $message->setTitle($title);
 
+        $message->setLevel($level);
+        $message->setTitle($title);
         $message->setVerbose([
             'path' => $this->file->getPath(),
         ]);

@@ -21,6 +21,7 @@ use PlanB\Wand\Core\Logger\Message\LogMessage;
 use PlanB\Wand\Core\Logger\Message\MessageEvent;
 use PlanB\Wand\Core\Logger\Question\QuestionEvent;
 use PlanB\Wand\Core\Logger\Question\QuestionMessage;
+use PlanB\Wand\Core\Task\Task;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 
@@ -62,6 +63,33 @@ class LogManagerTest extends Unit
 
         $logger = new LogManager($dispatcher);
         $logger->info('message');
+    }
+
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::begin
+     * @covers ::message
+     */
+    public function testBegin()
+    {
+        $dispatcher = new EventDispatcher();
+        $dispatcher->addListener('wand.log.message', function ($event) {
+
+            $this->tester->assertInstanceOf(MessageEvent::class, $event);
+            $this->tester->assertTrue($event->getMessage()->isInfo());
+
+            $lines = $event->getMessage()->parse();
+            $this->tester->assertContains('<fg=default>Running taskName task...</>', $lines[0]);
+
+        });
+
+        $task = $this->stub(Task::class);
+        $task->setName('taskName');
+
+        $logger = new LogManager($dispatcher);
+        $logger->begin($task);
     }
 
     /**
@@ -211,6 +239,30 @@ class LogManagerTest extends Unit
 
         $logger = new LogManager($dispatcher);
         $logger->confirm('message');
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::setLevel
+     */
+    public function testLevel()
+    {
+        $dispatcher = new EventDispatcher();
+        $dispatcher->addListener('wand.log.message', function ($event) {
+
+            $this->tester->assertInstanceOf(MessageEvent::class, $event);
+
+            $this->assertAttributeEquals(4, 'level', $event->getMessage());
+
+
+        });
+
+        $logger = new LogManager($dispatcher);
+        $logger->setLevel(4);
+        $logger->info('message');
+
+        $this->assertAttributeEquals(4, 'level', $logger);
     }
 
 }

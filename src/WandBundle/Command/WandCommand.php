@@ -11,7 +11,6 @@
 
 namespace PlanB\WandBundle\Command;
 
-use PlanB\Wand\Core\Task\TaskInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -48,9 +47,13 @@ class WandCommand extends BaseCommand
         $onlyStaged = $input->getOption('only-staged');
 
         $this->initPaths($input);
+        $this->initConsole($input, $output);
 
-        $task = $this->buildTask($input, $output);
-        $task->launch();
+
+        $this->getContextManager()->execute();
+
+        $taskName = $input->getArgument('task');
+        $this->getTaskManager()->executeByName($taskName);
     }
 
     /**
@@ -69,26 +72,14 @@ class WandCommand extends BaseCommand
      *
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @return \PlanB\Wand\Core\Task\TaskInterface
      */
-    private function buildTask(InputInterface $input, OutputInterface $output): TaskInterface
+    private function initConsole(InputInterface $input, OutputInterface $output): void
     {
-        $taskName = $input->getArgument('task');
-
         $helperSet = $this->getHelperSet();
 
         $consoleManager = ConsoleManager::create($input, $output, $helperSet);
 
         $dispatcher = $this->getEventDispatcher();
         $dispatcher->addSubscriber($consoleManager);
-
-        $task = $this->getTaskManager()->get($taskName);
-
-        $task->setName($taskName);
-        $task->setEventDispatcher($dispatcher);
-        $task->setLogger($this->getLogger());
-
-
-        return $task;
     }
 }

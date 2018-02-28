@@ -41,6 +41,8 @@ class ActionTest extends Unit
      * @test
      *
      * @covers ::setContext
+     * @covers ::setLevel
+     * @covers ::getLevel
      */
     public function testContainer()
     {
@@ -50,6 +52,11 @@ class ActionTest extends Unit
         $action->setContext($context);
 
         $this->assertAttributeEquals($context, 'context', $action);
+
+        $action->setLevel(5);
+        $this->tester->assertEquals(5, $action->getLevel());
+
+
 
     }
 

@@ -42,6 +42,18 @@ abstract class ActionEvent extends Event
      */
     abstract public function configureLog(LogMessage $message): void;
 
+
+    /**
+     * Termina una acción en modo silencioso
+     *
+     * @return \PlanB\Wand\Core\Action\ActionEvent
+     */
+    public function blank(): self
+    {
+        $this->message = LogMessage::info();
+        return $this;
+    }
+
     /**
      * Crea un mensaje de log tipo success
      *
@@ -50,10 +62,8 @@ abstract class ActionEvent extends Event
     public function success(): self
     {
         $message = LogMessage::success();
-        $this->configureLog($message);
 
-        $this->message = $message;
-        return $this;
+        return $this->message($message);
     }
 
 
@@ -65,10 +75,8 @@ abstract class ActionEvent extends Event
     public function skip(): self
     {
         $message = LogMessage::skip();
-        $this->configureLog($message);
 
-        $this->message = $message;
-        return $this;
+        return $this->message($message);
     }
 
 
@@ -81,16 +89,27 @@ abstract class ActionEvent extends Event
     public function error(?string $errorMessage = null): self
     {
         $message = LogMessage::error();
-        $this->configureLog($message);
 
         if (is_string($errorMessage)) {
             $message->addVerbose('error', $errorMessage);
         }
 
+        return $this->message($message);
+    }
+
+    /**
+     * Configura un menasje
+     *
+     * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
+     * @return \PlanB\Wand\Core\Action\ActionEvent
+     */
+    private function message(LogMessage $message): self
+    {
+
+        $this->configureLog($message);
         $this->message = $message;
         return $this;
     }
-
 
     /**
      * Indica que el mensaje NO es de tipo error

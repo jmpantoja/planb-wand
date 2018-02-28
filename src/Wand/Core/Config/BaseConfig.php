@@ -26,29 +26,42 @@ use Symfony\Component\Yaml\Yaml;
 abstract class BaseConfig
 {
     /**
-     * @var \PlanB\Utils\Path\Path $path
+     * @var mixed[] $configs
      */
-    private $path;
+    private $config = [
+        'tasks' => [],
+        'actions' => [],
+    ];
+
 
     /**
      * Crea una nueva instancia
      *
-     * @param \PlanB\Utils\Path\Path $path
+     * @param \PlanB\Utils\Path\Path[] ...$path
      * @return \PlanB\Wand\Core\Config\BaseConfig
      */
-    public static function create(Path $path): self
+    public static function create(Path ...$path): self
     {
-        return new static($path);
+        return new static(...$path);
     }
 
     /**
      * BaseConfig constructor.
      *
-     * @param \PlanB\Utils\Path\Path $path
+     * @param \PlanB\Utils\Path\Path[] ...$paths
      */
-    private function __construct(Path $path)
+    private function __construct(Path ...$paths)
     {
-        $this->path = $path;
+        foreach ($paths as $path) {
+            $config = $this->readFromFile($path);
+            $tasks = $config['tasks'] ?? [];
+            $actions = $config['actions'] ?? [];
+
+            $this->config['tasks'] = array_merge($this->config['tasks'], $tasks);
+            $this->config['actions'] = array_merge($this->config['actions'], $actions);
+        }
+
+        $this->config = array_filter($this->config);
     }
 
     /**
@@ -61,11 +74,12 @@ abstract class BaseConfig
     /**
      * Read the config/wand.yml file
      *
+     * @param \PlanB\Utils\Path\Path $path
      * @return mixed[]
      */
-    protected function readFromFile(): array
+    protected function readFromFile(Path $path): array
     {
-        return Yaml::parseFile($this->path);
+        return Yaml::parseFile($path);
     }
 
     /**
@@ -77,6 +91,6 @@ abstract class BaseConfig
     {
         $processor = new Processor();
         $configTree = $this->getConfigTree();
-        return $processor->process($configTree->buildTree(), [$this->readFromFile()]);
+        return $processor->process($configTree->buildTree(), [$this->config]);
     }
 }

@@ -36,9 +36,13 @@ class ActionEventTest extends Unit
 
     /**
      * @test
+     *
+     * @covers ::blank
+     *
      * @covers ::success
      * @covers ::skip
      * @covers ::error
+     * @covers ::message
      *
      * @covers ::isNotError
      * @covers ::getMessage
@@ -47,6 +51,11 @@ class ActionEventTest extends Unit
     public function testMessage()
     {
         $event = $this->getEvent();
+
+
+        $event->blank();
+        $this->tester->assertTrue($event->getMessage()->isInfo());
+        $this->tester->assertTrue($event->isNotError());
 
         $event->success();
         $this->tester->assertTrue($event->getMessage()->isSuccessful());
@@ -63,7 +72,10 @@ class ActionEventTest extends Unit
         $event->error('message');
         $this->tester->assertTrue($event->getMessage()->isError());
 
-        $this->tester->assertContains('<fg=red>ERROR:</> message', $event->getMessage()->parseVerbose());
+        $lines = $event->getMessage()->parseVerbose();
+
+        $this->tester->assertContains('<fg=red>ERROR</>', $lines[0]);
+        $this->tester->assertContains('Action file target', $lines[0]);
         $this->tester->assertFalse($event->isNotError());
 
 

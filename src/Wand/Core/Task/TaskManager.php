@@ -12,7 +12,10 @@
 namespace PlanB\Wand\Core\Task;
 
 use PlanB\Wand\Core\Config\ConfigManager;
+use PlanB\Wand\Core\Context\Context;
+use PlanB\Wand\Core\Context\ContextManager;
 use PlanB\Wand\Core\Task\Exception\TaskMissingException;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Gestiona las tareas
@@ -20,31 +23,49 @@ use PlanB\Wand\Core\Task\Exception\TaskMissingException;
  * @package PlanB\Wand\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
-class TaskManager
+class TaskManager implements EventSubscriberInterface
 {
+
+    /**
+     * @var \PlanB\Wand\Core\Context\ContextManager $contextManager
+     */
+    private $contextManager;
+
+    /**
+     * @var \PlanB\Wand\Core\Context\Context $context
+     */
+    private $context;
+
     /**
      * @var \PlanB\Wand\Core\Task\TaskInterface[] $tasks
      */
     private $tasks;
 
-
     /**
-     * @var \PlanB\Wand\Core\Config\ConfigManager $configManager
+     * @inheritdoc
+     *
+     * @return array The event names to listen to
      */
-    private $configManager;
-
+    public static function getSubscribedEvents()
+    {
+        return [
+            'wand.task.execute' => 'execute',
+        ];
+    }
 
     /**
      * TaskManager constructor.
      *
      * @param \PlanB\Wand\Core\Config\ConfigManager $configManager
+     * @param \PlanB\Wand\Core\Context\ContextManager $contextManager
      * @param \PlanB\Wand\Core\Task\TaskBuilder $builder
      */
-    public function __construct(ConfigManager $configManager, TaskBuilder $builder)
+    public function __construct(ConfigManager $configManager, ContextManager $contextManager, TaskBuilder $builder)
     {
-        $this->configManager = $configManager;
-        $config = $this->configManager->getConfig();
 
+        $this->contextManager = $contextManager;
+
+        $config = $configManager->getConfig();
         $builder->setConfig($config);
 
         $this->setTasks($builder->getTasks());
@@ -91,17 +112,55 @@ class TaskManager
     /**
      * Devuelve una tarea
      *
-     * @param string $task
+     * @param string $name
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
-    public function get(string $task): TaskInterface
+    public function get(string $name): TaskInterface
     {
-
-        if (!$this->exists($task)) {
+        if (!$this->exists($name)) {
             $availables = array_keys($this->tasks);
-            throw TaskMissingException::create($task, $availables);
+            throw TaskMissingException::create($name, $availables);
         }
 
-        return $this->tasks[$task];
+        $task = $this->tasks[$name];
+        $task->setContext($this->getContext());
+
+        return $this->tasks[$name];
+    }
+
+    /**
+     * Devuelve el objeto contexto
+     *
+     * @return \PlanB\Wand\Core\Context\Context
+     */
+    private function getContext(): Context
+    {
+        if (is_null($this->context)) {
+            $this->context = $this->contextManager->getContext();
+        }
+
+        return $this->context;
+    }
+
+
+    /**
+     * Ejecuta una tarea definida por su nombre
+     *
+     * @param string $name
+     */
+    public function executeByName(string $name): void
+    {
+        $task = $this->get($name);
+        $event = new TaskEvent($task);
+
+        $this->execute($event);
+    }
+
+    public function execute(TaskEvent $event): void
+    {
+        $task = $event->getTask();
+        $task->launch();
+
+        $event->blank();
     }
 }

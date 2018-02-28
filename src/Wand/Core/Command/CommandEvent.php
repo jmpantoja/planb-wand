@@ -58,10 +58,17 @@ class CommandEvent extends ActionEvent
     public function configureLog(LogMessage $message): void
     {
         $title = $this->command->getTitle();
+        $group = $this->command->getGroup();
         $commandLine = $this->command->getCommandLine();
         $output = $this->command->getOutput();
+        $level = $this->command->getLevel();
+
+
+        $title = sprintf('[%s] Execute %s', $group, $title);
 
         $message->setTitle($title);
+        $message->setLevel($level);
+
         $message->setVerbose([
             'cmd' => $commandLine,
             'output' => $output,

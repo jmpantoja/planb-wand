@@ -69,7 +69,6 @@ class LogFormatTest extends Unit
      *
      * @covers ::verbose
      * @covers ::formatVerbose
-     * @covers ::addTabs
      * @covers ::toLines
      *
      * @covers ::getType
@@ -88,18 +87,17 @@ class LogFormatTest extends Unit
         ]);
 
         $this->tester->assertContains('<fg=green>A:</> simple', $verbose[0]);
-        $this->tester->assertContains('<fg=green>B:</>', $verbose[1]);
+        $this->tester->assertContains('<fg=green>B:</>', $verbose[2]);
 
-        $this->tester->assertContains('line1', $verbose[2]);
-        $this->tester->assertContains('line2', $verbose[3]);
-        $this->tester->assertContains('line3', $verbose[4]);
 
+        $this->tester->assertContains('line1', $verbose[3]);
+        $this->tester->assertContains('line2', $verbose[4]);
+        $this->tester->assertContains('line3', $verbose[5]);
 
         $bigTitle = $format->title(str_repeat('X', LogFormat::PADDING_LENGTH - 1));
         $this->tester->assertContains('<fg=green>XXXXXXXXXXXXXXX', $bigTitle[0]);
         $this->tester->assertContains('<fg=green>OK</>', $bigTitle[0]);
         $this->tester->assertContains('.', $bigTitle[0]);
-
 
         $bigTitle = $format->title(str_repeat('X', LogFormat::PADDING_LENGTH));
         $this->tester->assertContains('<fg=green>XXXXXXXXXXXXXXX', $bigTitle[0]);
@@ -127,7 +125,6 @@ class LogFormatTest extends Unit
      *
      * @covers ::verbose
      * @covers ::formatVerbose
-     * @covers ::addTabs
      * @covers ::toLines
      *
      * @covers ::getType
@@ -146,11 +143,11 @@ class LogFormatTest extends Unit
         ]);
 
         $this->tester->assertContains('<fg=yellow>A:</> simple', $verbose[0]);
-        $this->tester->assertContains('<fg=yellow>B:</>', $verbose[1]);
+        $this->tester->assertContains('<fg=yellow>B:</>', $verbose[2]);
 
-        $this->tester->assertContains('line1', $verbose[2]);
-        $this->tester->assertContains('line2', $verbose[3]);
-        $this->tester->assertContains('line3', $verbose[4]);
+        $this->tester->assertContains('line1', $verbose[3]);
+        $this->tester->assertContains('line2', $verbose[4]);
+        $this->tester->assertContains('line3', $verbose[5]);
 
         $this->tester->assertTrue($format->getType()->isSkipped());
     }
@@ -168,7 +165,6 @@ class LogFormatTest extends Unit
      *
      * @covers ::verbose
      * @covers ::formatVerbose
-     * @covers ::addTabs
      * @covers ::toLines
      *
      * @covers ::getType
@@ -187,11 +183,11 @@ class LogFormatTest extends Unit
         ]);
 
         $this->tester->assertContains('<fg=red>A:</> simple', $verbose[0]);
-        $this->tester->assertContains('<fg=red>B:</>', $verbose[1]);
+        $this->tester->assertContains('<fg=red>B:</>', $verbose[2]);
 
-        $this->tester->assertContains('line1', $verbose[2]);
-        $this->tester->assertContains('line2', $verbose[3]);
-        $this->tester->assertContains('line3', $verbose[4]);
+        $this->tester->assertContains('line1', $verbose[3]);
+        $this->tester->assertContains('line2', $verbose[4]);
+        $this->tester->assertContains('line3', $verbose[5]);
 
         $this->tester->assertTrue($format->getType()->isError());
     }

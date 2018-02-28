@@ -49,6 +49,7 @@ class FileManager implements EventSubscriberInterface
         return [
             'wand.file.create' => 'create',
             'wand.file.remove' => 'remove',
+            'wand.file.overwrite' => 'dumpFile',
         ];
     }
 
@@ -73,7 +74,7 @@ class FileManager implements EventSubscriberInterface
      *
      * @param \PlanB\Wand\Core\File\FileEvent $event
      */
-    private function dumpFile(FileEvent $event): void
+    public function dumpFile(FileEvent $event): void
     {
         $fileSystem = new Filesystem();
         $file = $event->getFile();

@@ -12,6 +12,7 @@ tasks:
       contributing:
       license:
       editorconfig:
+      "@codecept":
 
 actions:
   travis:
@@ -33,7 +34,7 @@ actions:
           chmod: 0644
 
   readme:
-        group: projectInfo
+        group: project
         classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.projectInfo/readme.twig'
@@ -42,7 +43,7 @@ actions:
           chmod: 0644
 
   changelog:
-        group: projectInfo
+        group: project
         classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.projectInfo/changelog.twig'
@@ -51,7 +52,7 @@ actions:
           chmod: 0644
 
   conduct:
-        group: projectInfo
+        group: project
         classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.projectInfo/code_of_conduct.twig'
@@ -60,7 +61,7 @@ actions:
           chmod: 0644
 
   contributing:
-        group: projectInfo
+        group: project
         classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.projectInfo/contributing.twig'
@@ -69,7 +70,7 @@ actions:
           chmod: 0644
 
   license:
-        group: projectInfo
+        group: project
         classname: \PlanB\Wand\ProjectInfo\File\License
         params:
           target: LICENSE
@@ -77,7 +78,7 @@ actions:
           chmod: 0644
 
   editorconfig:
-        group: projectInfo
+        group: project
         classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.projectInfo/editorconfig.twig'

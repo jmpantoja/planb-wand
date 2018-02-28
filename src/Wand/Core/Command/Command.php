@@ -204,6 +204,6 @@ class Command extends Action
      */
     public function getGroup(): string
     {
-        return $this->group;
+        return ucfirst($this->group);
     }
 }
