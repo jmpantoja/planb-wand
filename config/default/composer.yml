@@ -13,9 +13,11 @@ actions:
         classname: \PlanB\Wand\Core\Command\SystemCommand
         params:
           pattern: composer validate -d %project%
+          title: composer validate
 
   update:
         group: project
         classname: \PlanB\Wand\Core\Command\SystemCommand
         params:
           pattern: composer update -d %project%
+          title: composer update

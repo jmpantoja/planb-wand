@@ -15,6 +15,7 @@ actions:
     classname: \PlanB\Wand\Core\Command\SystemCommand
     params:
       pattern: git init %project%
+      title: git init
 
 
   gitignore:

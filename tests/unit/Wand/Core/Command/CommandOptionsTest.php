@@ -43,13 +43,15 @@ class CommandOptionsTest extends Unit
      * @covers ::defineGroup
      * @covers ::definePattern
      * @covers ::defineCwd
+     * @covers ::defineTitle
      */
     public function testResolve()
     {
         $options = [
             'group' => 'el grupo',
             'pattern' => 'el pattern',
-            'cwd' => 'vendor/bin'
+            'cwd' => 'vendor/bin',
+            'title' => 'title'
         ];
 
         $params = CommandOptions::create()
@@ -104,7 +106,6 @@ class CommandOptionsTest extends Unit
     }
 
 
-
     /**
      * @test
      *
@@ -112,13 +113,15 @@ class CommandOptionsTest extends Unit
      * @covers ::defineGroup
      * @covers ::definePattern
      * @covers ::defineCommand
+     * @covers ::defineTitle
      */
     public function testResolveSymfony()
     {
         $options = [
             'group' => 'el grupo',
             'pattern' => 'el pattern',
-            'command' => WandCommand::class
+            'command' => WandCommand::class,
+            'title' => 'title'
         ];
 
         $params = CommandOptions::create('symfony')

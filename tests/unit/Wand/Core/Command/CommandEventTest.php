@@ -73,8 +73,7 @@ class CommandEventTest extends Unit
         $command = SystemCommand::create([
             'group' => 'metainfo',
             'params' => [
-                'pattern' => 'command -la %target%',
-                'cwd' => 'vendor/bin'
+                'pattern' => 'command -la %target%'
             ]
         ]);
 
@@ -91,7 +90,7 @@ class CommandEventTest extends Unit
 
         $lines = $message->parseVerbose();
 
-        $this->tester->assertContains('Execute command -la', $lines[0]);
+        $this->tester->assertContains('Execute command', $lines[0]);
 
     }
 }

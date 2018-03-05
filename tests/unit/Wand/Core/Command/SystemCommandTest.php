@@ -13,10 +13,13 @@ namespace PlanB\Wand\Core\Command;
 
 
 use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Data\Data;
+use PlanB\Utils\Dev\Tdd\Data\Provider;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Utils\Path\Path;
 use PlanB\Wand\Core\Context\Context;
 use Symfony\Component\Process\Process;
+use Mockery as m;
 
 /**
  * Class CommandText
@@ -38,10 +41,11 @@ class SystemCommandTest extends Unit
     /**
      * @test
      *
+     *
+     * @covers \PlanB\Wand\Core\Command\Command::__construct
+     *
      * @covers ::__construct
      * @covers ::create
-     * @covers ::getCommandLine
-     * @covers ::getCommandTokens
      * @covers ::getTitle
      * @covers ::getCwd
      * @covers ::getGroup
@@ -51,22 +55,107 @@ class SystemCommandTest extends Unit
         $command = $this->getCommmand();
 
         $base = realpath('.');
-        $commandLine = sprintf('%s/vendor/bin/ls -la %s', $base, $base);
-        $this->tester->assertEquals($commandLine, $command->getCommandLine());
-
-        $this->tester->assertEquals([
-            sprintf('%s/vendor/bin/ls', $base),
-            '-la',
-            $base
-        ], $command->getCommandTokens());
-
-        $this->tester->assertEquals('ls -la', $command->getTitle());
         $this->tester->assertEquals('Group', $command->getGroup());
 
         $cwd = sprintf('%s/vendor/bin', $base);
         $this->tester->assertEquals($cwd, $command->getCwd());
+    }
+
+
+    /**
+     * @test
+     *
+     *
+     * @covers \PlanB\Wand\Core\Command\Command::__construct
+     * @covers \PlanB\Wand\Core\Command\Command::getCommandLine
+     * @covers \PlanB\Wand\Core\Command\Command::getCommandTokens
+     *
+     * @covers ::getCommandLine
+     *
+     */
+    public function testCommandLine()
+    {
+
+
+        $command = $this->getCommmand();
+
+        $base = realpath('.');
+        $commandLine = sprintf('%s/vendor/bin/ls -la %s', $base, $base);
+        $this->tester->assertEquals($commandLine, $command->getCommandLine());
+
+        $this->tester->assertEquals([
+            sprintf('%s/vendor/bin/ls', realpath('.')),
+            '-la',
+            realpath('.'),
+
+        ], $command->getCommandTokens());
 
     }
+
+
+    /**
+     * @test
+     * @dataProvider providerTitle
+     *
+     * @covers       \PlanB\Wand\Core\Command\Command::__construct
+     * @covers       \PlanB\Wand\Core\Command\Command::getDefaultTitle
+     * @covers       \PlanB\Wand\Core\Command\Command::getTitle
+     *
+     * @covers ::getCommandLine
+     *
+     */
+    public function testTitle(Data $data)
+    {
+        $context = $this->stub(Context::class);
+        $context->allows()
+            ->getPath(m::notAnyOf('vendor/bin'))
+            ->andReturn(realpath('.'));
+
+        $context->allows()
+            ->getPath('vendor/bin')
+            ->andReturn(realpath('.') . '/vendor/bin');
+
+        $command = SystemCommand::create([
+            'group' => 'group',
+            'params' => [
+                'pattern' => 'command -la %target%',
+                'cwd' => $data->cwd,
+                'title' => $data->title,
+            ]
+        ]);
+
+        $command->setContext($context);
+
+        $this->tester->assertEquals($data->expected, $command->getTitle());
+
+    }
+
+    public function providerTitle()
+    {
+        return Provider::create()
+            ->add([
+                'cwd' => 'vendor/bin',
+                'expected' => 'vendor/bin/command',
+                'title' => null
+            ])
+            ->add([
+                'cwd' => null,
+                'expected' => 'command',
+                'title' => null
+            ])
+            ->add([
+                'cwd' => 'vendor/bin',
+                'expected' => 'overwrite',
+                'title' => 'overwrite'
+            ])
+            ->add([
+                'cwd' => null,
+                'expected' => 'overwrite',
+                'title' => 'overwrite'
+            ])
+            ->end();
+    }
+
 
     /**
      * @test
@@ -161,6 +250,15 @@ class SystemCommandTest extends Unit
         $this->assertEquals('output', $command->getOutput());
     }
 
+    /**
+     * @test
+     *
+     * @covers ::run
+     * @covers ::isSuccessful
+     * @covers ::buildOutput
+     * @covers ::getErrorOutput
+     * @covers ::getOutput
+     */
     public function testRunFailEmptyOutput()
     {
         $process = $this->stub(Process::class, [

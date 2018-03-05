@@ -29,6 +29,10 @@ abstract class Command extends Action
      */
     private $pattern;
 
+    /**
+     * @var string
+     */
+    protected $title;
 
     /**
      * @var string ;
@@ -44,6 +48,7 @@ abstract class Command extends Action
     {
         $this->group = (string)$params['group'];
         $this->pattern = (string)$params['pattern'];
+        $this->title = (string)$params['title'];
     }
 
     /**
@@ -94,16 +99,32 @@ abstract class Command extends Action
     }
 
     /**
-     * Devuelve la linea de comandos en formato reducido.
+     * Devuelve el titulo del mensaje de log
+     *
+     * @return string
+     */
+    public function getDefaultTitle(): string
+    {
+        $project = $this->context->getPath('project');
+        $tokens = $this->getCommandTokens();
+
+        $title = array_shift($tokens);
+        $title = str_replace($project, '', $title);
+
+        return trim($title, "/");
+    }
+
+    /**
+     * Devuelve el titulo del mensaje de log
      *
      * @return string
      */
     public function getTitle(): string
     {
-        $title = $this->pattern;
-        $title = preg_replace('/%.*%/', '', $title);
-
-        return trim($title);
+        if (empty($this->title)) {
+            $this->title = $this->getDefaultTitle();
+        }
+        return $this->title;
     }
 
 

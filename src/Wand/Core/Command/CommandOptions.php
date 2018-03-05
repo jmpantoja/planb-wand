@@ -32,8 +32,10 @@ class CommandOptions extends Options
     {
         $this->definePattern($resolver);
         $this->defineGroup($resolver);
+        $this->defineTitle($resolver);
 
         $profile = $this->getProfile();
+
         if ($profile === 'symfony') {
             $this->defineCommand($resolver);
         } else {
@@ -88,5 +90,17 @@ class CommandOptions extends Options
     {
         $resolver->setRequired('group');
         $resolver->addAllowedTypes('group', 'string');
+    }
+
+    /**
+     * Define el atributo 'group'.
+     *
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
+     */
+    private function defineTitle(OptionsResolver $resolver): void
+    {
+        $resolver->setDefined('title');
+        $resolver->addAllowedTypes('title', ['string', 'null']);
+        $resolver->setDefault('title', null);
     }
 }

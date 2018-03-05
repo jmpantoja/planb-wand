@@ -84,6 +84,8 @@ class SymfonyCommand extends Command
         return $status === 0;
     }
 
+
+
     /**
      * Devuelve el comando
      *
