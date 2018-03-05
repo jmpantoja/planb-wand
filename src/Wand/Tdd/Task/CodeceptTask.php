@@ -10,6 +10,7 @@
 
 namespace PlanB\Wand\Tdd\Task;
 
+use PlanB\Wand\Core\Logger\Message\LogMessage;
 use PlanB\Wand\Core\Task\Task;
 
 class CodeceptTask extends Task
@@ -17,19 +18,17 @@ class CodeceptTask extends Task
     /**
      * {@inheritdoc}
      */
-    public function execute(): void
+    public function execute(): LogMessage
     {
         $codeception = $this->file('codeception');
 
         if ($codeception->exists()) {
+            $message = LogMessage::skip();
             $this->logger->skip('[Tdd] Codeception is already installed in this directory');
         } else {
-            $this->run('codecept_bootstrap');
-            $this->run('codeception');
+            $message = $this->sequence('codecept_bootstrap', 'codeception');
         }
 
-        $this->run('unit_bootstrap');
-        $this->run('acceptance_bootstrap');
-        $this->run('functional_bootstrap');
+        return $this->sequenceFrom($message, 'unit_bootstrap', 'acceptance_bootstrap', 'functional_bootstrap');
     }
 }

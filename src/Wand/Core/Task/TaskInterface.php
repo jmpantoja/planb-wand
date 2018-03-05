@@ -79,7 +79,7 @@ interface TaskInterface extends ActionInterface
     /**
      * Lanza la tarea.
      *
-     * @return \PlanB\Wand\Core\Logger\Message\LogMessage
+     * @return int
      */
-    public function launch(): void;
+    public function launch(): int;
 }

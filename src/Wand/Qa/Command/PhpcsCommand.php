@@ -43,7 +43,6 @@ class PhpcsCommand extends Command
 
         $exitCode = $this->runMethod($tokens);
 
-        $this->output = $this->getRunner()->getOutput();
         return $exitCode === 0;
     }
 
@@ -106,6 +105,8 @@ class PhpcsCommand extends Command
      */
     protected function runMethod(array $tokens): int
     {
-        return $this->getRunner()->runPHPCS($tokens);
+        $exitCode =$this->getRunner()->runPHPCS($tokens);
+        $this->output = $this->getRunner()->getOutput();
+        return $exitCode;
     }
 }

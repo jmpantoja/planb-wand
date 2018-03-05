@@ -109,7 +109,7 @@ final class PhpcpdCommand extends AbstractCommand
      *
      * @return null|int null or 0 if everything went fine, or an error code
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $finder = new FinderFacade(
             $input->getArgument('values'),

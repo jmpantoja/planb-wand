@@ -248,4 +248,41 @@ final class LogMessage
 
         return $this->addTabs($lines);
     }
+
+    /**
+     * Devuelve el código de error
+     *
+     * @return int
+     */
+    public function getExitCode(): int
+    {
+        $type = $this->getType();
+
+        $exitCode = 1;
+        if (!$type->isError()) {
+            $exitCode = 0;
+        }
+        return $exitCode;
+    }
+
+
+    /**
+     * Combina el tipo de dos mensajes, considerando la jerarquia:
+     * 1. error
+     * 2. skip
+     * 3. success
+     *
+     * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
+     * @return \PlanB\Wand\Core\Logger\Message\LogMessage
+     */
+    public function mergeType(LogMessage $message): self
+    {
+        if (!$this->isError()) {
+            if (!$message->isSuccessful()) {
+                $this->type = $message->getType();
+            }
+        }
+
+        return $message;
+    }
 }

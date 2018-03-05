@@ -28,6 +28,8 @@ class PhpcbfCommand extends PhpcsCommand
     protected function runMethod(array $tokens): int
     {
 
-        return $this->getRunner()->runPHPCBF($tokens);
+        $exitCode = $this->getRunner()->runPHPCBF($tokens);
+        $this->output = '';
+        return $exitCode;
     }
 }

@@ -11,6 +11,7 @@
 namespace PlanB\Wand\Composer\Task;
 
 use PlanB\Utils\Path\Path;
+use PlanB\Wand\Core\Logger\Message\LogMessage;
 use PlanB\Wand\Core\Task\Task;
 
 /**
@@ -23,14 +24,14 @@ class ComposerTask extends Task
     /**
      * {@inheritdoc}
      */
-    public function execute(): void
+    public function execute(): LogMessage
     {
         if (!$this->isUpdatable()) {
-            return;
+            return LogMessage::skip();
         }
 
         $this->logger->info('wait while composer is updated...');
-        $this->run('update');
+        return $this->run('update');
     }
 
     /**

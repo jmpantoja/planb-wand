@@ -21,7 +21,6 @@ actions:
       pattern: ls -la
       cwd: vendor/bin
 
-
 tasks:
   taskA:
     classname: \PlanB\Wand\Core\Task\SimpleTask

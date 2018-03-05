@@ -29,6 +29,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 abstract class Task extends Action implements TaskInterface
 {
+    public const EXIT_SUCCESS = 0;
+    public const EXIT_FAIL = 1;
+
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcher
      */
@@ -273,6 +276,36 @@ abstract class Task extends Action implements TaskInterface
     }
 
     /**
+     * Ejecuta varias acciones
+     *
+     * @param string[] ...$actions
+     * @return \PlanB\Wand\Core\Logger\Message\LogMessage
+     */
+    public function sequence(string ...$actions): LogMessage
+    {
+        $message = LogMessage::success();
+        return $this->sequenceFrom($message, ...$actions);
+    }
+
+    /**
+     * Ejecuta varias acciones
+     *
+     * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
+     * @param string[] ...$actions
+     * @return \PlanB\Wand\Core\Logger\Message\LogMessage
+     */
+    public function sequenceFrom(LogMessage $message, string ...$actions): LogMessage
+    {
+        foreach ($actions as $action) {
+            $temp = $this->run($action);
+            $message->mergeType($temp);
+        }
+
+        return $message;
+    }
+
+
+    /**
      * Crea un evento para una acción.
      *
      * @param string $name
@@ -290,16 +323,19 @@ abstract class Task extends Action implements TaskInterface
     /**
      * {@inheritdoc}
      *
-     * @return null|\PlanB\Wand\Core\Logger\Message\LogMessage
+     * @return int
      */
-    public function launch(): void
+    public function launch(): int
     {
         $this->logger->begin($this);
-        $this->execute();
+
+        $message = $this->execute();
+
+        return $message->getExitCode();
     }
 
     /**
      * {@inheritdoc}
      */
-    abstract public function execute(): void;
+    abstract public function execute(): LogMessage;
 }

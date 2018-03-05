@@ -36,8 +36,12 @@ class WandCommand extends BaseCommand
     /**
      * {@inheritdoc}
      *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
+
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -48,7 +52,7 @@ class WandCommand extends BaseCommand
         $this->getContextManager()->execute();
 
         $taskName = $input->getArgument('task');
-        $this->getTaskManager()->executeByName($taskName);
+        return $this->getTaskManager()->executeByName($taskName);
     }
 
     /**
@@ -65,7 +69,7 @@ class WandCommand extends BaseCommand
     /**
      * Prepara una tarea para ser ejecutada.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     private function initConsole(InputInterface $input, OutputInterface $output): void

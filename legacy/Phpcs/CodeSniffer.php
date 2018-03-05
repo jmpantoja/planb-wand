@@ -200,15 +200,12 @@ class CodeSniffer
             return $e->getCode();
         }//end try
 
-        if ($this->reporter->totalFixed === 0) {
-            // Nothing was fixed by PHPCBF.
-            if ($this->reporter->totalFixable === 0) {
-                // Nothing found that could be fixed.
-                return 0;
-            } else {
-                // Something failed to fix.
-                return 2;
-            }
+
+        $total = $this->reporter->totalErrors + $this->reporter->totalWarnings;
+
+        if ($total <= $this->reporter->totalFixed) {
+            //No quedan errores por arreglar
+            return 0;
         }
 
         if ($this->reporter->totalFixable === 0) {

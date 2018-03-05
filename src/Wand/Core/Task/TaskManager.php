@@ -53,9 +53,9 @@ class TaskManager implements EventSubscriberInterface
     /**
      * TaskManager constructor.
      *
-     * @param \PlanB\Wand\Core\Config\ConfigManager   $configManager
+     * @param \PlanB\Wand\Core\Config\ConfigManager $configManager
      * @param \PlanB\Wand\Core\Context\ContextManager $contextManager
-     * @param \PlanB\Wand\Core\Task\TaskBuilder       $builder
+     * @param \PlanB\Wand\Core\Task\TaskBuilder $builder
      */
     public function __construct(ConfigManager $configManager, ContextManager $contextManager, TaskBuilder $builder)
     {
@@ -86,7 +86,7 @@ class TaskManager implements EventSubscriberInterface
     /**
      * Añade una tarea al stack.
      *
-     * @param string                              $name
+     * @param string $name
      * @param \PlanB\Wand\Core\Task\TaskInterface $task
      *
      * @return \PlanB\Wand\Core\Task\TaskManager
@@ -148,20 +148,29 @@ class TaskManager implements EventSubscriberInterface
      * Ejecuta una tarea definida por su nombre.
      *
      * @param string $name
+     * @return int
      */
-    public function executeByName(string $name): void
+    public function executeByName(string $name): int
     {
         $task = $this->get($name);
         $event = new TaskEvent($task);
 
-        $this->execute($event);
+        return $this->execute($event);
     }
 
-    public function execute(TaskEvent $event): void
+    /**
+     * Ejecuta una tarea
+     *
+     * @param \PlanB\Wand\Core\Task\TaskEvent $event
+     * @return int
+     */
+    public function execute(TaskEvent $event): int
     {
         $task = $event->getTask();
-        $task->launch();
+        $exitCode = $task->launch();
 
         $event->blank();
+
+        return $exitCode;
     }
 }

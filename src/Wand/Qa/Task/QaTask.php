@@ -8,24 +8,31 @@
  * file that was distributed with this source code.
  */
 
-namespace PlanB\Wand\Core\Task;
+
+namespace PlanB\Wand\Qa\Task;
 
 use PlanB\Wand\Core\Logger\Message\LogMessage;
+use PlanB\Wand\Core\Task\Task;
 
 /**
- * Tareas.
- *
+ * Quality Assurance
+ * @package PlanB\Wand\Qa\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
-class SimpleTask extends Task
+class QaTask extends Task
 {
+
     /**
-     * Ejecuta la tarea.
+     * {@inheritdoc}
      */
     public function execute(): LogMessage
     {
-        $actions = array_keys($this->getActions());
+        $message = $this->sequence('lint', 'phpcpd', 'phpmd');
 
-        return $this->sequence(...$actions);
+        if ($this->run('phpcbf')->isError()) {
+            $message = $this->run('phpcs');
+        }
+
+        return $message;
     }
 }

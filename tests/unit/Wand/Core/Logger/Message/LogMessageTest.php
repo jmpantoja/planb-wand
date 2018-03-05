@@ -13,6 +13,7 @@ namespace PlanB\Wand\Core\Logger\Message;
 
 use Codeception\Test\Unit;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
+use PlanB\Wand\Core\Task\Task;
 
 
 /**
@@ -72,6 +73,8 @@ class LogMessageTest extends Unit
      * @covers ::setVerbose
      * @covers ::addVerbose
      *
+     * @covers ::getExitCode
+     *
      * @covers ::success
      * @covers ::parse
      * @covers ::parseVerbose
@@ -106,6 +109,8 @@ class LogMessageTest extends Unit
 
         $this->tester->assertTrue($message->isSuccessful());
         $this->tester->assertTrue($message->getType()->isSuccessful());
+
+        $this->tester->assertEquals(Task::EXIT_SUCCESS, $message->getExitCode());
     }
 
 
@@ -117,6 +122,8 @@ class LogMessageTest extends Unit
      * @covers ::setTitle
      * @covers ::setVerbose
      * @covers ::addVerbose
+     *
+     * @covers ::getExitCode
      *
      * @covers ::skip
      * @covers ::parse
@@ -152,6 +159,8 @@ class LogMessageTest extends Unit
 
         $this->tester->assertTrue($message->isSkipped());
         $this->tester->assertTrue($message->getType()->isSkipped());
+
+        $this->tester->assertEquals(Task::EXIT_SUCCESS, $message->getExitCode());
     }
 
     /**
@@ -162,6 +171,8 @@ class LogMessageTest extends Unit
      * @covers ::setTitle
      * @covers ::setVerbose
      * @covers ::addVerbose
+     *
+     * @covers ::getExitCode
      *
      * @covers ::error
      * @covers ::parse
@@ -198,6 +209,8 @@ class LogMessageTest extends Unit
 
         $this->tester->assertTrue($message->isError());
         $this->tester->assertTrue($message->getType()->isError());
+
+        $this->tester->assertEquals(Task::EXIT_FAIL, $message->getExitCode());
 
     }
 
@@ -245,8 +258,33 @@ class LogMessageTest extends Unit
             '    ',
         ], $message->parseVerbose());
 
-
     }
 
+    /**
+     * @test
+     * @covers ::mergeType
+     */
+    public function testMerge(){
+
+        $message = LogMessage::success();
+
+        $message->mergeType(LogMessage::success());
+        $this->assertTrue($message->isSuccessful());
+
+        
+        $message->mergeType(LogMessage::skip());
+        $this->assertTrue($message->isSkipped());
+        $message->mergeType(LogMessage::success());
+        $this->assertTrue($message->isSkipped());
+
+
+        $message->mergeType(LogMessage::error());
+        $this->assertTrue($message->isError());
+        $message->mergeType(LogMessage::skip());
+        $this->assertTrue($message->isError());
+        $message->mergeType(LogMessage::success());
+        $this->assertTrue($message->isError());
+
+    }
 
 }

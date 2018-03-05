@@ -8,7 +8,7 @@ tasks:
       phpmd_xml:
 
   qa:
-    classname: \PlanB\Wand\Core\Task\SimpleTask
+    classname: \PlanB\Wand\Qa\Task\QaTask
     description: wubba lubba dub dub
     actions:
       lint:
@@ -58,6 +58,11 @@ actions:
     params:
       pattern: phpmd %src% text %project%/phpmd.xml --minimumpriority 3
 
+  phpcbf:
+    group: qa
+    classname: \PlanB\Wand\Qa\Command\PhpcbfCommand
+    params:
+      pattern: phpcbf %src% -p --standard=%project%/phpcs.xml -q
 
   phpcs:
     group: qa
@@ -66,11 +71,7 @@ actions:
       pattern: phpcs %src% -p --standard=%project%/phpcs.xml -q
 
 
-  phpcbf:
-    group: qa
-    classname: \PlanB\Wand\Qa\Command\PhpcbfCommand
-    params:
-      pattern: phpcbf %src% -p --standard=%project%/phpcs.xml -q
+
 
 
 

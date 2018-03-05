@@ -12,19 +12,19 @@
 namespace PlanB\Spine\Core\Task;
 
 use Codeception\Test\Unit;
+use Mockery as m;
+use PlanB\Utils\Dev\Tdd\Data\Data;
+use PlanB\Utils\Dev\Tdd\Data\Provider;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Action\ActionEvent;
 use PlanB\Wand\Core\Context\Context;
-use PlanB\Wand\Core\Context\ContextManager;
 use PlanB\Wand\Core\Logger\LogManager;
-use PlanB\Wand\Core\Path\PathManager;
+use PlanB\Wand\Core\Logger\Message\LogMessage;
+use PlanB\Wand\Core\Logger\Message\MessageType;
 use PlanB\Wand\Core\Task\SimpleTask;
 use PlanB\Wand\Core\Task\TaskBuilder;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
-
-use Mockery as m;
 
 /**
  * Class TaskManagerTest
@@ -49,6 +49,10 @@ class SimpleTaskTest extends Unit
      * @covers ::execute
      *
      * @covers \PlanB\Wand\Core\Task\Task::run
+     * @covers \PlanB\Wand\Core\Task\Task::sequence
+     * @covers \PlanB\Wand\Core\Task\Task::sequenceFrom
+     *
+     *
      * @covers \PlanB\Wand\Core\Task\Task::launch
      * @covers \PlanB\Wand\Core\Task\Task::configureActionLevel
      *
@@ -89,6 +93,46 @@ class SimpleTaskTest extends Unit
 
         $task->launch();
 
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider providerSequence
+     *
+     * @covers ::sequence
+     * @covers ::sequenceFrom
+     */
+    public function testSequence(Data $data)
+    {
+        $task = $this->stub(SimpleTask::class);
+        $task->allows()
+            ->run(m::anyOf('A', 'C'))
+            ->andReturn(LogMessage::success());
+
+        $task->allows()
+            ->run('B')
+            ->andReturn($data->response);
+
+        $this->tester->assertTrue($task->sequence('A', 'B', 'C')->getType()->is($data->expected));
+    }
+
+    public function providerSequence()
+    {
+        return Provider::create()
+            ->add([
+                'response' => LogMessage::success(),
+                'expected' => MessageType::SUCCESS()
+            ])
+            ->add([
+                'response' => LogMessage::skip(),
+                'expected' => MessageType::SKIP()
+            ])
+            ->add([
+                'response' => LogMessage::error(),
+                'expected' => MessageType::ERROR()
+            ])
+            ->end();
     }
 
 

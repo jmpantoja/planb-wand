@@ -11,6 +11,7 @@
 namespace PlanB\Wand\Git\Task;
 
 use PlanB\Utils\Path\Path;
+use PlanB\Wand\Core\Logger\Message\LogMessage;
 use PlanB\Wand\Core\Task\Task;
 
 /**
@@ -23,17 +24,16 @@ class GitInitTask extends Task
     /**
      * {@inheritdoc}
      */
-    public function execute(): void
+    public function execute(): LogMessage
     {
         if ($this->isInitialized()) {
+            $message = LogMessage::success();
             $this->logger->skip('[Git] Initialized empty Git repository');
         } else {
-            $this->run('git');
+            $message =$this->run('git');
         }
 
-        $this->run('gitignore');
-        $this->run('precommit');
-        $this->run('commitmsg');
+        return $this->sequenceFrom($message, 'gitignore', 'precommit', 'commitmsg');
     }
 
     /**

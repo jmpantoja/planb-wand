@@ -27,7 +27,7 @@ use PlanB\Wand\Git\Task\GitInitTask;
  * @package PlanB\Wand\Composer
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  *
- * @coversDefaultClass  \PlanB\Wand\Composer\Git\Task\GitInitTask
+ * @coversDefaultClass  \PlanB\Wand\Git\Task\GitInitTask
  */
 class GitInitTaskTest extends Unit
 {
@@ -38,6 +38,12 @@ class GitInitTaskTest extends Unit
      */
     protected $tester;
 
+    /**
+     * @test
+     *
+     * @covers ::execute
+     * @covers ::isInitialized
+     */
     public function testExecute()
     {
 
@@ -61,6 +67,13 @@ class GitInitTaskTest extends Unit
         $task->execute();
     }
 
+
+    /**
+     * @test
+     *
+     * @covers ::execute
+     * @covers ::isInitialized
+     */
     public function testExecuteFirstTime()
     {
 
