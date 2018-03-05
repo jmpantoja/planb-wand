@@ -8,28 +8,25 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Config;
 
 use PlanB\Wand\Core\Config\Exception\UndefinidedActionNameException;
 use PlanB\Wand\Core\Config\Exception\UndefinidedTaskNameException;
 
 /**
- * Aplica los filtros definidos en custom a la configuración original
+ * Aplica los filtros definidos en custom a la configuración original.
  *
- * @package PlanB\Wand\Core\App
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 final class ConfigFilter
 {
-
     /**
-     * @var mixed[] $tasks
+     * @var mixed[]
      */
     private $tasks;
 
     /**
-     * @var mixed[] $custom
+     * @var mixed[]
      */
     private $custom;
 
@@ -46,7 +43,7 @@ final class ConfigFilter
     }
 
     /**
-     * Crea una nueva instancia
+     * Crea una nueva instancia.
      *
      * @param mixed[] $config
      * @param mixed[] $custom
@@ -59,7 +56,7 @@ final class ConfigFilter
     }
 
     /**
-     * Devuelve la configuración resultante de aplicar los filtros custom
+     * Devuelve la configuración resultante de aplicar los filtros custom.
      *
      * @return mixed[]
      */
@@ -80,11 +77,10 @@ final class ConfigFilter
     }
 
     /**
-     * Comprueba que no se hayan usado tareas en custom que no estén definidas en default
+     * Comprueba que no se hayan usado tareas en custom que no estén definidas en default.
      */
     private function validateTasksNames(): void
     {
-
         $extra = $this->findDiffTaskNames();
         if (!empty($extra)) {
             $availables = array_keys($this->tasks);
@@ -94,7 +90,7 @@ final class ConfigFilter
     }
 
     /**
-     * Busca tareas definidas en custom que no lo estén en default
+     * Busca tareas definidas en custom que no lo estén en default.
      *
      * @return string[]
      */
@@ -107,7 +103,7 @@ final class ConfigFilter
     }
 
     /**
-     * Comprueba que no se hayan usado acciones en custom que no estén definidas en default
+     * Comprueba que no se hayan usado acciones en custom que no estén definidas en default.
      */
     private function validateTasksActionNames(): void
     {
@@ -122,9 +118,10 @@ final class ConfigFilter
     }
 
     /**
-     * Busca acciones definidas en custom que no lo estén en default
+     * Busca acciones definidas en custom que no lo estén en default.
      *
      * @param string $task
+     *
      * @return string[]
      */
     private function findDiffActionNames(string $task): array
@@ -137,8 +134,7 @@ final class ConfigFilter
     }
 
     /**
-     * Admite solo las tareas definidas en custom
-     *
+     * Admite solo las tareas definidas en custom.
      */
     private function filterUndefinidedTasks(): void
     {
@@ -146,12 +142,12 @@ final class ConfigFilter
         $this->tasks = $this->filterByKey($this->tasks, $custom);
     }
 
-
     /**
-     * Admite solo las acciones definidas en custom
+     * Admite solo las acciones definidas en custom.
      *
-     * @param string $name
+     * @param string  $name
      * @param mixed[] $task
+     *
      * @return mixed[]
      */
     private function filterUndefinidedActions(string $name, array $task): array
@@ -160,12 +156,12 @@ final class ConfigFilter
         $customActions = array_keys($actions);
 
         $task['actions'] = $this->filterByKey($task['actions'], $customActions);
+
         return $task;
     }
 
     /**
-     * Descarta las tareas sin acciones
-     *
+     * Descarta las tareas sin acciones.
      */
     private function filterTaskWithNoActions(): void
     {
@@ -175,10 +171,11 @@ final class ConfigFilter
     }
 
     /**
-     * Filtra un array, admitiendo solo las keys de una lista
+     * Filtra un array, admitiendo solo las keys de una lista.
      *
-     * @param mixed[] $input el array
+     * @param mixed[]  $input  el array
      * @param string[] $valids keys admitidas
+     *
      * @return mixed[]
      */
     private function filterByKey(array $input, array $valids): array

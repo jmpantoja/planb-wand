@@ -6,3 +6,8 @@ tasks:
     actions:
       readme: []
 
+  taskB:
+    classname: \PlanB\Wand\Core\Task\Task
+    description: wubba lubba dub dub
+    actions:
+      readme: []

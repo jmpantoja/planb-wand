@@ -1,0 +1,11 @@
+{% extends "layout/layout.twig" %}
+{% from "macros.twig" import link %}
+{% block page_content %}
+
+# Classes
+
+{% for class in classes %}
+* {{ link(class) }}
+{% endfor %}
+
+{% endblock %}

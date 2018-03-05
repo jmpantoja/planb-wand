@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\WandBundle\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,16 +16,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Comando wand
+ * Comando wand.
  *
- * @package PlanB\WandBundle\Command
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class WandCommand extends BaseCommand
 {
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -37,18 +34,16 @@ class WandCommand extends BaseCommand
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $onlyStaged = $input->getOption('only-staged');
 
         $this->initPaths($input);
         $this->initConsole($input, $output);
-
 
         $this->getContextManager()->execute();
 
@@ -57,7 +52,7 @@ class WandCommand extends BaseCommand
     }
 
     /**
-     * Indica al pathManager cual es la ruta raiz del proyecto
+     * Indica al pathManager cual es la ruta raiz del proyecto.
      *
      * @param \Symfony\Component\Console\Input\InputInterface $input
      */
@@ -68,9 +63,9 @@ class WandCommand extends BaseCommand
     }
 
     /**
-     * Prepara una tarea para ser ejecutada
+     * Prepara una tarea para ser ejecutada.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     private function initConsole(InputInterface $input, OutputInterface $output): void

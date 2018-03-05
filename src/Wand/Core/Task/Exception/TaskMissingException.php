@@ -8,22 +8,20 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Task\Exception;
 
 /**
- * Se lanza cuando se pide una tarea que no existe
+ * Se lanza cuando se pide una tarea que no existe.
  *
- * @package PlanB\Wand\Core\Task\Exception
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class TaskMissingException extends \RuntimeException
 {
     /**
-     * La tarea solicitada no existe
+     * La tarea solicitada no existe.
      *
-     * @param string $task
-     * @param string[] $availables
+     * @param string          $task
+     * @param string[]        $availables
      * @param null|\Throwable $previous
      *
      * @return \PlanB\Wand\Core\Task\Exception\TaskMissingException

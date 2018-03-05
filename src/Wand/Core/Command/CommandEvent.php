@@ -8,21 +8,18 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Command;
 
 use PlanB\Wand\Core\Action\ActionEvent;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
 
 /**
- * Evento que se lanza al tratar un objeto Command
+ * Evento que se lanza al tratar un objeto Command.
  *
- * @package PlanB\Wand\Core\Command
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class CommandEvent extends ActionEvent
 {
-
     /**
      * @var \PlanB\Wand\Core\Command\Command
      */
@@ -38,9 +35,8 @@ class CommandEvent extends ActionEvent
         $this->command = $command;
     }
 
-
     /**
-     * Devuelve el nombre del evento
+     * Devuelve el nombre del evento.
      *
      * @return string
      */
@@ -49,9 +45,8 @@ class CommandEvent extends ActionEvent
         return 'wand.cmd.execute';
     }
 
-
     /**
-     * Configura el mensaje de log
+     * Configura el mensaje de log.
      *
      * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
      */
@@ -61,8 +56,8 @@ class CommandEvent extends ActionEvent
         $group = $this->command->getGroup();
         $commandLine = $this->command->getCommandLine();
         $output = $this->command->getOutput();
-        $level = $this->command->getLevel();
 
+        $level = $this->command->getLevel();
 
         $title = sprintf('[%s] Execute %s', $group, $title);
 
@@ -76,7 +71,7 @@ class CommandEvent extends ActionEvent
     }
 
     /**
-     * Devuelve el comando
+     * Devuelve el comando.
      *
      * @return \PlanB\Wand\Core\Command\Command
      */

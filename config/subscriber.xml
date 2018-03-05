@@ -20,6 +20,9 @@
             <call method="addSubscriber">
                 <argument type="service" id="wand.task.manager"/>
             </call>
+            <!--<call method="addSubscriber">-->
+                <!--<argument type="service" id="wand.runner.manager"/>-->
+            <!--</call>-->
         </service>
 
     </services>

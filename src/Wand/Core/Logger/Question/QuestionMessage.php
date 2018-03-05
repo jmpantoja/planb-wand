@@ -8,47 +8,43 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Logger\Question;
 
 /**
  * Representa una pregunta que queremos hacer al usuario
- * Vale para solicitar información o para pedir confirmación
+ * Vale para solicitar información o para pedir confirmación.
  *
- * @package PlanB\Wand\Core\Logger\Question
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 final class QuestionMessage
 {
-
     /**
-     * @var string $message
+     * @var string
      */
     private $message;
 
-
     /**
-     * @var string $warning
+     * @var string
      */
     private $warning;
 
     /**
-     * @var null|string $default
+     * @var null|string
      */
     private $default;
 
     /**
-     * @var string[] $options
+     * @var string[]
      */
     private $options = [];
 
     /**
-     * @var callable $validator
+     * @var callable
      */
     private $validator;
 
     /**
-     * @var callable $normalizer
+     * @var callable
      */
     private $normalizer;
 
@@ -63,9 +59,10 @@ final class QuestionMessage
     }
 
     /**
-     * Crea una nueva instancia
+     * Crea una nueva instancia.
      *
      * @param string $message
+     *
      * @return \PlanB\Wand\Core\Logger\Question\QuestionMessage
      */
     public static function create(string $message): self
@@ -73,9 +70,8 @@ final class QuestionMessage
         return new self($message);
     }
 
-
     /**
-     * Devuelve el mensaje
+     * Devuelve el mensaje.
      *
      * @return string
      */
@@ -91,19 +87,21 @@ final class QuestionMessage
     }
 
     /**
-     * Asigna el texto de advertencia
+     * Asigna el texto de advertencia.
      *
      * @param string $warning
+     *
      * @return \PlanB\Wand\Core\Logger\Question\QuestionMessage
      */
     public function setWarning(string $warning): QuestionMessage
     {
         $this->warning = $warning;
+
         return $this;
     }
 
     /**
-     * Devuelve el valor por defecto
+     * Devuelve el valor por defecto.
      *
      * @return null|string
      */
@@ -117,19 +115,21 @@ final class QuestionMessage
     }
 
     /**
-     * Asigna el valor por defecto
+     * Asigna el valor por defecto.
      *
      * @param null|string $default
+     *
      * @return \PlanB\Wand\Core\Logger\Question\QuestionMessage
      */
     public function setDefault(?string $default): QuestionMessage
     {
         $this->default = $default;
+
         return $this;
     }
 
     /**
-     * Indica si hay opciones
+     * Indica si hay opciones.
      *
      * @return bool
      */
@@ -139,7 +139,7 @@ final class QuestionMessage
     }
 
     /**
-     * Devuelve las opciones válidas para esta question
+     * Devuelve las opciones válidas para esta question.
      *
      * @return string[]
      */
@@ -149,19 +149,21 @@ final class QuestionMessage
     }
 
     /**
-     * Asigna las opciones para esta question
+     * Asigna las opciones para esta question.
      *
      * @param string[] $options
+     *
      * @return \PlanB\Wand\Core\Logger\Question\QuestionMessage
      */
     public function setOptions(array $options): QuestionMessage
     {
         $this->options = $options;
+
         return $this;
     }
 
     /**
-     * Devuelve el validador
+     * Devuelve el validador.
      *
      * @return callable
      */
@@ -171,19 +173,21 @@ final class QuestionMessage
     }
 
     /**
-     * Asigna el validador
+     * Asigna el validador.
      *
      * @param callable $validator
+     *
      * @return \PlanB\Wand\Core\Logger\Question\QuestionMessage
      */
     public function setValidator(callable $validator): QuestionMessage
     {
         $this->validator = $validator;
+
         return $this;
     }
 
     /**
-     * Devuelve el normalizador
+     * Devuelve el normalizador.
      *
      * @return callable
      */
@@ -193,14 +197,16 @@ final class QuestionMessage
     }
 
     /**
-     * Asigna el normalizador
+     * Asigna el normalizador.
      *
      * @param callable $normalizer
+     *
      * @return \PlanB\Wand\Core\Logger\Question\QuestionMessage
      */
     public function setNormalizer(callable $normalizer): QuestionMessage
     {
         $this->normalizer = $normalizer;
+
         return $this;
     }
 }

@@ -8,11 +8,9 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Logger;
 
 use PlanB\Wand\Core\Action\ActionEvent;
-
 use PlanB\Wand\Core\Logger\Confirm\ConfirmEvent;
 use PlanB\Wand\Core\Logger\Confirm\ConfirmMessage;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
@@ -23,21 +21,19 @@ use PlanB\Wand\Core\Task\TaskInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
- * Gestor de logs
+ * Gestor de logs.
  *
- * @package PlanB\Wand\Core\Logger
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class LogManager
 {
-
     /**
-     * @var int $level
+     * @var int
      */
     private $level = 0;
 
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
+     * @var \Symfony\Component\EventDispatcher\EventDispatcher
      */
     private $dispatcher;
 
@@ -54,6 +50,7 @@ class LogManager
     public function setLevel(int $level): LogManager
     {
         $this->level = $level;
+
         return $this;
     }
 
@@ -61,7 +58,7 @@ class LogManager
     {
         $level = $task->getLevel();
 
-        $title = sprintf("Running %s task...", $task->getName());
+        $title = sprintf('Running %s task...', $task->getName());
         $message = LogMessage::info()
             ->setLevel($level)
             ->setTitle($title);
@@ -70,7 +67,7 @@ class LogManager
     }
 
     /**
-     * Muestra un mensaje tipo info por consola
+     * Muestra un mensaje tipo info por consola.
      *
      * @param string $title
      */
@@ -84,9 +81,9 @@ class LogManager
     }
 
     /**
-     * Muestra un mensaje tipo success por consola
+     * Muestra un mensaje tipo success por consola.
      *
-     * @param string $title
+     * @param string   $title
      * @param string[] $verbose
      */
     public function success(string $title, array $verbose = []): void
@@ -99,9 +96,9 @@ class LogManager
     }
 
     /**
-     * Muestra un mensaje tipo skip por consola
+     * Muestra un mensaje tipo skip por consola.
      *
-     * @param string $title
+     * @param string   $title
      * @param string[] $verbose
      */
     public function skip(string $title, array $verbose = []): void
@@ -115,9 +112,9 @@ class LogManager
     }
 
     /**
-     * Muestra un mensaje tipo error por consola
+     * Muestra un mensaje tipo error por consola.
      *
-     * @param string $title
+     * @param string   $title
      * @param string[] $verbose
      */
     public function error(string $title, array $verbose = []): void
@@ -130,9 +127,8 @@ class LogManager
         $this->message($message);
     }
 
-
     /**
-     * Muestra un LogMessage por consola
+     * Muestra un LogMessage por consola.
      *
      * @param \PlanB\Wand\Core\Action\ActionEvent $event
      */
@@ -142,7 +138,7 @@ class LogManager
     }
 
     /**
-     * Muestra un LogMessage por consola
+     * Muestra un LogMessage por consola.
      *
      * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
      */
@@ -152,11 +148,11 @@ class LogManager
         $this->dispatcher->dispatch('wand.log.message', $event);
     }
 
-
     /**
-     * Pide información al usuario
+     * Pide información al usuario.
      *
      * @param \PlanB\Wand\Core\Logger\Question\QuestionMessage $question
+     *
      * @return string
      */
     public function question(QuestionMessage $question): string
@@ -168,10 +164,12 @@ class LogManager
     }
 
     /**
-     * Pide confirmación al usuario
+     * Pide confirmación al usuario.
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      *
      * @param string $message
-     * @param bool $default
+     * @param bool   $default
+     *
      * @return bool
      */
     public function confirm(string $message, bool $default = true): bool
@@ -182,6 +180,6 @@ class LogManager
         $event = new ConfirmEvent($question);
         $this->dispatcher->dispatch('wand.log.confirm', $event);
 
-        return $event->getAnswer();
+        return $event->isTrue();
     }
 }

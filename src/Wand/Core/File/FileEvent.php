@@ -8,23 +8,20 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\File;
 
 use PlanB\Wand\Core\Action\ActionEvent;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
 
 /**
- * Evento que se lanza al tratar un objeto File
+ * Evento que se lanza al tratar un objeto File.
  *
- * @package PlanB\Wand\Core\File
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class FileEvent extends ActionEvent
 {
-
     /**
-     * @var \PlanB\Wand\Core\File\File $file
+     * @var \PlanB\Wand\Core\File\File
      */
     private $file;
 
@@ -38,9 +35,8 @@ class FileEvent extends ActionEvent
         $this->file = $file;
     }
 
-
     /**
-     * Devuelve el nombre del evento
+     * Devuelve el nombre del evento.
      *
      * @return string
      */
@@ -51,9 +47,8 @@ class FileEvent extends ActionEvent
         return sprintf('wand.file.%s', $action);
     }
 
-
     /**
-     * Configura el mensaje de log
+     * Configura el mensaje de log.
      *
      * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
      */
@@ -73,9 +68,8 @@ class FileEvent extends ActionEvent
         ]);
     }
 
-
     /**
-     * Devuelve el objeto File
+     * Devuelve el objeto File.
      *
      * @return \PlanB\Wand\Core\File\File
      */

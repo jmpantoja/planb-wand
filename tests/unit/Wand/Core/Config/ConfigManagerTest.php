@@ -40,7 +40,6 @@ class ConfigManagerTest extends Unit
      * @covers ::__construct
      * @covers ::getConfig
      * @covers ::getDefaultPaths
-     * @covers ::getCustomPath
      */
     public function testInit()
     {
@@ -56,10 +55,19 @@ class ConfigManagerTest extends Unit
         $config = $manager->getConfig();
         $tasks = $config['tasks'];
 
-        $this->tester->assertEquals([
-            'init'
+        $this->assertArrayHasKey('composer', $tasks);
+        $this->assertArrayHasKey('init/ci', $tasks);
+        $this->assertArrayHasKey('init/git', $tasks);
+        $this->assertArrayHasKey('init/qa', $tasks);
+        $this->assertArrayHasKey('qa', $tasks);
+        $this->assertArrayHasKey('init', $tasks);
+        $this->assertArrayHasKey('validate', $tasks);
+        $this->assertArrayHasKey('init/documentation', $tasks);
+        $this->assertArrayHasKey('init/project', $tasks);
+        $this->assertArrayHasKey('init/info', $tasks);
+        $this->assertArrayHasKey('init/codecept', $tasks);
 
-        ], array_keys($tasks));
+        $this->assertCount(11, $tasks);
 
     }
 

@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Action;
 
 use PlanB\Wand\Core\Action\Exception\ActionEventFactoryException;
@@ -20,17 +19,17 @@ use PlanB\Wand\Core\Task\Task;
 use PlanB\Wand\Core\Task\TaskEvent;
 
 /**
- * Crea objetos ActionEvent
+ * Crea objetos ActionEvent.
  *
- * @package PlanB\Wand\Core\Action
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class ActionEventFactory
 {
     /**
-     * Crea el objeto ActionEvent que corresponde a un action
+     * Crea el objeto ActionEvent que corresponde a un action.
      *
      * @param \PlanB\Wand\Core\Action\ActionInterface $action
+     *
      * @return \PlanB\Wand\Core\Action\ActionEvent
      */
     public static function fromAction(ActionInterface $action): ActionEvent
@@ -44,6 +43,7 @@ class ActionEventFactory
         } else {
             throw ActionEventFactoryException::create($action);
         }
+
         return $event;
     }
 }

@@ -1,0 +1,45 @@
+---
+tasks:
+  "init/git":
+    classname: \PlanB\Wand\Git\Task\GitInitTask
+    description: wubba lubba dub dub
+    actions:
+      git:
+      gitignore:
+      precommit:
+      commitmsg:
+
+actions:
+  git:
+    group: git
+    classname: \PlanB\Wand\Core\Command\SystemCommand
+    params:
+      pattern: git init %project%
+
+
+  gitignore:
+        group: git
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.git/gitignore.twig'
+          target: .gitignore
+          action: create
+          chmod: 0644
+
+  precommit:
+        group: git
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.git/pre-commit.twig'
+          target: .git/hooks/pre-commit
+          action: create
+          chmod: 0644
+
+  commitmsg:
+        group: git
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.git/commit-msg.twig'
+          target: .git/hooks/commit-msg
+          action: create
+          chmod: 0644

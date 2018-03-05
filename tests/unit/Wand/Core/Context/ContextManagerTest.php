@@ -44,7 +44,6 @@ class ContextManagerTest extends Unit
      * @covers ::resolve
      * @covers ::read
      * @covers ::ask
-     *
      */
     public function testExecute(Data $data)
     {

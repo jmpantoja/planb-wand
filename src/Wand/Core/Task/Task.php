@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Task;
 
 use PlanB\Wand\Core\Action\Action;
@@ -24,36 +23,34 @@ use PlanB\Wand\Core\Task\Exception\InvalidTypeActionException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
- * Tareas
+ * Tareas.
  *
- * @package PlanB\Wand\Core\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 abstract class Task extends Action implements TaskInterface
 {
-
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
+     * @var \Symfony\Component\EventDispatcher\EventDispatcher
      */
     protected $dispatcher;
 
     /**
-     * @var string $name
+     * @var string
      */
     private $name = '<??>';
 
     /**
-     * @var \PlanB\Wand\Core\Logger\LogManager $logger
+     * @var \PlanB\Wand\Core\Logger\LogManager
      */
     protected $logger;
 
     /**
-     * @var string $description
+     * @var string
      */
     private $description;
 
     /**
-     * @var \PlanB\Wand\Core\Action\ActionInterface[] $actions ;
+     * @var \PlanB\Wand\Core\Action\ActionInterface[] ;
      */
     private $actions = [];
 
@@ -69,9 +66,10 @@ abstract class Task extends Action implements TaskInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param array $params
+     *
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
     final public static function create(array $params): TaskInterface
@@ -83,20 +81,21 @@ abstract class Task extends Action implements TaskInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param string $name
+     *
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
     public function setName(string $name): TaskInterface
     {
         $this->name = $name;
+
         return $this;
     }
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @return string
      */
@@ -106,32 +105,38 @@ abstract class Task extends Action implements TaskInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
+     *
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
     public function setEventDispatcher(EventDispatcher $dispatcher): TaskInterface
     {
         $this->dispatcher = $dispatcher;
+
         return $this;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param \PlanB\Wand\Core\Logger\LogManager $logger
+     *
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
     public function setLogger(LogManager $logger): TaskInterface
     {
         $this->logger = $logger;
+
         return $this;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
+     *
      * @param \PlanB\Wand\Core\Context\Context $context
+     *
      * @return \PlanB\Wand\Core\Action\ActionInterface
      */
     public function setContext(Context $context): ActionInterface
@@ -141,13 +146,15 @@ abstract class Task extends Action implements TaskInterface
         foreach ($this->actions as $action) {
             $action->setContext($context);
         }
+
         return $this;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param int $level
+     *
      * @return \PlanB\Wand\Core\Action\ActionInterface
      */
     public function setLevel(int $level): ActionInterface
@@ -158,11 +165,12 @@ abstract class Task extends Action implements TaskInterface
         foreach ($this->actions as $action) {
             $action->setLevel($level);
         }
+
         return $this;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @return string
      */
@@ -172,7 +180,7 @@ abstract class Task extends Action implements TaskInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @return \PlanB\Wand\Core\Action\ActionInterface[]
      */
@@ -182,9 +190,10 @@ abstract class Task extends Action implements TaskInterface
     }
 
     /**
-     * Indica si una acción está definida
+     * Indica si una acción está definida.
      *
      * @param string $name
+     *
      * @return bool
      */
     public function exists(string $name): bool
@@ -193,9 +202,10 @@ abstract class Task extends Action implements TaskInterface
     }
 
     /**
-     * Devuelve una acción
+     * Devuelve una acción.
      *
      * @param string $name
+     *
      * @return \PlanB\Wand\Core\Action\ActionInterface
      */
     public function get(string $name): ActionInterface
@@ -212,9 +222,10 @@ abstract class Task extends Action implements TaskInterface
     }
 
     /**
-     * Devuelve una acción tipo file
+     * Devuelve una acción tipo file.
      *
      * @param string $name
+     *
      * @return \PlanB\Wand\Core\File\File
      */
     public function file(string $name): File
@@ -223,12 +234,12 @@ abstract class Task extends Action implements TaskInterface
         if (!($file instanceof File)) {
             throw InvalidTypeActionException::create($name, File::class);
         }
+
         return $file;
     }
 
-
     /**
-     * Asigna el nivel a una acción
+     * Asigna el nivel a una acción.
      *
      * @param \PlanB\Wand\Core\Action\ActionInterface $action
      */
@@ -243,9 +254,10 @@ abstract class Task extends Action implements TaskInterface
     }
 
     /**
-     * Ejecuta una acción
+     * Ejecuta una acción.
      *
      * @param string $action
+     *
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
     public function run(string $action): LogMessage
@@ -256,13 +268,15 @@ abstract class Task extends Action implements TaskInterface
         $this->dispatcher->dispatch($name, $event);
 
         $this->logger->log($event);
+
         return $event->getMessage();
     }
 
     /**
-     * Crea un evento para una acción
+     * Crea un evento para una acción.
      *
      * @param string $name
+     *
      * @return \PlanB\Wand\Core\Action\ActionEvent
      */
     private function getEvent(string $name): ActionEvent
@@ -274,7 +288,8 @@ abstract class Task extends Action implements TaskInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
      * @return null|\PlanB\Wand\Core\Logger\Message\LogMessage
      */
     public function launch(): void
@@ -284,7 +299,7 @@ abstract class Task extends Action implements TaskInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     abstract public function execute(): void;
 }

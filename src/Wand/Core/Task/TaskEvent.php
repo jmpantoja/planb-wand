@@ -8,28 +8,26 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Task;
 
 use PlanB\Wand\Core\Action\ActionEvent;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
 
 /**
- * Se lanza para ejecutar tareas
+ * Se lanza para ejecutar tareas.
  *
- * @package PlanB\Wand\Core\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class TaskEvent extends ActionEvent
 {
-
     /**
-     * @var \PlanB\Wand\Core\Task\Task $task
+     * @var \PlanB\Wand\Core\Task\Task
      */
     private $task;
 
     /**
      * TaskEvent constructor.
+     *
      * @param \PlanB\Wand\Core\Task\Task $task
      */
     public function __construct(Task $task)
@@ -38,7 +36,7 @@ class TaskEvent extends ActionEvent
     }
 
     /**
-     * Devuelve la tarea
+     * Devuelve la tarea.
      *
      * @return \PlanB\Wand\Core\Task\Task
      */
@@ -48,7 +46,7 @@ class TaskEvent extends ActionEvent
     }
 
     /**
-     * Devuelve el nombre del evento
+     * Devuelve el nombre del evento.
      *
      * @return string
      */
@@ -58,7 +56,7 @@ class TaskEvent extends ActionEvent
     }
 
     /**
-     * Configura el mensaje de log
+     * Configura el mensaje de log.
      *
      * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
      */

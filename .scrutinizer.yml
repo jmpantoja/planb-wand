@@ -3,6 +3,7 @@ checks:
 
 filter:
     excluded_paths:
+        - "legacy/"
         - "tests/"
         - "var/"
         - "sami.php"

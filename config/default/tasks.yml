@@ -1,0 +1,23 @@
+---
+tasks:
+  init:
+    classname: \PlanB\Wand\Core\Task\SimpleTask
+    description: wubba lubba dub dub
+    actions:
+      "@composer":
+      "@init/project":
+      "@init/info":
+      "@init/codecept":
+      "@init/ci":
+      "@init/qa":
+      "@init/git":
+      "@init/documentation":
+
+  validate:
+    classname: \PlanB\Wand\Core\Task\SimpleTask
+    description: wubba lubba dub dub
+    actions:
+      "@composer":
+      "@qa":
+#     restage:
+#     tests:

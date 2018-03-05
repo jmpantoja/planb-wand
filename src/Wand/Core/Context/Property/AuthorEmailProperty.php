@@ -8,23 +8,20 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context\Property;
 
 use PlanB\Wand\Core\Context\Property;
 use PlanB\Wand\Core\Context\ValidableProperty;
 
 /**
- * Propiedad author email
+ * Propiedad author email.
  *
- * @package PlanB\Wand\Core\Context\Property
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class AuthorEmailProperty extends Property implements ValidableProperty
 {
-
     /**
-     * Define los parámetros path y message
+     * Define los parámetros path y message.
      *
      * @param string[] $options
      */
@@ -34,11 +31,11 @@ class AuthorEmailProperty extends Property implements ValidableProperty
         $options['message'] = 'Author Email';
     }
 
-
     /**
-     * Realiza las comprobaciones especificas de esta propiedad
+     * Realiza las comprobaciones especificas de esta propiedad.
      *
      * @param mixed $answer
+     *
      * @return bool
      */
     public function validate($answer): bool
@@ -47,7 +44,7 @@ class AuthorEmailProperty extends Property implements ValidableProperty
     }
 
     /**
-     * Devuelve el mensaje de error personalizado
+     * Devuelve el mensaje de error personalizado.
      *
      * @return string
      */

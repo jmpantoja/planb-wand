@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\WandBundle\Command;
 
 use PlanB\Wand\Core\Logger\Confirm\ConfirmEvent;
@@ -24,34 +23,31 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Gestiona los eventos relacionado con mostrar o pedir información por consola
+ * Gestiona los eventos relacionado con mostrar o pedir información por consola.
  *
- * @package PlanB\WandBundle\Command
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class ConsoleManager implements EventSubscriberInterface
 {
-
     /**
-     * @var \Symfony\Component\Console\Helper\HelperSet $helperSet
+     * @var \Symfony\Component\Console\Helper\HelperSet
      */
     private $helperSet;
 
     /**
-     * @var \Symfony\Component\Console\Input\InputInterface $input
+     * @var \Symfony\Component\Console\Input\InputInterface
      */
     private $input;
 
     /**
-     * @var \Symfony\Component\Console\Output\OutputInterface $output
+     * @var \Symfony\Component\Console\Output\OutputInterface
      */
     private $output;
-
 
     /**
      * ConsoleManager constructor.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     private function __construct(InputInterface $input, OutputInterface $output, HelperSet $helperSet)
@@ -61,12 +57,12 @@ class ConsoleManager implements EventSubscriberInterface
         $this->helperSet = $helperSet;
     }
 
-
     /**
-     * Crea una nueva instancia
+     * Crea una nueva instancia.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
      * @return \PlanB\WandBundle\Command\ConsoleManager
      */
     public static function create(InputInterface $input, OutputInterface $output, HelperSet $helperSet): self
@@ -75,7 +71,7 @@ class ConsoleManager implements EventSubscriberInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @return array The event names to listen to
      */
@@ -89,7 +85,8 @@ class ConsoleManager implements EventSubscriberInterface
     }
 
     /**
-     * Devuelve el question Helper
+     * Devuelve el question Helper.
+     *
      * @return \Symfony\Component\Console\Helper\QuestionHelper
      */
     public function getQuestionHelper(): QuestionHelper
@@ -97,9 +94,8 @@ class ConsoleManager implements EventSubscriberInterface
         return $this->helperSet->get('question');
     }
 
-
     /**
-     * Muestra un mensaje por consola
+     * Muestra un mensaje por consola.
      *
      * @param \PlanB\Wand\Core\Logger\Message\MessageEvent $event
      */
@@ -115,9 +111,8 @@ class ConsoleManager implements EventSubscriberInterface
         }
     }
 
-
     /**
-     * Indica si estamos en modo verbosity quiet o normal
+     * Indica si estamos en modo verbosity quiet o normal.
      *
      * @return bool
      */
@@ -127,7 +122,7 @@ class ConsoleManager implements EventSubscriberInterface
     }
 
     /**
-     * Pide información al usuario
+     * Pide información al usuario.
      *
      * @param \PlanB\Wand\Core\Logger\Question\QuestionEvent $event
      */
@@ -142,14 +137,14 @@ class ConsoleManager implements EventSubscriberInterface
     }
 
     /**
-     * Convierte un objeto QuestionEvent en un Question, adecuado para la consola
+     * Convierte un objeto QuestionEvent en un Question, adecuado para la consola.
      *
      * @param \PlanB\Wand\Core\Logger\Question\QuestionEvent $event
+     *
      * @return \Symfony\Component\Console\Question\Question
      */
     private function eventToQuestion(QuestionEvent $event): Question
     {
-
         $message = $event->getQuestion();
         $text = $message->getMessage();
         $default = $message->getDefault();
@@ -168,7 +163,7 @@ class ConsoleManager implements EventSubscriberInterface
     }
 
     /**
-     * Pide información al usuario
+     * Pide información al usuario.
      *
      * @param \PlanB\Wand\Core\Logger\Confirm\ConfirmEvent $event
      */
@@ -176,7 +171,7 @@ class ConsoleManager implements EventSubscriberInterface
     {
         $message = $event->getConfirm();
         $text = $message->getMessage();
-        $default = $message->getDefault();
+        $default = $message->isTrueByDefault();
 
         $question = new ConfirmationQuestion($text, $default);
 

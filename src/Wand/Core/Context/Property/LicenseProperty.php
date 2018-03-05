@@ -8,16 +8,14 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context\Property;
 
 use PlanB\Wand\Core\Context\Property;
 
 class LicenseProperty extends Property
 {
-
     /**
-     * Define los parámetros path y message
+     * Define los parámetros path y message.
      *
      * @param string[] $options
      */
@@ -28,7 +26,7 @@ class LicenseProperty extends Property
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getOptions(): array
     {

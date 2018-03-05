@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Task;
 
 use PlanB\Wand\Core\Config\ConfigManager;
@@ -18,31 +17,29 @@ use PlanB\Wand\Core\Task\Exception\TaskMissingException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Gestiona las tareas
+ * Gestiona las tareas.
  *
- * @package PlanB\Wand\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class TaskManager implements EventSubscriberInterface
 {
-
     /**
-     * @var \PlanB\Wand\Core\Context\ContextManager $contextManager
+     * @var \PlanB\Wand\Core\Context\ContextManager
      */
     private $contextManager;
 
     /**
-     * @var \PlanB\Wand\Core\Context\Context $context
+     * @var \PlanB\Wand\Core\Context\Context
      */
     private $context;
 
     /**
-     * @var \PlanB\Wand\Core\Task\TaskInterface[] $tasks
+     * @var \PlanB\Wand\Core\Task\TaskInterface[]
      */
     private $tasks;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @return array The event names to listen to
      */
@@ -56,13 +53,12 @@ class TaskManager implements EventSubscriberInterface
     /**
      * TaskManager constructor.
      *
-     * @param \PlanB\Wand\Core\Config\ConfigManager $configManager
+     * @param \PlanB\Wand\Core\Config\ConfigManager   $configManager
      * @param \PlanB\Wand\Core\Context\ContextManager $contextManager
-     * @param \PlanB\Wand\Core\Task\TaskBuilder $builder
+     * @param \PlanB\Wand\Core\Task\TaskBuilder       $builder
      */
     public function __construct(ConfigManager $configManager, ContextManager $contextManager, TaskBuilder $builder)
     {
-
         $this->contextManager = $contextManager;
 
         $config = $configManager->getConfig();
@@ -72,9 +68,10 @@ class TaskManager implements EventSubscriberInterface
     }
 
     /**
-     * Añade un conjunto de tareas definidas en un array de configuración
+     * Añade un conjunto de tareas definidas en un array de configuración.
      *
      * @param mixed[] $tasks
+     *
      * @return \PlanB\Wand\Core\Task\TaskManager
      */
     public function setTasks(array $tasks): self
@@ -82,26 +79,30 @@ class TaskManager implements EventSubscriberInterface
         foreach ($tasks as $name => $task) {
             $this->addTask($name, $task);
         }
+
         return $this;
     }
 
     /**
-     * Añade una tarea al stack
+     * Añade una tarea al stack.
      *
-     * @param string $name
+     * @param string                              $name
      * @param \PlanB\Wand\Core\Task\TaskInterface $task
+     *
      * @return \PlanB\Wand\Core\Task\TaskManager
      */
     public function addTask(string $name, TaskInterface $task): self
     {
         $this->tasks[$name] = $task;
+
         return $this;
     }
 
     /**
-     * Indica si la tarea está definida
+     * Indica si la tarea está definida.
      *
      * @param string $task
+     *
      * @return bool
      */
     public function exists(string $task): bool
@@ -110,9 +111,10 @@ class TaskManager implements EventSubscriberInterface
     }
 
     /**
-     * Devuelve una tarea
+     * Devuelve una tarea.
      *
      * @param string $name
+     *
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
     public function get(string $name): TaskInterface
@@ -129,7 +131,7 @@ class TaskManager implements EventSubscriberInterface
     }
 
     /**
-     * Devuelve el objeto contexto
+     * Devuelve el objeto contexto.
      *
      * @return \PlanB\Wand\Core\Context\Context
      */
@@ -142,9 +144,8 @@ class TaskManager implements EventSubscriberInterface
         return $this->context;
     }
 
-
     /**
-     * Ejecuta una tarea definida por su nombre
+     * Ejecuta una tarea definida por su nombre.
      *
      * @param string $name
      */

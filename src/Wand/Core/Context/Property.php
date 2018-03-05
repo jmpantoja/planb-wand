@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context;
 
 use PlanB\Wand\Core\Context\Exception\InvalidAnswerException;
@@ -16,21 +15,19 @@ use PlanB\Wand\Core\Logger\Question\QuestionMessage;
 use Throwable;
 
 /**
- * Clase base para propiedades de composer.json
+ * Clase base para propiedades de composer.json.
  *
- * @package PlanB\Wand\Core\Context
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 abstract class Property
 {
-
     /**
-     * @var \PlanB\Wand\Core\Logger\Question\QuestionMessage $question
+     * @var \PlanB\Wand\Core\Logger\Question\QuestionMessage
      */
     private $question;
 
     /**
-     * @var string $path
+     * @var string
      */
     private $path;
 
@@ -50,7 +47,7 @@ abstract class Property
     }
 
     /**
-     * Inicializa los valores de path y question
+     * Inicializa los valores de path y question.
      *
      * @param string $message
      */
@@ -63,12 +60,11 @@ abstract class Property
     }
 
     /**
-     * Define los parámetros path y message
+     * Define los parámetros path y message.
      *
      * @param string[] $options
      */
     abstract public function init(array &$options): void;
-
 
     /** Crea una nueva instancia de esta propiedad
      *
@@ -80,12 +76,12 @@ abstract class Property
     }
 
     /**
-     * Añade un texto explicando por qué el valor almacenado en composer.json no es correcto
+     * Añade un texto explicando por qué el valor almacenado en composer.json no es correcto.
+     *
      * @param mixed $value
      */
     public function addWarning($value): void
     {
-
         try {
             $this->checkInOptions($value);
             $this->checkCustom($value);
@@ -95,9 +91,9 @@ abstract class Property
         }
     }
 
-
     /**
-     * Devuelve el objeto Question correctamente configurado
+     * Devuelve el objeto Question correctamente configurado.
+     *
      * @return \PlanB\Wand\Core\Logger\Question\QuestionMessage
      */
     public function getQuestion(): QuestionMessage
@@ -106,7 +102,7 @@ abstract class Property
     }
 
     /**
-     * Devuelve el path de la propiedad
+     * Devuelve el path de la propiedad.
      *
      * @return string
      */
@@ -116,10 +112,12 @@ abstract class Property
     }
 
     /**
-     * Comprueba que un valor sea valido para esta propiedad
+     * Comprueba que un valor sea valido para esta propiedad.
      *
      * @param mixed $answer
+     *
      * @return mixed
+     *
      * @throws \PlanB\Wand\Core\Context\Exception\InvalidAnswerException
      */
     public function check($answer)
@@ -133,7 +131,7 @@ abstract class Property
     }
 
     /**
-     * Comprueba que un valor no sea nulo
+     * Comprueba que un valor no sea nulo.
      *
      * @param mixed $answer
      */
@@ -145,7 +143,7 @@ abstract class Property
     }
 
     /**
-     * Comprueba que un valor esté entre los permitidos
+     * Comprueba que un valor esté entre los permitidos.
      *
      * @param mixed $answer
      */
@@ -162,9 +160,10 @@ abstract class Property
     }
 
     /**
-     * Validación especifica de la propiedad
+     * Validación especifica de la propiedad.
      *
      * (solo aplica a instancias de ValidableProperty)
+     *
      * @param mixed $answer
      */
     private function checkCustom($answer): void
@@ -179,11 +178,11 @@ abstract class Property
         }
     }
 
-
     /**
-     * Prepara el valor para ser almacenado en composer.json
+     * Prepara el valor para ser almacenado en composer.json.
      *
      * @param mixed $answer
+     *
      * @return mixed
      */
     public function normalize($answer)
@@ -192,9 +191,10 @@ abstract class Property
     }
 
     /**
-     * Desnormaliza un valor para esta propiedad
+     * Desnormaliza un valor para esta propiedad.
      *
      * @param mixed $answer
+     *
      * @return null|string
      */
     public function denormalize($answer): ?string
@@ -202,12 +202,12 @@ abstract class Property
         return $answer;
     }
 
-
     /**
      * Prepara el valor para ser usado como parámetro
-     * (Cuando se llama al método toArray de Context)
+     * (Cuando se llama al método toArray de Context).
      *
      * @param mixed $answer
+     *
      * @return null|string
      */
     public function resolve($answer): ?string
@@ -215,17 +215,18 @@ abstract class Property
         return $answer;
     }
 
-
     /**
-     * Indica si un valor es valido para esta propiedad
+     * Indica si un valor es valido para esta propiedad.
      *
      * @param mixed $answer
+     *
      * @return bool
      */
     public function isValid($answer): bool
     {
         try {
             $this->check($answer);
+
             return true;
         } catch (Throwable $exception) {
             return false;
@@ -233,7 +234,7 @@ abstract class Property
     }
 
     /**
-     * Devuelve un array con los valores admitidos para esta propiedad
+     * Devuelve un array con los valores admitidos para esta propiedad.
      *
      * @return mixed[]
      */

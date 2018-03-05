@@ -8,23 +8,20 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context\Property;
 
 use PlanB\Wand\Core\Context\Property;
 use PlanB\Wand\Core\Context\ValidableProperty;
 
 /**
- * Propiedad Author Homepage
+ * Propiedad Author Homepage.
  *
- * @package PlanB\Wand\Core\Context\Property
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class AuthorHomepageProperty extends Property implements ValidableProperty
 {
-
     /**
-     * Define los parámetros path y message
+     * Define los parámetros path y message.
      *
      * @param string[] $options
      */
@@ -35,7 +32,7 @@ class AuthorHomepageProperty extends Property implements ValidableProperty
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function normalize($answer)
     {
@@ -43,7 +40,7 @@ class AuthorHomepageProperty extends Property implements ValidableProperty
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function denormalize($answer): ?string
     {
@@ -51,29 +48,31 @@ class AuthorHomepageProperty extends Property implements ValidableProperty
         if (preg_match('#https://github.com/(.*?)/#', $answer, $matches)) {
             return $matches[1];
         }
+
         return null;
     }
 
-
     /**
-     * Realiza las comprobaciones especificas de esta propiedad
+     * Realiza las comprobaciones especificas de esta propiedad.
      *
      * @param mixed $answer
+     *
      * @return bool
      */
     public function validate($answer): bool
     {
-        return (bool)$this->denormalize($answer);
+        return (bool) $this->denormalize($answer);
     }
 
     /**
-     * Devuelve el mensaje de error personalizado
+     * Devuelve el mensaje de error personalizado.
      *
      * @return string
      */
     public function getErrorMessage(string $answer): string
     {
         $format = 'El formato de author homepage "%s" no es correcto, se esperaba "https://github.com/<username>/"';
+
         return sprintf($format, $answer);
     }
 }

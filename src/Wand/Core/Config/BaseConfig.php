@@ -8,39 +8,36 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Config;
 
-use PlanB\Utils\Path\Path;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Base para las clases Configuración
- * Contiene lógica y métodos comunes a DefaultConfig y CustomConfig
+ * Contiene lógica y métodos comunes a DefaultConfig y CustomConfig.
  *
- * @package PlanB\Wand\Core\App
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 abstract class BaseConfig
 {
     /**
-     * @var mixed[] $configs
+     * @var mixed[]
      */
     private $config = [
         'tasks' => [],
         'actions' => [],
     ];
 
-
     /**
-     * Crea una nueva instancia
+     * Crea una nueva instancia.
      *
-     * @param \PlanB\Utils\Path\Path[] ...$path
+     * @param string[] ...$path
+     *
      * @return \PlanB\Wand\Core\Config\BaseConfig
      */
-    public static function create(Path ...$path): self
+    public static function create(string ...$path): self
     {
         return new static(...$path);
     }
@@ -48,9 +45,9 @@ abstract class BaseConfig
     /**
      * BaseConfig constructor.
      *
-     * @param \PlanB\Utils\Path\Path[] ...$paths
+     * @param string[] ...$paths
      */
-    private function __construct(Path ...$paths)
+    private function __construct(string ...$paths)
     {
         foreach ($paths as $path) {
             $config = $this->readFromFile($path);
@@ -72,18 +69,19 @@ abstract class BaseConfig
     abstract protected function getConfigTree(): TreeBuilder;
 
     /**
-     * Read the config/wand.yml file
+     * Read the config/wand.yml file.
      *
-     * @param \PlanB\Utils\Path\Path $path
+     * @param string $path
+     *
      * @return mixed[]
      */
-    protected function readFromFile(Path $path): array
+    protected function readFromFile(string $path): array
     {
         return Yaml::parseFile($path);
     }
 
     /**
-     * Devuelve la configuración validada y normalizada
+     * Devuelve la configuración validada y normalizada.
      *
      * @return mixed[]
      */
@@ -91,6 +89,7 @@ abstract class BaseConfig
     {
         $processor = new Processor();
         $configTree = $this->getConfigTree();
+
         return $processor->process($configTree->buildTree(), [$this->config]);
     }
 }

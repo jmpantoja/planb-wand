@@ -1,0 +1,27 @@
+---
+tasks:
+  "init/ci":
+    classname: \PlanB\Wand\Core\Task\SimpleTask
+    description: wubba lubba dub dub
+    actions:
+      travis:
+      scrutinizer:
+
+actions:
+  travis:
+        group: ci
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.ci/travis.twig'
+          target: .travis.yml
+          action: create
+          chmod: 0644
+
+  scrutinizer:
+        group: ci
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.ci/scrutinizer.twig'
+          target: .scrutinizer.yml
+          action: create
+          chmod: 0644

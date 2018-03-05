@@ -66,9 +66,10 @@ class FileManagerTest extends Unit
      *
      * @covers ::__construct
      * @covers ::create
+     * @covers ::dump
      * @covers ::dumpFile
      */
-    public function testCreateSuccess()
+    public function testCreateFile()
     {
 
         $fileSystem = $this->stub(Filesystem::class);
@@ -89,7 +90,6 @@ class FileManagerTest extends Unit
         $manager->create($event);
 
         $this->assertMessage('[group] Create file TARGET', MessageType::SUCCESS(), $event->getMessage());
-
     }
 
     /**
@@ -97,9 +97,10 @@ class FileManagerTest extends Unit
      *
      * @covers ::__construct
      * @covers ::create
+     * @covers ::dump
      * @covers ::dumpFile
      */
-    public function testCreateFail()
+    public function testCreateFileFail()
     {
 
         $fileSystem = $this->stub(Filesystem::class);
@@ -122,6 +123,72 @@ class FileManagerTest extends Unit
         $this->assertMessage('[group] Create file TARGET', MessageType::ERROR(), $event->getMessage());
 
     }
+
+    /**
+     * @test
+     *
+     * @covers ::__construct
+     * @covers ::create
+     * @covers ::dump
+     * @covers ::createDirectory
+     */
+    public function testCreateDirectory()
+    {
+
+        $fileSystem = $this->stub(Filesystem::class);
+
+        $fileSystem->expects()
+            ->dumpFile('/path/to/TARGET', m::any())
+            ->once()
+            ->andReturn(null);
+
+        $fileSystem->expects()
+            ->chmod('/path/to/TARGET', m::any(), m::any(), m::any())
+            ->once()
+            ->andReturn(null);
+
+        $event = $this->getEventDirectory('create', false);
+
+        $manager = $this->getFileManager();
+        $manager->create($event);
+
+        $this->assertMessage('[group] Create file TARGET', MessageType::SUCCESS(), $event->getMessage());
+    }
+
+
+    /**
+     * @test
+     *
+     * @covers ::__construct
+     * @covers ::create
+     * @covers ::dump
+     * @covers ::createDirectory
+     */
+    public function testCreateDirectoryFail()
+    {
+
+        $fileSystem = $this->stub(Filesystem::class);
+
+        $fileSystem->allows()
+            ->dumpFile(m::any(), m::any())
+            ->once()
+            ->andReturnUsing(function () {
+                throw new \Exception('fallo al crear el directorio');
+            });
+
+        $fileSystem->expects()
+            ->chmod(m::any(), m::any(), m::any(), m::any())
+            ->never();
+
+        $event = $this->getEventDirectory('create', false);
+        $manager = $this->getFileManager();
+        $manager->create($event);
+
+        $this->assertMessage('[group] Create file TARGET', MessageType::ERROR(), $event->getMessage());
+    }
+
+
+
 
     /**
      * @test
@@ -215,6 +282,22 @@ class FileManagerTest extends Unit
             'getTarget' => 'TARGET',
             'getPath' => '/path/to/TARGET',
             'getTemplate' => 'template',
+            'getGroup' => 'group',
+            'getAction' => $action,
+            'getChmod' => 0644,
+            'getVars' => []
+        ]);
+
+        return new FileEvent($file);
+    }
+
+
+    protected function getEventDirectory(string $action, $exists)
+    {
+        $file = $this->stub(Directory::class, [
+            'exists' => $exists,
+            'getTarget' => 'TARGET',
+            'getPath' => '/path/to/TARGET',
             'getGroup' => 'group',
             'getAction' => $action,
             'getChmod' => 0644,

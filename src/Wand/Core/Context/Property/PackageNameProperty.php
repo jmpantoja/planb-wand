@@ -8,23 +8,20 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context\Property;
 
 use PlanB\Wand\Core\Context\Property;
 use PlanB\Wand\Core\Context\ValidableProperty;
 
 /**
- * Propiedad package name
+ * Propiedad package name.
  *
- * @package PlanB\Wand\Core\Context\Property
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class PackageNameProperty extends Property implements ValidableProperty
 {
-
     /**
-     * Define los parámetros path y message
+     * Define los parámetros path y message.
      *
      * @param string[] $options
      */
@@ -35,7 +32,7 @@ class PackageNameProperty extends Property implements ValidableProperty
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate($answer): bool
     {
@@ -43,7 +40,7 @@ class PackageNameProperty extends Property implements ValidableProperty
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getErrorMessage(string $answer): string
     {

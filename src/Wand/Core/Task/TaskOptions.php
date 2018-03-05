@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Task;
 
 use PlanB\Utils\Options\Options;
@@ -16,16 +15,14 @@ use PlanB\Wand\Core\Action\ActionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Gestiona los parámetros con los que se crea una tarea
+ * Gestiona los parámetros con los que se crea una tarea.
  *
- * @package PlanB\Wand\Core\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class TaskOptions extends Options
 {
-
     /**
-     * Configura los criterios
+     * Configura los criterios.
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
@@ -35,9 +32,8 @@ class TaskOptions extends Options
         $this->defineDescription($resolver);
     }
 
-
     /**
-     * Define el atributo "actions"
+     * Define el atributo "actions".
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
@@ -50,9 +46,10 @@ class TaskOptions extends Options
     }
 
     /**
-     * Indica si todos los elementos del array son instancias de ActionInterface
+     * Indica si todos los elementos del array son instancias de ActionInterface.
      *
      * @param mixed[] $actions
+     *
      * @return mixed
      */
     public function isValidActions(array $actions)
@@ -62,9 +59,8 @@ class TaskOptions extends Options
         }, true);
     }
 
-
     /**
-     * Define el attributo "description"
+     * Define el attributo "description".
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */

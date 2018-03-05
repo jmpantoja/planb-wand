@@ -41,6 +41,8 @@ class FileTest extends Unit
      * @covers ::__construct
      * @covers ::create
      *
+     * @covers ::getProfile
+     *
      * @covers ::getChmod
      * @covers ::getAction
      * @covers ::getTemplate
@@ -54,7 +56,7 @@ class FileTest extends Unit
      */
     public function testCreate()
     {
-        $pathManager = $this->stub(PathManager::class, [
+        $this->stub(PathManager::class, [
             'projectDir' => '/path/to/project'
         ]);
 
@@ -64,8 +66,8 @@ class FileTest extends Unit
                 'keyB' => 'valueB',
                 'keyC' => 'valueC',
             ]
-
         ]);
+
         $context->expects()
             ->getPath('project')
             ->twice()
@@ -81,6 +83,8 @@ class FileTest extends Unit
         ]);
 
         $file->setContext($context);
+
+        $this->tester->assertEquals('standard', $file->getProfile());
 
         $this->tester->assertInstanceOf(File::class, $file);
 

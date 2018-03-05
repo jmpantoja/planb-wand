@@ -1,0 +1,27 @@
+---
+tasks:
+  "init/documentation":
+    classname: \PlanB\Wand\Core\Task\SimpleTask
+    description: wubba lubba dub dub
+    actions:
+      doc_index:
+      sami:
+
+actions:
+  doc_index:
+        group: documentation
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.docs/docs_index.twig'
+          target: docs/index.md
+          action: create
+          chmod: 0644
+
+  sami:
+        group: documentation
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.docs/sami.twig'
+          target: sami.php
+          action: create
+          chmod: 0644

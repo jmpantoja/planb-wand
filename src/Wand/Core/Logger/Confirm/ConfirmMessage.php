@@ -8,26 +8,23 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Logger\Confirm;
 
 /**
- * Representa a una petición de confirmación al usuario
+ * Representa a una petición de confirmación al usuario.
  *
  *
- * @package PlanB\Wand\Core\Logger\Confirm
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class ConfirmMessage
 {
-
     /**
-     * @var string $message
+     * @var string
      */
     private $message;
 
     /**
-     * @var bool $default
+     * @var bool
      */
     private $default = true;
 
@@ -41,11 +38,11 @@ class ConfirmMessage
         $this->message = $message;
     }
 
-
     /**
-     * Crea una nueva instancia
+     * Crea una nueva instancia.
      *
      * @param string $message
+     *
      * @return \PlanB\Wand\Core\Logger\Confirm\ConfirmMessage
      */
     public static function create(string $message): self
@@ -53,32 +50,32 @@ class ConfirmMessage
         return new self($message);
     }
 
-
     /**
-     * Asigna el valor por defecto
+     * Asigna el valor por defecto.
      *
      * @param bool $default
+     *
      * @return \PlanB\Wand\Core\Logger\Confirm\ConfirmMessage
      */
     public function setDefault(bool $default): ConfirmMessage
     {
         $this->default = $default;
+
         return $this;
     }
 
-
     /**
-     * Devuelve el valor por defecto
+     * Devuelve el valor por defecto.
      *
      * @return bool
      */
-    public function getDefault(): bool
+    public function isTrueByDefault(): bool
     {
         return $this->default;
     }
 
     /**
-     * Devuelve el texto de la pregunta
+     * Devuelve el texto de la pregunta.
      *
      * @return string
      */

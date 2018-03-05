@@ -9,9 +9,11 @@ $kernel->init([
     'cacheDir' => $base . 'var/mocks',
     'includePaths' => [
         $base . '/src',
+        $base . '/legacy',
         $base . '/vendor'
     ],
     'excludePaths' => [
+        $base . "/vendor/squizlabs",
         $base . "/vendor/planb/utils-dev",
         $base . "/vendor/behat",
         $base . "/vendor/codeception",

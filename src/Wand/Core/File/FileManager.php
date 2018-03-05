@@ -8,26 +8,22 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\File;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Gestiona los archivos
+ * Gestiona los archivos.
  *
- * @package PlanB\Wand\Core\File
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class FileManager implements EventSubscriberInterface
 {
-
     /**
-     * @var \Twig_Environment $twig
+     * @var \Twig_Environment
      */
     private $twig;
-
 
     /**
      * FileManager constructor.
@@ -40,7 +36,7 @@ class FileManager implements EventSubscriberInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @return array The event names to listen to
      */
@@ -54,7 +50,7 @@ class FileManager implements EventSubscriberInterface
     }
 
     /**
-     * Crea un archivo
+     * Crea un archivo o un directorio.
      *
      * @param \PlanB\Wand\Core\File\FileEvent $event
      */
@@ -65,12 +61,50 @@ class FileManager implements EventSubscriberInterface
         if ($file->exists()) {
             $event->skip();
         } else {
+            $this->dump($event);
+        }
+    }
+
+    /**
+     * Crea un archivo o un directorio.
+     *
+     * @param \PlanB\Wand\Core\File\FileEvent $event
+     */
+    private function dump(FileEvent $event): void
+    {
+        $file = $event->getFile();
+        if ($file instanceof Directory) {
+            $this->createDirectory($event);
+        } else {
             $this->dumpFile($event);
         }
     }
 
     /**
-     * Escribe el archivo en disco
+     * Crea un directorio.
+     *
+     * @param \PlanB\Wand\Core\File\FileEvent $event
+     */
+    private function createDirectory(FileEvent $event): void
+    {
+        $fileSystem = new Filesystem();
+        $file = $event->getFile();
+        $path = $file->getPath();
+        $chmod = $file->getChmod();
+
+        try {
+            $fileSystem->dumpFile($path, '');
+            $fileSystem->chmod($path, $chmod);
+
+            $event->success();
+        } catch (\Throwable $exception) {
+            $message = $exception->getMessage();
+            $event->error($message);
+        }
+    }
+
+    /**
+     * Escribe el archivo en disco.
      *
      * @param \PlanB\Wand\Core\File\FileEvent $event
      */
@@ -81,7 +115,6 @@ class FileManager implements EventSubscriberInterface
 
         $template = $file->getTemplate();
         $params = $file->getVars();
-
 
         $path = $file->getPath();
         $chmod = $file->getChmod();
@@ -99,13 +132,12 @@ class FileManager implements EventSubscriberInterface
     }
 
     /**
-     * Elimina un archivo
+     * Elimina un archivo.
      *
      * @param \PlanB\Wand\Core\File\FileEvent $event
      */
     public function remove(FileEvent $event): void
     {
-
         $file = $event->getFile();
 
         if (!$file->exists()) {
@@ -116,7 +148,7 @@ class FileManager implements EventSubscriberInterface
     }
 
     /**
-     * Borra un archivo de disco
+     * Borra un archivo de disco.
      */
     private function deleteFile(FileEvent $event): void
     {

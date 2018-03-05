@@ -8,21 +8,19 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Logger\Message;
 
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Evento lanzado para mostrar un mensaje por consola
+ * Evento lanzado para mostrar un mensaje por consola.
  *
- * @package PlanB\Wand\Core\Logger\Message
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class MessageEvent extends Event
 {
     /**
-     * @var \PlanB\Wand\Core\Logger\Message\LogMessage $message
+     * @var \PlanB\Wand\Core\Logger\Message\LogMessage
      */
     private $message;
 
@@ -37,7 +35,7 @@ class MessageEvent extends Event
     }
 
     /**
-     * Devuelve el objeto LogMessage
+     * Devuelve el objeto LogMessage.
      *
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */

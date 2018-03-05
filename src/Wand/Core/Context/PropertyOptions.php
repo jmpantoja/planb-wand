@@ -8,23 +8,20 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context;
 
 use PlanB\Utils\Options\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Gestiona el juego de opciones de Property
+ * Gestiona el juego de opciones de Property.
  *
- * @package PlanB\Wand\Core\Context
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class PropertyOptions extends Options
 {
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */

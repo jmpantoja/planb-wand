@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * This file is part of the planb project.
  *
@@ -8,22 +9,20 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context\Property;
 
 use PlanB\Wand\Core\Context\Property;
 
 /**
- * Propiedad package description
+ * Propiedad package description.
  *
- * @package PlanB\Wand\Core\Context\Property
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class PackageDescriptionProperty extends Property
 {
 
     /**
-     * Define los parámetros path y message
+     * Define los parámetros path y message.
      *
      * @param string[] $options
      */

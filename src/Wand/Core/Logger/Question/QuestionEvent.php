@@ -8,22 +8,19 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Logger\Question;
 
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Evento para pedir información por consola
+ * Evento para pedir información por consola.
  *
- * @package PlanB\Wand\Core\Logger\Question
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class QuestionEvent extends Event
 {
-
     /**
-     * @var \PlanB\Wand\Core\Logger\Question\QuestionMessage $question
+     * @var \PlanB\Wand\Core\Logger\Question\QuestionMessage
      */
     private $question;
 
@@ -43,7 +40,7 @@ class QuestionEvent extends Event
     }
 
     /**
-     * Devuelve el objeto QuestionMessage
+     * Devuelve el objeto QuestionMessage.
      *
      * @return \PlanB\Wand\Core\Logger\Question\QuestionMessage
      */
@@ -53,7 +50,7 @@ class QuestionEvent extends Event
     }
 
     /**
-     * Devuelve la respuesta dada por el usuario
+     * Devuelve la respuesta dada por el usuario.
      *
      * @return string
      */
@@ -63,14 +60,16 @@ class QuestionEvent extends Event
     }
 
     /**
-     * Asigna la respuesta dada por el usuario
+     * Asigna la respuesta dada por el usuario.
      *
      * @param string $answer
+     *
      * @return \PlanB\Wand\Core\Logger\Question\QuestionEvent
      */
     public function setAnswer(string $answer): QuestionEvent
     {
         $this->answer = $answer;
+
         return $this;
     }
 }

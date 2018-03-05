@@ -8,42 +8,39 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Logger\Message;
 
 /**
- * Representa un mensaje mostrado por consola
+ * Representa un mensaje mostrado por consola.
  *
- * @package PlanB\Wand\Core\Logger\Message
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 final class LogMessage
 {
-
     private const TAB = '  ';
 
     /**
-     * @var int $level
+     * @var int
      */
     private $level = 0;
 
     /**
-     * @var \PlanB\Wand\Core\Logger\Message\LogFormat $format
+     * @var \PlanB\Wand\Core\Logger\Message\LogFormat
      */
     private $format;
 
     /**
-     * @var \PlanB\Wand\Core\Logger\Message\MessageType $type
+     * @var \PlanB\Wand\Core\Logger\Message\MessageType
      */
     private $type;
 
     /**
-     * @var string[] $title
+     * @var string[]
      */
     private $title;
 
     /**
-     * @var string[] $verbose
+     * @var string[]
      */
     private $verbose;
 
@@ -61,44 +58,49 @@ final class LogMessage
     }
 
     /**
-     * Asigna el nivel en la jerarquia de logs
+     * Asigna el nivel en la jerarquia de logs.
      *
      * @param int $level
+     *
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
     public function setLevel(int $level): LogMessage
     {
         $this->level = $level;
+
         return $this;
     }
 
-
     /**
-     * Asigna el titulo
+     * Asigna el titulo.
      *
      * @param string $title
+     *
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
     public function setTitle(string $title): LogMessage
     {
         $this->title = $this->format->title($title);
+
         return $this;
     }
 
     /**
-     * Asigna las lineas de verbose
+     * Asigna las lineas de verbose.
      *
      * @param string[] $verbose
+     *
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
     public function setVerbose(array $verbose): LogMessage
     {
         $this->verbose = $this->format->verbose($verbose);
+
         return $this;
     }
 
     /**
-     * Añade una linea al verbose
+     * Añade una linea al verbose.
      *
      * @param string $title
      * @param string $body
@@ -113,9 +115,8 @@ final class LogMessage
         return $this;
     }
 
-
     /**
-     *  Crea una nueva instancia de mensaje tipo "info"
+     *  Crea una nueva instancia de mensaje tipo "info".
      *
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
@@ -125,7 +126,7 @@ final class LogMessage
     }
 
     /**
-     * Crea una nueva instancia de mensaje tipo  "success"
+     * Crea una nueva instancia de mensaje tipo  "success".
      *
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
@@ -135,7 +136,7 @@ final class LogMessage
     }
 
     /**
-     * Crea una nueva instancia de mensaje tipo  "skip"
+     * Crea una nueva instancia de mensaje tipo  "skip".
      *
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
@@ -144,9 +145,8 @@ final class LogMessage
         return new self(LogFormat::skip());
     }
 
-
     /**
-     * Crea una nueva instancia de mensaje tipo  "error"
+     * Crea una nueva instancia de mensaje tipo  "error".
      *
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
@@ -156,7 +156,7 @@ final class LogMessage
     }
 
     /**
-     * Devuelve el tipo de mensaje
+     * Devuelve el tipo de mensaje.
      *
      * @return \PlanB\Wand\Core\Logger\Message\MessageType
      */
@@ -166,7 +166,7 @@ final class LogMessage
     }
 
     /**
-     * Indica si el mensaje es de tipo info
+     * Indica si el mensaje es de tipo info.
      *
      * @return bool
      */
@@ -175,9 +175,8 @@ final class LogMessage
         return $this->type->is(MessageType::INFO);
     }
 
-
     /**
-     * Indica si el mensaje es de tipo success
+     * Indica si el mensaje es de tipo success.
      *
      * @return bool
      */
@@ -186,9 +185,8 @@ final class LogMessage
         return $this->type->is(MessageType::SUCCESS);
     }
 
-
     /**
-     * Indica si el mensaje es de tipo skip
+     * Indica si el mensaje es de tipo skip.
      *
      * @return bool
      */
@@ -197,9 +195,8 @@ final class LogMessage
         return $this->type->is(MessageType::SKIP);
     }
 
-
     /**
-     * Indica si el mensaje es de tipo error
+     * Indica si el mensaje es de tipo error.
      *
      * @return bool
      */
@@ -208,9 +205,8 @@ final class LogMessage
         return $this->type->is(MessageType::ERROR);
     }
 
-
     /**
-     * Devuelve el mensage en forma de lineas de texto
+     * Devuelve el mensage en forma de lineas de texto.
      *
      * @return string[]
      */
@@ -225,30 +221,31 @@ final class LogMessage
         return $lines;
     }
 
-
     /**
-     * Añade tabulaciones al principio de cada linea
+     * Añade tabulaciones al principio de cada linea.
      *
      * @param string[] $lines
+     *
      * @return string[]
      */
     private function addTabs(array $lines): array
     {
         $tabs = str_repeat(self::TAB, $this->level);
+
         return array_map(function (string $line) use ($tabs) {
             return sprintf('%s%s', $tabs, trim($line));
         }, $lines);
     }
 
-
     /**
-     * Devuelve el mensage en forma de lineas de texto
+     * Devuelve el mensage en forma de lineas de texto.
      *
      * @return string[]
      */
     public function parseVerbose(): array
     {
         $lines = array_merge($this->title, $this->verbose);
+
         return $this->addTabs($lines);
     }
 }

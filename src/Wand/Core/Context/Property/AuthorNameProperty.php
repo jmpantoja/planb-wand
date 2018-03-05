@@ -8,22 +8,19 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context\Property;
 
 use PlanB\Wand\Core\Context\Property;
 
 /**
- * Propiedad author name
+ * Propiedad author name.
  *
- * @package PlanB\Wand\Core\Context\Property
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class AuthorNameProperty extends Property
 {
-
     /**
-     * Define los parámetros path y message
+     * Define los parámetros path y message.
      *
      * @param string[] $options
      */

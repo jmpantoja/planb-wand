@@ -8,23 +8,20 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\File;
 
 use PlanB\Utils\Options\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Verifica las opciones de un objeto File
+ * Verifica las opciones de un objeto File.
  *
- * @package PlanB\Wand\Core\File
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class FileOptions extends Options
 {
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
@@ -43,7 +40,7 @@ class FileOptions extends Options
     }
 
     /**
-     * Define el atributo 'action'
+     * Define el atributo 'action'.
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
@@ -56,9 +53,8 @@ class FileOptions extends Options
         $resolver->setDefault('action', File::ACTION_CREATE);
     }
 
-
     /**
-     * Define el atributo 'chmod'
+     * Define el atributo 'chmod'.
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
@@ -69,9 +65,8 @@ class FileOptions extends Options
         $resolver->setDefault('chmod', 0644);
     }
 
-
     /**
-     * Define el atributo 'group'
+     * Define el atributo 'group'.
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
@@ -81,9 +76,8 @@ class FileOptions extends Options
         $resolver->addAllowedTypes('group', 'string');
     }
 
-
     /**
-     * Define el atributo 'target'
+     * Define el atributo 'target'.
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
@@ -94,7 +88,7 @@ class FileOptions extends Options
     }
 
     /**
-     * Define el atributo 'template'
+     * Define el atributo 'template'.
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */

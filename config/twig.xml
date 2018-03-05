@@ -10,7 +10,7 @@
 
         <service id="wand.twig_loader" class="Twig_Loader_Filesystem">
             <call method="addPath">
-                <argument type="string">%root_dir%/src/Wand/ProjectInfo/config/views</argument>
+                <argument type="string">%root_dir%/src/Wand/Info/config/views</argument>
                 <argument type="string">wand.projectInfo</argument>
             </call>
             <call method="addPath">
@@ -20,6 +20,18 @@
             <call method="addPath">
                 <argument type="string">%root_dir%/src/Wand/Tdd/config/views</argument>
                 <argument type="string">wand.tdd</argument>
+            </call>
+            <call method="addPath">
+                <argument type="string">%root_dir%/src/Wand/Git/config/views</argument>
+                <argument type="string">wand.git</argument>
+            </call>
+            <call method="addPath">
+                <argument type="string">%root_dir%/src/Wand/Docs/config/views</argument>
+                <argument type="string">wand.docs</argument>
+            </call>
+            <call method="addPath">
+                <argument type="string">%root_dir%/src/Wand/Qa/config/views</argument>
+                <argument type="string">wand.qa</argument>
             </call>
         </service>
 

@@ -8,32 +8,29 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Logger\Message;
 
 /**
- * Formatea un mensaje de log
+ * Formatea un mensaje de log.
  *
- * @package PlanB\Wand\Core\Logger\Message
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 final class LogFormat
 {
-
     public const PADDING_LENGTH = 80;
 
     /**
-     * @var \PlanB\Wand\Core\Logger\Message\MessageType $type
+     * @var \PlanB\Wand\Core\Logger\Message\MessageType
      */
     private $type;
 
     /**
-     * @var string $color
+     * @var string
      */
     private $color;
 
     /**
-     * @var null|string $resume
+     * @var null|string
      */
     private $resume;
 
@@ -41,9 +38,8 @@ final class LogFormat
      * LogFormat constructor.
      *
      * @param \PlanB\Wand\Core\Logger\Message\MessageType $type
-     *
-     * @param string $color
-     * @param null|string $resume
+     * @param string                                      $color
+     * @param null|string                                 $resume
      */
     private function __construct(MessageType $type, string $color, ?string $resume = null)
     {
@@ -53,7 +49,7 @@ final class LogFormat
     }
 
     /**
-     * Crea una nueva instancia, tipo info
+     * Crea una nueva instancia, tipo info.
      *
      * @return \PlanB\Wand\Core\Logger\Message\LogFormat
      */
@@ -62,9 +58,8 @@ final class LogFormat
         return new static(MessageType::INFO(), 'default');
     }
 
-
     /**
-     * Crea una nueva instancia, tipo success
+     * Crea una nueva instancia, tipo success.
      *
      * @return \PlanB\Wand\Core\Logger\Message\LogFormat
      */
@@ -73,9 +68,8 @@ final class LogFormat
         return new static(MessageType::SUCCESS(), 'green', 'OK');
     }
 
-
     /**
-     * Crea una nueva instancia, tipo skip
+     * Crea una nueva instancia, tipo skip.
      *
      * @return \PlanB\Wand\Core\Logger\Message\LogFormat
      */
@@ -84,9 +78,8 @@ final class LogFormat
         return new static(MessageType::SKIP(), 'yellow', 'SKIP');
     }
 
-
     /**
-     * Crea una nueva instancia, tipo skip
+     * Crea una nueva instancia, tipo skip.
      *
      * @return \PlanB\Wand\Core\Logger\Message\LogFormat
      */
@@ -96,7 +89,7 @@ final class LogFormat
     }
 
     /**
-     * Devuelve el tipo de mensaje
+     * Devuelve el tipo de mensaje.
      *
      * @return \PlanB\Wand\Core\Logger\Message\MessageType
      */
@@ -105,11 +98,11 @@ final class LogFormat
         return $this->type;
     }
 
-
     /**
-     * Devuelve el titulo debidamente formateado
+     * Devuelve el titulo debidamente formateado.
      *
      * @param string $title
+     *
      * @return string[]
      */
     public function title(string $title): array
@@ -117,13 +110,15 @@ final class LogFormat
         $lines = [];
 
         $lines[] = $this->format($title);
+
         return $lines;
     }
 
     /**
-     * Devuelve el titulo del mensaje, con el padding  y el resume
+     * Devuelve el titulo del mensaje, con el padding  y el resume.
      *
      * @param string $title
+     *
      * @return string
      */
     private function format(string $title): string
@@ -138,9 +133,10 @@ final class LogFormat
     }
 
     /**
-     * Devuelve el número correcto de puntos para el padding
+     * Devuelve el número correcto de puntos para el padding.
      *
      * @param string $title
+     *
      * @return null|string
      */
     private function getPoints(string $title): ?string
@@ -160,9 +156,10 @@ final class LogFormat
     }
 
     /**
-     * Colorea un texto
+     * Colorea un texto.
      *
      * @param null|string $text
+     *
      * @return string
      */
     private function colorize(?string $text): string
@@ -176,14 +173,14 @@ final class LogFormat
     }
 
     /**
-     * Devuelve el verbose debidamente formateado
+     * Devuelve el verbose debidamente formateado.
      *
      * @param string[] $verbose
+     *
      * @return string[]
      */
     public function verbose(array $verbose): array
     {
-
         $lines = [];
 
         foreach ($verbose as $head => $value) {
@@ -199,10 +196,11 @@ final class LogFormat
     }
 
     /**
-     * Devuelve las lineas de verbose, ordenadas y formateadas
+     * Devuelve las lineas de verbose, ordenadas y formateadas.
      *
-     * @param string $key
+     * @param string   $key
      * @param string[] $body
+     *
      * @return string[]
      */
     private function formatVerbose(string $key, array $body): array
@@ -223,14 +221,15 @@ final class LogFormat
         }
 
         $lines[] = "\n";
-        return (array)$lines;
+
+        return (array) $lines;
     }
 
-
     /**
-     * Convierte una linea en un array
+     * Convierte una linea en un array.
      *
      * @param string[]|string $value
+     *
      * @return string[]
      */
     private function toLines($value): array

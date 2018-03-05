@@ -17,6 +17,7 @@ use PlanB\Utils\Dev\Tdd\Data\Data;
 use PlanB\Utils\Dev\Tdd\Data\Provider;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
+use PlanB\WandBundle\Command\WandCommand;
 
 /**
  * Class CommandText
@@ -77,7 +78,6 @@ class CommandOptionsTest extends Unit
 
     }
 
-
     public function providerResolveException()
     {
         return Provider::create()
@@ -102,5 +102,75 @@ class CommandOptionsTest extends Unit
             ], 'missing pattern')
             ->end();
     }
+
+
+
+    /**
+     * @test
+     *
+     * @covers ::configure
+     * @covers ::defineGroup
+     * @covers ::definePattern
+     * @covers ::defineCommand
+     */
+    public function testResolveSymfony()
+    {
+        $options = [
+            'group' => 'el grupo',
+            'pattern' => 'el pattern',
+            'command' => WandCommand::class
+        ];
+
+        $params = CommandOptions::create('symfony')
+            ->resolve($options);
+
+        $this->tester->assertEquals($options, $params);
+    }
+
+
+    /**
+     * @test
+     *
+     * @dataProvider providerResolveSymfonyException
+     *
+     * @covers ::configure
+     * @covers ::defineGroup
+     * @covers ::definePattern
+     * @covers ::defineCwd
+     *
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
+     */
+    public function testResolveSymfonyException(Data $data)
+    {
+        CommandOptions::create('symfony')
+            ->resolve($data->options);
+
+    }
+
+    public function providerResolveSymfonyException()
+    {
+        return Provider::create()
+            ->add([
+                'options' => [
+                    'group' => 'el grupo',
+                    'pattern' => 'el pattern',
+                    'command' => 'bad command'
+                ]
+            ], 'bad command')
+            ->add([
+                'options' => [
+                    'pattern' => 'el pattern',
+                    'group' => 'group'
+                ]
+            ], 'missing commmand')
+            ->add([
+                'options' => [
+                    'group' => 'el grupo',
+                    'cwd' => 'vendor/bin'
+                ]
+            ], 'missing pattern')
+            ->end();
+    }
+
 
 }

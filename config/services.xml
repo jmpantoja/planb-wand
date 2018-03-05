@@ -27,6 +27,8 @@
         <!--command-->
         <parameter key="wand.command.manager.class">\PlanB\Wand\Core\Command\CommandManager</parameter>
 
+        <!--runner-->
+        <parameter key="wand.runner.manager.class">\PlanB\Wand\Core\Runner\RunnerManager</parameter>
 
     </parameters>
 
@@ -70,6 +72,9 @@
 
         <!--command-->
         <service id="wand.command.manager" class="%wand.command.manager.class%"/>
+
+        <!--runner-->
+        <service id="wand.runner.manager" class="%wand.runner.manager.class%"/>
 
     </services>
 </container>

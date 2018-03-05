@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context;
 
 use PlanB\Wand\Core\Path\PathManager;
@@ -16,36 +15,34 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
- * Clase que nos permite leer y escribir valores de composer.json
+ * Clase que nos permite leer y escribir valores de composer.json.
  *
- * @package PlanB\Wand\Core\Context
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class ComposerInfo
 {
-
     /**
-     * @var \Symfony\Component\PropertyAccess\PropertyAccessor $propertyAccess
+     * @var \Symfony\Component\PropertyAccess\PropertyAccessor
      */
     private $propertyAccess;
 
     /**
-     * @var mixed[] $contents
+     * @var mixed[]
      */
     private $contents;
 
     /**
-     * @var string $composerPath
+     * @var string
      */
     private $composerPath;
 
     /**
-     * @var bool $changed
+     * @var bool
      */
     private $changed = false;
 
     /**
-     * @var string[] $keyOrder
+     * @var string[]
      */
     private $keyOrder = [];
 
@@ -62,9 +59,10 @@ class ComposerInfo
 
     /**
      * Inicializa todos las propiedades de la clase,
-     * segun el contenido del fichero composer.json del proyecto
+     * segun el contenido del fichero composer.json del proyecto.
      *
      * @param \PlanB\Wand\Core\Path\PathManager $pathManager
+     *
      * @return \PlanB\Wand\Core\Context\ComposerInfo
      */
     public static function load(PathManager $pathManager): self
@@ -73,7 +71,7 @@ class ComposerInfo
     }
 
     /**
-     * Inicia los atributos del objeto
+     * Inicia los atributos del objeto.
      *
      * @param string $composerPath
      */
@@ -87,7 +85,7 @@ class ComposerInfo
     }
 
     /**
-     * Define un array con el orden en el que deben aparecer las claves del fichero composer.json
+     * Define un array con el orden en el que deben aparecer las claves del fichero composer.json.
      */
     private function populateSortedKeys(): void
     {
@@ -119,12 +117,10 @@ class ComposerInfo
     }
 
     /**
-     * Configura el apartado config para optimizar composer
-     *
+     * Configura el apartado config para optimizar composer.
      */
     private function optimize(): void
     {
-
         if (!$this->get('[config][optimize-autoloader]')) {
             $this->set('[config][optimize-autoloader]', true);
         }
@@ -141,9 +137,10 @@ class ComposerInfo
     }
 
     /**
-     * Devuelve el valor que corresponde a un path
+     * Devuelve el valor que corresponde a un path.
      *
      * @param string $path
+     *
      * @return mixed
      */
     public function get(string $path)
@@ -152,24 +149,26 @@ class ComposerInfo
     }
 
     /**
-     * Asigna un valor a un path
+     * Asigna un valor a un path.
      *
      * @param string $path
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return \PlanB\Wand\Core\Context\ComposerInfo
      */
     public function set(string $path, $value): self
     {
         $this->propertyAccess->setValue($this->contents, $path, $value);
         $this->changed = true;
+
         return $this;
     }
 
-
     /**
-     * Indica si un path tiene valor
+     * Indica si un path tiene valor.
      *
      * @param \PlanB\Wand\Core\Context\Property $property
+     *
      * @return bool
      */
     public function has(Property $property): bool
@@ -180,7 +179,7 @@ class ComposerInfo
     }
 
     /**
-     * Guarda los cambios si los hay
+     * Guarda los cambios si los hay.
      */
     public function save(): void
     {
@@ -192,7 +191,7 @@ class ComposerInfo
     }
 
     /**
-     * Escribe los valores en el fichero composer.json
+     * Escribe los valores en el fichero composer.json.
      */
     private function dumpFile(): void
     {
@@ -200,13 +199,12 @@ class ComposerInfo
         $content = json_encode($values, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $fileSystem = new Filesystem();
 
-
         $fileSystem->dumpFile($this->composerPath, $content);
     }
 
-
     /**
-     * Ordena los valores por clave, segun el orden defindo en 'keyOrder'
+     * Ordena los valores por clave, segun el orden defindo en 'keyOrder'.
+     *
      * @return mixed[]
      */
     private function getSortedValues(): array
@@ -215,7 +213,6 @@ class ComposerInfo
         $contents = $this->contents;
 
         uksort($contents, function ($first, $second) use ($keys) {
-
             $firstWeight = $keys[$first] ?? 100;
             $secondWeight = $keys[$second] ?? 100;
 

@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Config;
 
 use PlanB\Wand\Core\Action\ActionInterface;
@@ -21,9 +20,8 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class DefaultConfig extends BaseConfig
 {
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
      */
@@ -71,13 +69,12 @@ final class DefaultConfig extends BaseConfig
             ->validate()
             ->ifTrue(function ($className) use ($interface) {
                 return !is_subclass_of($className, $interface);
-            })->thenInvalid("debería ser del tipo " . $interface)
+            })->thenInvalid('debería ser del tipo '.$interface)
             ->end()
             ->end();
 
         return $node;
     }
-
 
     private function getParamsNode(): ArrayNodeDefinition
     {
@@ -89,7 +86,6 @@ final class DefaultConfig extends BaseConfig
         return $node;
     }
 
-
     private function defineTasks(NodeBuilder $root): void
     {
         $root->arrayNode('tasks')
@@ -99,7 +95,6 @@ final class DefaultConfig extends BaseConfig
             ->append($this->getActionsNode())
             ->end();
     }
-
 
     private function getDescriptionNode(): ScalarNodeDefinition
     {
@@ -120,20 +115,5 @@ final class DefaultConfig extends BaseConfig
         ->end();
 
         return $node;
-    }
-
-    /**
-     *
-     * @param mixed[] $custom
-     * @return mixed[]
-     */
-    public function processWithFilter(array $custom): array
-    {
-        $config = $this->process();
-
-        $filter = ConfigFilter::create($config, $custom);
-        $config['tasks'] = $filter->process();
-
-        return $config;
     }
 }

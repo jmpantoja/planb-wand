@@ -8,29 +8,26 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context\Exception;
 
 /**
- * Se lanza cuando se pide una ruta que no existe
+ * Se lanza cuando se pide una ruta que no existe.
  *
- * @package PlanB\Wand\Core\Context\Exception
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class UnknowPathException extends \RuntimeException
 {
     /**
-     * Crea una instancia de la excepción
+     * Crea una instancia de la excepción.
      *
-     * @param string $path
-     * @param string[] $availables
+     * @param string          $path
+     * @param string[]        $availables
      * @param \Throwable|null $previous
      *
      * @return \PlanB\Wand\Core\Context\Exception\UnknowPathException
      */
     public static function create(string $path, array $availables, ?\Throwable $previous = null): UnknowPathException
     {
-
         $message = sprintf("La ruta '%s' no existe. (disponibles: %s)", $path, implode('|', $availables));
 
         return new self($message, 0, $previous);

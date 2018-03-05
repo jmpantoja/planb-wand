@@ -8,50 +8,46 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\File;
 
 use PlanB\Utils\Path\Path;
 use PlanB\Wand\Core\Action\Action;
 
 /**
- * Representa a un fichero del proyecto
+ * Representa a un fichero del proyecto.
  *
- * @package PlanB\Wand\Core\File
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class File extends Action
 {
-
     public const ACTION_CREATE = 'create';
     public const ACTION_REMOVE = 'remove';
     public const ACTION_OVERWRITE = 'overwrite';
 
     /**
-     * @var int $chmod
+     * @var int
      */
     private $chmod;
 
     /**
-     * @var string $action
+     * @var string
      */
     private $action;
 
     /**
-     * @var string $template
+     * @var string
      */
     private $template;
 
     /**
-     * @var string $target
+     * @var string
      */
-    private $target;
+    protected $target;
 
     /**
-     * @var string $group
+     * @var string
      */
     private $group;
-
 
     /**
      * File constructor.
@@ -68,26 +64,37 @@ class File extends Action
     }
 
     /**
-     * Crea una nueva instancia
+     * Crea una nueva instancia.
      *
      * @param mixed[] $options
-     * @return \PlanB\Wand\Core\File\File
      *
+     * @return \PlanB\Wand\Core\File\File
      */
     public static function create(array $options): self
     {
         $params = $options['params'] ?? [];
         $params['group'] = $options['group'];
 
+        $profile = static::getProfile();
 
-        $params = FileOptions::create()
+        $params = FileOptions::create($profile)
             ->resolve($params);
 
-        return new self($params);
+        return new static($params);
     }
 
     /**
-     * Devuelve los permisos del fichero
+     * Devuelve el perfil de options para este objeto.
+     *
+     * @return string
+     */
+    public static function getProfile(): string
+    {
+        return 'standard';
+    }
+
+    /**
+     * Devuelve los permisos del fichero.
      *
      * @return int
      */
@@ -97,7 +104,7 @@ class File extends Action
     }
 
     /**
-     * Devuelve la acción (create|delete)
+     * Devuelve la acción (create|delete).
      *
      * @return string
      */
@@ -107,7 +114,7 @@ class File extends Action
     }
 
     /**
-     * Devuelve la template
+     * Devuelve la template.
      *
      * @return string
      */
@@ -117,7 +124,7 @@ class File extends Action
     }
 
     /**
-     * Devuelve la ruta de destino, (relativa a root_project)
+     * Devuelve la ruta de destino, (relativa a root_project).
      *
      * @return string
      */
@@ -127,7 +134,7 @@ class File extends Action
     }
 
     /**
-     * Devuelve la ruta absoluta de destino
+     * Devuelve la ruta absoluta de destino.
      *
      * @return string
      */
@@ -139,7 +146,7 @@ class File extends Action
     }
 
     /**
-     * Devuelve las variables necesarias para renderizar el archivo
+     * Devuelve las variables necesarias para renderizar el archivo.
      *
      * @return string[]
      */
@@ -149,7 +156,7 @@ class File extends Action
     }
 
     /**
-     * Indica si el fichero ya existe
+     * Indica si el fichero ya existe.
      *
      * @return bool
      */
@@ -162,7 +169,7 @@ class File extends Action
     }
 
     /**
-     * Devuelve el grupo de acciones a la que pertenece este fichero
+     * Devuelve el grupo de acciones a la que pertenece este fichero.
      *
      * @return string
      */

@@ -1,0 +1,14 @@
+{% extends "layout/layout.twig" %}
+{% from "macros.twig" import table, links %}
+{% block page_content %}
+
+# {{ namespace }}
+
+{{ links('Namespaces', subnamespaces) }}
+
+{{ table('Classes', classes) }}
+
+{{ links('Interfaces', interfaces) }}
+
+
+{% endblock %}

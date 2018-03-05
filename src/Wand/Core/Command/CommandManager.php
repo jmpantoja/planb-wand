@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * This file is part of the planb project.
  *
@@ -8,22 +9,20 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Command;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Gestiona los comandos
+ * Gestiona los comandos.
  *
- * @package PlanB\Wand\Core\Command
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class CommandManager implements EventSubscriberInterface
 {
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @return array The event names to listen to
      */
@@ -35,7 +34,7 @@ class CommandManager implements EventSubscriberInterface
     }
 
     /**
-     * Ejecuta el comando
+     * Ejecuta el comando.
      *
      * @param \PlanB\Wand\Core\Command\CommandEvent $event
      */

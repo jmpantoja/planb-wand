@@ -1,0 +1,77 @@
+---
+tasks:
+  "init/qa":
+    classname: \PlanB\Wand\Core\Task\SimpleTask
+    description: wubba lubba dub dub
+    actions:
+      phpcs_xml:
+      phpmd_xml:
+
+  qa:
+    classname: \PlanB\Wand\Core\Task\SimpleTask
+    description: wubba lubba dub dub
+    actions:
+      lint:
+      phpcpd:
+      phpmd:
+      phpcbf:
+      phpcs:
+
+actions:
+  phpcs_xml:
+        group: qa
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.qa/phpcs.twig'
+          target: phpcs.xml
+          action: create
+          chmod: 0644
+
+  phpmd_xml:
+        group: qa
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: '@wand.qa/phpmd.twig'
+          target: phpmd.xml
+          action: create
+          chmod: 0644
+
+
+  lint:
+    group: qa
+    classname: \PlanB\Wand\Core\Command\SymfonyCommand
+    params:
+      pattern: phplint --no-configuration %src%
+      command: \Overtrue\PHPLint\Command\LintCommand
+
+  phpcpd:
+    group: qa
+    classname: \PlanB\Wand\Core\Command\SymfonyCommand
+    params:
+      pattern: phpcpd --min-tokens 30 %src%
+      command: \PlanB\Wand\Legacy\Phpcpd\PhpcpdCommand
+
+
+  phpmd:
+    group: qa
+    classname: \PlanB\Wand\Qa\Command\PhpmdCommand
+    params:
+      pattern: phpmd %src% text %project%/phpmd.xml --minimumpriority 3
+
+
+  phpcs:
+    group: qa
+    classname: \PlanB\Wand\Qa\Command\PhpcsCommand
+    params:
+      pattern: phpcs %src% -p --standard=%project%/phpcs.xml -q
+
+
+  phpcbf:
+    group: qa
+    classname: \PlanB\Wand\Qa\Command\PhpcbfCommand
+    params:
+      pattern: phpcbf %src% -p --standard=%project%/phpcs.xml -q
+
+
+
+

@@ -1,0 +1,52 @@
+---
+tasks:
+  "init/project":
+    classname: \PlanB\Wand\Core\Task\SimpleTask
+    description: wubba lubba dub dub
+    actions:
+      src:
+      tests:
+      var-cache:
+      var-mocks:
+      docs-api:
+
+actions:
+  src:
+        group: project
+        classname: \PlanB\Wand\Core\File\Directory
+        params:
+          target: src
+          action: create
+          chmod: 0644
+
+  tests:
+        group: project
+        classname: \PlanB\Wand\Core\File\Directory
+        params:
+          target: tests
+          action: create
+          chmod: 0644
+
+  docs-api:
+        group: project
+        classname: \PlanB\Wand\Core\File\Directory
+        params:
+          target: docs/api
+          action: create
+          chmod: 0644
+
+  var-cache:
+        group: project
+        classname: \PlanB\Wand\Core\File\Directory
+        params:
+          target: var/cache
+          action: create
+          chmod: 0644
+
+  var-mocks:
+        group: project
+        classname: \PlanB\Wand\Core\File\Directory
+        params:
+          target: var/mocks
+          action: create
+          chmod: 0644

@@ -8,29 +8,27 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Config\Exception;
 
 /**
- * Se lanza cuando en la configuración custom se trata de definir una tarea que no existe en default
+ * Se lanza cuando en la configuración custom se trata de definir una tarea que no existe en default.
  *
- * @package PlanB\Wand\Core\App\Exception
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class UndefinidedTaskNameException extends \RuntimeException
 {
     /**
-     * Crea una nueva instancia
+     * Crea una nueva instancia.
      *
-     * @param string[] $names
-     * @param string[] $availables
+     * @param string[]        $names
+     * @param string[]        $availables
      * @param \Throwable|null $previous
-     * s
+     *                                    s
+     *
      * @return \PlanB\Wand\Core\Config\Exception\UndefinidedTaskNameException
      */
     public static function create(array $names, array $availables, ?\Throwable $previous = null): self
     {
-
         $availablesText = implode('|', $availables);
         if (count($names) > 1) {
             $namesText = implode('|', $names);

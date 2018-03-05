@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
  * This file is part of the planb project.
  *
@@ -8,35 +9,40 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Command;
 
 use PlanB\Utils\Options\Options;
+use Symfony\Component\Console\Command\Command as ConsoleCommand;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Verifica las opciones de un objeto Command
+ * Verifica las opciones de un objeto Command.
  *
- * @package PlanB\Wand\Core\Command
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class CommandOptions extends Options
 {
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
     public function configure(OptionsResolver $resolver): void
     {
         $this->definePattern($resolver);
-        $this->defineCwd($resolver);
         $this->defineGroup($resolver);
+
+        $profile = $this->getProfile();
+        if ($profile === 'symfony') {
+            $this->defineCommand($resolver);
+        } else {
+            $this->defineCwd($resolver);
+        }
     }
 
     /**
-     * Define el atributo 'cmd'
+     * Define el atributo 'cmd'.
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
@@ -46,9 +52,8 @@ class CommandOptions extends Options
         $resolver->addAllowedTypes('pattern', ['string', 'null']);
     }
 
-
     /**
-     * Define el atributo 'cwd'
+     * Define el atributo 'cwd'.
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
@@ -56,12 +61,26 @@ class CommandOptions extends Options
     {
         $resolver->setRequired('cwd');
         $resolver->addAllowedTypes('cwd', ['string', 'null']);
-        $resolver->addAllowedValues('cwd', ['vendor/bin', 'wand-vendor/bin']);
+        $resolver->addAllowedValues('cwd', ['vendor/bin', null]);
+        $resolver->setDefault('cwd', null);
     }
 
+    /**
+     * Define el atributo 'command'.
+     *
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
+     */
+    private function defineCommand(OptionsResolver $resolver): void
+    {
+        $resolver->setRequired('command');
+        $resolver->addAllowedTypes('command', ['string']);
+        $resolver->addAllowedValues('command', function ($value) {
+            return is_subclass_of($value, ConsoleCommand::class);
+        });
+    }
 
     /**
-     * Define el atributo 'group'
+     * Define el atributo 'group'.
      *
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */

@@ -8,59 +8,49 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context;
 
-use PlanB\Wand\Core\Context\Property\AuthorEmailProperty;
-use PlanB\Wand\Core\Context\Property\AuthorHomepageProperty;
-use PlanB\Wand\Core\Context\Property\AuthorNameProperty;
-use PlanB\Wand\Core\Context\Property\GithubUsernameProperty;
-use PlanB\Wand\Core\Context\Property\LicenseProperty;
-use PlanB\Wand\Core\Context\Property\PackageDescriptionProperty;
-use PlanB\Wand\Core\Context\Property\PackageNameProperty;
-use PlanB\Wand\Core\Context\Property\PackageTypeProperty;
+use PlanB\Wand\Core\Context\Property\PropertyCollection;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Path\PathManager;
 
 /**
- * Gestiona el contenido de composer.json
+ * Gestiona el contenido de composer.json.
  *
- * @package PlanB\Wand\Core\Context
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class ContextManager
 {
     /**
-     * @var \PlanB\Wand\Core\Logger\LogManager $logger
+     * @var \PlanB\Wand\Core\Logger\LogManager
      */
     private $logger;
 
     /**
-     * @var \PlanB\Wand\Core\Path\PathManager $pathManager
+     * @var \PlanB\Wand\Core\Path\PathManager
      */
     private $pathManager;
 
     /**
-     * @var \PlanB\Wand\Core\Context\ComposerInfo $info
+     * @var \PlanB\Wand\Core\Context\ComposerInfo
      */
     private $info;
 
     /**
-     * @var \PlanB\Wand\Core\Context\Property[] $properties
+     * @var \PlanB\Wand\Core\Context\Property[]
      */
     private $properties = [];
 
     /**
-     * @var mixed[] $values ;
+     * @var mixed[] ;
      */
     private $values = [];
-
 
     /**
      * ContextManager constructor.
      *
      * @param \PlanB\Wand\Core\Logger\LogManager $logger
-     * @param \PlanB\Wand\Core\Path\PathManager $pathManager
+     * @param \PlanB\Wand\Core\Path\PathManager  $pathManager
      */
     public function __construct(LogManager $logger, PathManager $pathManager)
     {
@@ -68,18 +58,11 @@ class ContextManager
         $this->pathManager = $pathManager;
         $this->info = ComposerInfo::load($pathManager);
 
-        $this->properties['package_name'] = PackageNameProperty::create();
-        $this->properties['package_description'] = PackageDescriptionProperty::create();
-        $this->properties['package_type'] = PackageTypeProperty::create();
-        $this->properties['license'] = LicenseProperty::create();
-        $this->properties['author_name'] = AuthorNameProperty::create();
-        $this->properties['author_email'] = AuthorEmailProperty::create();
-        $this->properties['author_homepage'] = AuthorHomepageProperty::create();
-        $this->properties['github_username'] = GithubUsernameProperty::create();
+        $this->properties = PropertyCollection::getAll();
     }
 
     /**
-     * Comprueba que el archivo composer.json sea correcto
+     * Comprueba que el archivo composer.json sea correcto.
      */
     public function execute(): void
     {
@@ -91,9 +74,8 @@ class ContextManager
         $this->info->save();
     }
 
-
     /**
-     * Devuelve el contexto de la aplicación
+     * Devuelve el contexto de la aplicación.
      *
      * @return \PlanB\Wand\Core\Context\Context
      */
@@ -105,9 +87,8 @@ class ContextManager
         return Context::create($params, $paths);
     }
 
-
     /**
-     * Devuelve los valores almacenados en composer.json
+     * Devuelve los valores almacenados en composer.json.
      *
      * @return mixed[]
      */
@@ -116,18 +97,19 @@ class ContextManager
         if (empty($this->values)) {
             $this->execute();
         }
+
         return $this->values;
     }
 
     /**
-     * Devuelve el valor que corresponde a la propiedad pasada
+     * Devuelve el valor que corresponde a la propiedad pasada.
      *
      * @param \PlanB\Wand\Core\Context\Property $property
+     *
      * @return null|string
      */
     private function resolve(Property $property): ?string
     {
-
         if ($this->info->has($property)) {
             $value = $this->read($property);
         } else {
@@ -138,9 +120,10 @@ class ContextManager
     }
 
     /**
-     * Obtiene el valor de la propiedad desde el fichero composer.json
+     * Obtiene el valor de la propiedad desde el fichero composer.json.
      *
      * @param \PlanB\Wand\Core\Context\Property $property
+     *
      * @return string
      */
     private function read(Property $property): string
@@ -152,24 +135,26 @@ class ContextManager
             $property->addWarning($value);
             $value = $this->ask($property);
         }
+
         return $value;
     }
 
     /**
-     * Pide por consola el valor de una propiedad
+     * Pide por consola el valor de una propiedad.
      *
      * @param \PlanB\Wand\Core\Context\Property $property
+     *
      * @return string
      */
     private function ask(Property $property): string
     {
-
         $path = $property->getPath();
         $question = $property->getQuestion();
 
         $value = $this->logger->question($question);
 
         $this->info->set($path, $value);
+
         return $value;
     }
 }

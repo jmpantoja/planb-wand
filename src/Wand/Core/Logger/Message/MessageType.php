@@ -8,15 +8,13 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Logger\Message;
 
 use MabeEnum\Enum;
 
 /**
- * Tipos de mensaje de log
+ * Tipos de mensaje de log.
  *
- * @package PlanB\Wand\Core\Action
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  *
  *  @method static MessageType ERROR()
@@ -31,9 +29,8 @@ class MessageType extends Enum
     public const SKIP = 2;
     public const INFO = 3;
 
-
     /**
-     * Indica si el mensaje es de tipo info
+     * Indica si el mensaje es de tipo info.
      *
      * @return bool
      */
@@ -42,9 +39,8 @@ class MessageType extends Enum
         return $this->is(MessageType::INFO);
     }
 
-
     /**
-     * Indica si el mensaje es de tipo success
+     * Indica si el mensaje es de tipo success.
      *
      * @return bool
      */
@@ -53,9 +49,8 @@ class MessageType extends Enum
         return $this->is(MessageType::SUCCESS);
     }
 
-
     /**
-     * Indica si el mensaje es de tipo skip
+     * Indica si el mensaje es de tipo skip.
      *
      * @return bool
      */
@@ -64,9 +59,8 @@ class MessageType extends Enum
         return $this->is(MessageType::SKIP);
     }
 
-
     /**
-     * Indica si el mensaje es de tipo error
+     * Indica si el mensaje es de tipo error.
      *
      * @return bool
      */

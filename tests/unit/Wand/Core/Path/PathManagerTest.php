@@ -176,6 +176,9 @@ class PathManagerTest extends Unit
             'vendor/bin' => sprintf('%s/vendor/bin', realpath('.')),
             'wand-vendor/bin' => sprintf('%s/vendor/bin', realpath('.')),
             'target' => sprintf('%s', realpath('.')),
+            'src' => sprintf('%s/src', realpath('.')),
+            'vendor' => sprintf('%s/vendor', realpath('.')),
+            'wand-bin' => sprintf('%s/bin', realpath('.')),
 
 
         ], $manager->getPaths());

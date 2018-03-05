@@ -40,7 +40,8 @@ class ConfirmEventTest extends Unit
      * @covers ::getConfirm
      *
      * @covers ::setAnswer
-     * @covers ::getAnswer
+     * @covers ::isTrue
+     * @covers ::isFalse
      *
      */
     public function testCreate()
@@ -51,10 +52,12 @@ class ConfirmEventTest extends Unit
         $this->tester->assertEquals($confirm, $event->getConfirm());
 
         $event->setAnswer(true);
-        $this->tester->assertTrue($event->getAnswer());
+        $this->tester->assertTrue($event->isTrue());
+        $this->tester->assertFalse($event->isFalse());
 
         $event->setAnswer(false);
-        $this->tester->assertFalse($event->getAnswer());
+        $this->tester->assertFalse($event->isTrue());
+        $this->tester->assertTrue($event->isFalse());
     }
 
 

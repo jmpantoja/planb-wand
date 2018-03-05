@@ -1,0 +1,12 @@
+{% extends "layout/layout.twig" %}
+{% from "macros.twig" import link %}
+{% block page_content %}
+
+{% if namespaces %}
+# Namespaces
+
+{% for namespace in namespaces %}
+* {{ link(namespace) }}
+{% endfor %}
+{% endif %}
+{% endblock %}

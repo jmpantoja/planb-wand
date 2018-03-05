@@ -49,7 +49,7 @@ class DefaultConfigTest extends Unit
      * @covers ::getActionGroupNode
      * @covers ::getParamsNode
      *
-     * @covers ::processWithFilter
+     * @covers ::process
      *
      * @covers       \PlanB\Wand\Core\Config\BaseConfig::__construct
      * @covers       \PlanB\Wand\Core\Config\BaseConfig::create
@@ -62,21 +62,13 @@ class DefaultConfigTest extends Unit
         $expected = $data->expected;
 
         $config = DefaultConfig::create($path)
-            ->processWithFilter([
-                'tasks' => [
-                    'init' => [
-                        'readme' => true
-                    ],
-                    'taskB' => []
-                ]
-            ]);
+            ->process();
 
         unset($config['actions']);
 
         $this->tester->assertEquals($expected, $config);
 
     }
-
 
     public function providerProcess()
     {
@@ -85,10 +77,10 @@ class DefaultConfigTest extends Unit
                 'path' => Path::create(sprintf('%s/configs/default/valid.yml', __DIR__)),
                 'expected' => $this->fromFile('valid.expected'),
             ], 'valid')
-            ->add([
-                'path' => Path::create(sprintf('%s/configs/default/default_values.yml', __DIR__)),
-                'expected' => $this->fromFile('default_values.expected'),
-            ], 'default values')
+//            ->add([
+//                'path' => Path::create(sprintf('%s/configs/default/default_values.yml', __DIR__)),
+//                'expected' => $this->fromFile('default_values.expected'),
+//            ], 'default values')
             ->end();
     }
 

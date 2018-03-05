@@ -8,20 +8,17 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Task;
 
 /**
- * Tareas
+ * Tareas.
  *
- * @package PlanB\Wand\Core\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class SimpleTask extends Task
 {
-
     /**
-     * Ejecuta la tarea
+     * Ejecuta la tarea.
      */
     public function execute(): void
     {

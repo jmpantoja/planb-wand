@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Path;
 
 use PlanB\Utils\Path\Path;
@@ -16,21 +15,19 @@ use PlanB\Utils\Path\PathTree;
 use PlanB\Wand\Core\Path\Exception\InvalidProjectDirectoryException;
 
 /**
- * Gestiona las rutas utiles para la aplicacion
+ * Gestiona las rutas utiles para la aplicacion.
  *
- * @package PlanB\Wand\Core\Path
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class PathManager
 {
-
     /**
-     * @var string $projectDir
+     * @var string
      */
     private $projectDir;
 
     /**
-     * @var string $targetPath
+     * @var string
      */
     private $targetPath;
 
@@ -45,7 +42,7 @@ class PathManager
     /**
      * Configura todas las rutas desde la ruta del proyecto
      * Si la ruta no contiene un archivo composer.json, lo busca en los padres
-     * Si no lo encuentra, o no existe lanza una excepción
+     * Si no lo encuentra, o no existe lanza una excepción.
      *
      * @param null|string $projectDir
      */
@@ -57,11 +54,11 @@ class PathManager
         $this->projectDir = $this->findProjectDir($projectDir);
     }
 
-
     /**
-     * Devuelve el argumento path bien formado
+     * Devuelve el argumento path bien formado.
      *
      * @param string $projectDir
+     *
      * @return null|string
      */
     private function sanitizePathArgument(?string $projectDir): string
@@ -73,16 +70,16 @@ class PathManager
             throw InvalidProjectDirectoryException::notFound($path);
         }
 
-        return (string)$realPath;
+        return (string) $realPath;
     }
-
 
     /**
      * Localiza el directorio del proyecto
-     * Busca un fichero composer.json en el projectDir o en sus padres, hasta encontralo
+     * Busca un fichero composer.json en el projectDir o en sus padres, hasta encontralo.
      *
      *
      * @param string $projectDir
+     *
      * @return string
      */
     protected function findProjectDir(string $projectDir): string
@@ -103,11 +100,11 @@ class PathManager
             throw InvalidProjectDirectoryException::composerMissing($projectDir);
         }
 
-        return (string)$projectPath;
+        return (string) $projectPath;
     }
 
     /**
-     * Devuelve la ruta del proyecto
+     * Devuelve la ruta del proyecto.
      *
      * @return string
      */
@@ -116,9 +113,8 @@ class PathManager
         return $this->projectDir;
     }
 
-
     /**
-     * Devuelve la ruta indicada como argumento
+     * Devuelve la ruta indicada como argumento.
      *
      * @return string
      */
@@ -127,9 +123,8 @@ class PathManager
         return $this->targetPath;
     }
 
-
     /**
-     * Devuelve la ruta del archivo composer.json
+     * Devuelve la ruta del archivo composer.json.
      *
      * @return string
      */
@@ -139,7 +134,7 @@ class PathManager
     }
 
     /**
-     * Devuelve la ruta del proyecto wand
+     * Devuelve la ruta del proyecto wand.
      *
      * @return string
      */
@@ -152,7 +147,7 @@ class PathManager
     }
 
     /**
-     * Devuelve un array con todas las rutas
+     * Devuelve un array con todas las rutas.
      *
      * @return string[]
      */
@@ -160,8 +155,11 @@ class PathManager
     {
         return [
             'project' => $this->projectDir(),
+            'src' => Path::join($this->projectDir(), 'src'),
+            'vendor' => Path::join($this->projectDir(), 'vendor'),
             'vendor/bin' => Path::join($this->projectDir(), 'vendor/bin'),
             'wand-vendor/bin' => Path::join($this->wandDir(), 'vendor/bin'),
+            'wand-bin' => Path::join($this->wandDir(), 'bin'),
             'target' => $this->targetPath(),
             'composer' => $this->composerJsonPath(),
             'wand' => $this->wandDir(),

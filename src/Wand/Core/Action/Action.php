@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * This file is part of the planb project.
  *
@@ -8,31 +9,30 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Action;
 
 use PlanB\Wand\Core\Context\Context;
 
 /**
- * Clase Base para acciones
+ * Clase Base para acciones.
  *
- * @package PlanB\Wand\Core\Action
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 abstract class Action implements ActionInterface
 {
+
     /**
-     * @var int $level
+     * @var int
      */
     protected $level = 0;
 
     /**
-     * @var \PlanB\Wand\Core\Context\Context $context
+     * @var \PlanB\Wand\Core\Context\Context
      */
     protected $context;
 
     /**
-     * Devuelve el nivel de esta acción
+     * Devuelve el nivel de esta acción.
      *
      * @return int
      */
@@ -42,27 +42,30 @@ abstract class Action implements ActionInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param int $level
+     *
      * @return \PlanB\Wand\Core\Action\ActionInterface
      */
     public function setLevel(int $level): ActionInterface
     {
         $this->level = $level;
+
         return $this;
     }
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param \PlanB\Wand\Core\Context\Context $context
+     *
      * @return \PlanB\Wand\Core\Action\ActionInterface
      */
     public function setContext(Context $context): ActionInterface
     {
         $this->context = $context;
+
         return $this;
     }
 }

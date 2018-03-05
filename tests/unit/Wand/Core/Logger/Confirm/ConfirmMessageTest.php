@@ -40,7 +40,7 @@ class ConfirmMessageTest extends Unit
      * @covers ::create
      *
      * @covers ::getMessage
-     * @covers ::getDefault
+     * @covers ::isTrueByDefault
      * @covers ::setDefault
      *
      */
@@ -50,15 +50,15 @@ class ConfirmMessageTest extends Unit
 
         $this->tester->assertEquals('message (Y / n):', $confirm->getMessage());
 
-        $this->tester->assertTrue($confirm->getDefault());
+        $this->tester->assertTrue($confirm->isTrueByDefault());
 
         $confirm->setDefault(false);
-        $this->tester->assertFalse($confirm->getDefault());
+        $this->tester->assertFalse($confirm->isTrueByDefault());
         $this->tester->assertEquals('message (y / N):', $confirm->getMessage());
 
 
         $confirm->setDefault(true);
-        $this->tester->assertTrue($confirm->getDefault());
+        $this->tester->assertTrue($confirm->isTrueByDefault());
         $this->tester->assertEquals('message (Y / n):', $confirm->getMessage());
 
     }

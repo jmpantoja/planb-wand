@@ -1,6 +1,6 @@
 ---
 tasks:
-  codecept:
+  "init/codecept":
     classname: \PlanB\Wand\Tdd\Task\CodeceptTask
     description: wubba lubba dub dub
     actions:
@@ -22,7 +22,7 @@ actions:
 
   codecept_bootstrap:
         group: tdd
-        classname: \PlanB\Wand\Core\Command\Command
+        classname: \PlanB\Wand\Core\Command\SystemCommand
         params:
           pattern: codecept bootstrap %project%
           cwd: vendor/bin

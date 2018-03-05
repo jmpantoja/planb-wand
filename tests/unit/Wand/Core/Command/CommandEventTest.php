@@ -53,6 +53,10 @@ class CommandEventTest extends Unit
             ->andReturn(Path::join(realpath('.'), 'vendor/bin'));
 
         $context->allows()
+            ->getPath('src')
+            ->andReturn(Path::join(realpath('.'), 'src'));
+
+        $context->allows()
             ->getPath('project')
             ->andReturn(realpath('.'));
 
@@ -61,7 +65,12 @@ class CommandEventTest extends Unit
             ->andReturn(realpath('.'));
 
 
-        $command = Command::create([
+        $context->allows()
+            ->getPath('wand')
+            ->andReturn(realpath('.'));
+
+
+        $command = SystemCommand::create([
             'group' => 'metainfo',
             'params' => [
                 'pattern' => 'command -la %target%',
@@ -82,7 +91,7 @@ class CommandEventTest extends Unit
 
         $lines = $message->parseVerbose();
 
-        $this->tester->assertContains('vendor/bin/command -la', $lines[0]);
+        $this->tester->assertContains('Execute command -la', $lines[0]);
 
     }
 }

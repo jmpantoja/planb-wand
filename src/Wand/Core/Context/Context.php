@@ -8,30 +8,27 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context;
 
 use PlanB\Wand\Core\Context\Exception\UnknowParamException;
 use PlanB\Wand\Core\Context\Exception\UnknowPathException;
 
 /**
- * Contexto de la aplicación
+ * Contexto de la aplicación.
  *
- * @package PlanB\Wand\Core\Context
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class Context
 {
-
     /**
-     * @var string[] $params
+     * @var string[]
      */
     private $params;
 
     /**
-     * @var string[] $paths
+     * @var string[]
      */
-    private $paths;
+    private $paths = [];
 
     /**
      * Context constructor.
@@ -46,10 +43,11 @@ class Context
     }
 
     /**
-     * Crea una nueva instancia
+     * Crea una nueva instancia.
      *
      * @param string[] $params
      * @param string[] $paths
+     *
      * @return \PlanB\Wand\Core\Context\Context
      */
     public static function create(array $params, array $paths): self
@@ -58,9 +56,10 @@ class Context
     }
 
     /**
-     * Devuelve una ruta
+     * Devuelve una ruta.
      *
      * @param string $name
+     *
      * @return mixed|string
      */
     public function getPath(string $name)
@@ -69,11 +68,12 @@ class Context
             $availables = array_keys($this->paths);
             throw  UnknowPathException::create($name, $availables);
         }
+
         return $this->paths[$name];
     }
 
     /**
-     * Devuelve los valores almacenados en composer.json
+     * Devuelve los valores almacenados en composer.json.
      *
      * @return string[]
      */
@@ -83,9 +83,10 @@ class Context
     }
 
     /**
-     * Devuelve el valor de un parámetro
+     * Devuelve el valor de un parámetro.
      *
      * @param string $name
+     *
      * @return string
      */
     public function getParam(string $name): string
@@ -94,6 +95,7 @@ class Context
             $availables = array_keys($this->params);
             throw  UnknowParamException::create($name, $availables);
         }
+
         return $this->params[$name];
     }
 }

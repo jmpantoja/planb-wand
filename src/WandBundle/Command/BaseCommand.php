@@ -13,7 +13,6 @@ namespace PlanB\WandBundle\Command;
 use PlanB\Wand\Core\Context\ContextManager;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Path\PathManager;
-
 use PlanB\Wand\Core\Task\TaskManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -21,20 +20,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
- * Comando con funcionalidades comunes
+ * Comando con funcionalidades comunes.
  *
- * @package PlanB\WandBundle\Command
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 abstract class BaseCommand extends Command implements ContainerAwareInterface
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface $container ;
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface ;
      */
     private $container;
 
     /**
      * WandCommand constructor.
+     *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface|null $container
      */
     public function __construct(?ContainerInterface $container = null)
@@ -44,7 +43,7 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface|null $container
      */
@@ -54,7 +53,7 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * Devuelve el contenedor
+     * Devuelve el contenedor.
      *
      * @return null|\Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -64,7 +63,7 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * Devuelve el gestor de tareas
+     * Devuelve el gestor de tareas.
      *
      * @return \PlanB\Wand\Core\Task\TaskManager
      */
@@ -74,7 +73,7 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * Devuelve el gestor de la aplicacion
+     * Devuelve el gestor de la aplicacion.
      *
      * @return \PlanB\Wand\Core\Logger\LogManager
      */
@@ -84,7 +83,7 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * Devuelve el gestor de rutas
+     * Devuelve el gestor de rutas.
      *
      * @return \PlanB\Wand\Core\Path\PathManager
      */
@@ -94,7 +93,7 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * Devuelve el gestor de contexto
+     * Devuelve el gestor de contexto.
      *
      * @return \PlanB\Wand\Core\Context\ContextManager
      */
@@ -103,9 +102,8 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
         return $this->container->get('wand.context.manager');
     }
 
-
     /**
-     * Devuelve el dispatcher
+     * Devuelve el dispatcher.
      *
      * @return \Symfony\Component\EventDispatcher\EventDispatcher
      */
@@ -115,7 +113,7 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * Devuelve el gestor de logs
+     * Devuelve el gestor de logs.
      *
      * @return \PlanB\Wand\Core\Logger\LogManager
      */

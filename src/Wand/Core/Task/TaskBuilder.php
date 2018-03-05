@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Task;
 
 use PlanB\Wand\Core\Action\ActionInterface;
@@ -16,30 +15,29 @@ use PlanB\Wand\Core\Logger\LogManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
- * Se encarga de instancias tareas
+ * Se encarga de instancias tareas.
  *
- * @package PlanB\Wand\Core\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class TaskBuilder
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
+     * @var \Symfony\Component\EventDispatcher\EventDispatcher
      */
     private $dispatcher;
 
     /**
-     * @var \PlanB\Wand\Core\Logger\LogManager $logger
+     * @var \PlanB\Wand\Core\Logger\LogManager
      */
     private $logger;
 
     /**
-     * @var mixed[] $tasks
+     * @var mixed[]
      */
     private $tasks;
 
     /**
-     * @var mixed[] $actions
+     * @var mixed[]
      */
     private $actions;
 
@@ -47,7 +45,7 @@ class TaskBuilder
      * TaskBuilder constructor.
      *
      * @param \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
-     * @param \PlanB\Wand\Core\Logger\LogManager $logger
+     * @param \PlanB\Wand\Core\Logger\LogManager                 $logger
      */
     public function __construct(EventDispatcher $dispatcher, LogManager $logger)
     {
@@ -56,9 +54,10 @@ class TaskBuilder
     }
 
     /**
-     * Asigna el array de configuración
+     * Asigna el array de configuración.
      *
      * @param mixed[] $config
+     *
      * @return \PlanB\Wand\Core\Task\TaskBuilder
      */
     public function setConfig(array $config): self
@@ -69,9 +68,8 @@ class TaskBuilder
         return $this;
     }
 
-
     /**
-     * Devuelve una lista de los objetos task definidos
+     * Devuelve una lista de los objetos task definidos.
      *
      * @return \PlanB\Wand\Core\Task\TaskInterface[]
      */
@@ -85,11 +83,10 @@ class TaskBuilder
         return $tasks;
     }
 
-
     /**
-     * Crea una nueva tarea
+     * Crea una nueva tarea.
      *
-     * @param string $name
+     * @param string  $name
      * @param mixed[] $options
      *
      * @return \PlanB\Wand\Core\Task\TaskInterface
@@ -110,11 +107,11 @@ class TaskBuilder
         return $task;
     }
 
-
     /**
-     * Resuelve la lista de acciones de una tarea
+     * Resuelve la lista de acciones de una tarea.
      *
      * @param mixed[] $options
+     *
      * @return \PlanB\Wand\Core\Action\ActionInterface[]
      */
     private function resolveActions(array $options): array
@@ -122,7 +119,6 @@ class TaskBuilder
         $actions = $options['actions'] ?? [];
 
         array_walk($actions, function (&$action, $name): void {
-
             $ref = $this->getTaskRef($name);
 
             if (is_null($ref)) {
@@ -138,9 +134,10 @@ class TaskBuilder
     }
 
     /**
-     * Devuelve null si es el nombre de una acción, o el nombre de una tarea
+     * Devuelve null si es el nombre de una acción, o el nombre de una tarea.
      *
      * @param string $name
+     *
      * @return string
      */
     private function getTaskRef(string $name): ?string
@@ -154,9 +151,10 @@ class TaskBuilder
     }
 
     /**
-     * Crea una nueva acción
+     * Crea una nueva acción.
      *
      * @param mixed[] $options
+     *
      * @return \PlanB\Wand\Core\Action\ActionInterface
      */
     private function buildAction(array $options): ActionInterface
@@ -165,6 +163,7 @@ class TaskBuilder
         unset($options['classname']);
 
         $action = $className::create($options);
+
         return $action;
     }
 }

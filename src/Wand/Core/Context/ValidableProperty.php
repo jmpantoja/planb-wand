@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /**
  * This file is part of the planb project.
  *
@@ -8,27 +9,27 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Context;
 
 /**
- * Representa a las propiedades que tienen una validación específica
+ * Representa a las propiedades que tienen una validación específica.
  *
- * @package PlanB\Wand\Core\Context
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 interface ValidableProperty
 {
+
     /**
-     * Realiza las comprobaciones especificas de esta propiedad
+     * Realiza las comprobaciones especificas de esta propiedad.
      *
      * @param mixed $answer
+     *
      * @return bool
      */
     public function validate($answer): bool;
 
     /**
-     * Devuelve el mensaje de error personalizado
+     * Devuelve el mensaje de error personalizado.
      *
      * @return string
      */

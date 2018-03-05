@@ -10,13 +10,13 @@ actions:
       chmod: 0644
   actionB:
     group: metainfo
-    classname: \PlanB\Wand\Core\Command\Command
+    classname: \PlanB\Wand\Core\Command\SystemCommand
     params:
       pattern: ls -la
       cwd: vendor/bin
   actionC:
     group: metainfo
-    classname: \PlanB\Wand\Core\Command\Command
+    classname: \PlanB\Wand\Core\Command\SystemCommand
     params:
       pattern: ls -la
       cwd: vendor/bin

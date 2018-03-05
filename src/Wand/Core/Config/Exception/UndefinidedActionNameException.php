@@ -8,30 +8,28 @@
  * file that was distributed with this source code.
  */
 
-
 namespace PlanB\Wand\Core\Config\Exception;
 
 /**
- * Se lanza cuando en la configuración custom se trata de definir una tarea que no existe en default
+ * Se lanza cuando en la configuración custom se trata de definir una tarea que no existe en default.
  *
- * @package PlanB\Wand\Core\App\Exception
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class UndefinidedActionNameException extends \RuntimeException
 {
     /**
-     * Crea una nueva instancia
+     * Crea una nueva instancia.
      *
-     * @param string $task
-     * @param string[] $names
-     * @param string[] $availables
+     * @param string          $task
+     * @param string[]        $names
+     * @param string[]        $availables
      * @param \Throwable|null $previous
-     * s
+     *                                    s
+     *
      * @return \PlanB\Wand\Core\Config\Exception\UndefinidedActionNameException
      */
     public static function create(string $task, array $names, array $availables, ?\Throwable $previous = null): self
     {
-
         $names = array_map(function ($name) use ($task) {
             return sprintf('%s/%s', $task, $name);
         }, $names);
@@ -44,7 +42,7 @@ class UndefinidedActionNameException extends \RuntimeException
             $name = array_shift($names);
             $message = sprintf("La acción '%s' no existe (disponibles: %s)", $name, $availablesText);
         }
-        
+
         $message = sprintf("%s\nEs necesario revisar el archivo de configuración '.wand.yml'", $message);
 
         return new self($message, 0, $previous);
