@@ -54,3 +54,5 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+\.phplint-cache

@@ -1,0 +1,16 @@
+---
+tasks:
+  "tdd/coverage":
+    classname: \PlanB\Wand\Core\Task\SimpleTask
+    description: wubba lubba dub dub
+    actions:
+      coverage:
+
+actions:
+  coverage:
+    group: qa
+    classname: \PlanB\Wand\Tdd\Command\CoverageCommand
+    params:
+      pattern: codecept run unit -c %project%/codeception.yml --coverage --debug
+      cwd: vendor/bin
+      title: code coverage

@@ -66,8 +66,9 @@ class ConfigManagerTest extends Unit
         $this->assertArrayHasKey('init/project', $tasks);
         $this->assertArrayHasKey('init/info', $tasks);
         $this->assertArrayHasKey('init/codecept', $tasks);
+        $this->assertArrayHasKey('tdd/coverage', $tasks);
 
-        $this->assertCount(11, $tasks);
+        $this->assertCount(12, $tasks);
 
     }
 

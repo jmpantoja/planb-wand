@@ -19,5 +19,4 @@ tasks:
     actions:
       "@composer":
       "@qa":
-#     "@tdd/run":
-#     "@tdd/coverage":
+      "@tdd/coverage":
