@@ -44,3 +44,10 @@ actions:
           target: .git/hooks/commit-msg
           action: create
           chmod: 0644
+
+  restage:
+    group: git
+    classname: \PlanB\Wand\Git\Command\GitRestageCommand
+    params:
+      pattern: git restage
+      title: git restage

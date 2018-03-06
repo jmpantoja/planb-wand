@@ -17,6 +17,7 @@ use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Utils\Path\Path;
 use PlanB\Wand\Composer\Task\ComposerTask;
 use PlanB\Wand\Core\Context\Context;
+use PlanB\Wand\Core\Git\GitManager;
 use PlanB\Wand\Core\Logger\LogManager;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
 use Mockery as m;
@@ -115,7 +116,16 @@ class GitInitTaskTest extends Unit
             'skip' => null
         ]);
 
-        $context = $this->stub(Context::class);
+        $gitManager = $this->stub(GitManager::class, [
+            'isInitialized' => $initalized
+        ]);
+
+
+        $context = $this->stub(Context::class, [
+            'getGitManager' => $gitManager
+        ]);
+
+
         $context->allows()
             ->getPath('project')
             ->andReturn(realpath('.'));

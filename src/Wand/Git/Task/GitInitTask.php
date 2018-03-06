@@ -10,7 +10,6 @@
 
 namespace PlanB\Wand\Git\Task;
 
-use PlanB\Utils\Path\Path;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
 use PlanB\Wand\Core\Task\Task;
 
@@ -21,6 +20,8 @@ use PlanB\Wand\Core\Task\Task;
  */
 class GitInitTask extends Task
 {
+
+
     /**
      * {@inheritdoc}
      */
@@ -30,7 +31,7 @@ class GitInitTask extends Task
             $message = LogMessage::success();
             $this->logger->skip('[Git] Initialized empty Git repository');
         } else {
-            $message =$this->run('git');
+            $message = $this->run('git');
         }
 
         return $this->sequenceFrom($message, 'gitignore', 'precommit', 'commitmsg');
@@ -43,9 +44,7 @@ class GitInitTask extends Task
      */
     private function isInitialized(): bool
     {
-        $base = $this->context->getPath('project');
-        $path = Path::create($base, '.git');
-
-        return $path->isDirectory();
+        $manager = $this->context->getGitManager();
+        return $manager->isInitialized();
     }
 }

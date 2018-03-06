@@ -33,6 +33,22 @@ class QaTask extends Task
             $message = $this->run('phpcs');
         }
 
+        if ($this->hasStagedFiles()) {
+            $message = $this->sequenceFrom($message, 'restage');
+        }
+
         return $message;
+    }
+
+    /**
+     * Indica si hay ficheros en el stage
+     *
+     * @return bool
+     */
+    private function hasStagedFiles(): bool
+    {
+        $manager = $this->context->getGitManager();
+
+        return $manager->hasStagedFiles();
     }
 }

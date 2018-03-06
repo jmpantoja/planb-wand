@@ -16,6 +16,7 @@ use Codeception\Test\Unit;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Context\Exception\UnknowParamException;
 use PlanB\Wand\Core\Context\Exception\UnknowPathException;
+use PlanB\Wand\Core\Git\GitManager;
 
 /**
  * Class ContextTest
@@ -45,6 +46,8 @@ class ContextTest extends Unit
      *
      * @covers ::getPath
      *
+     * @covers ::getGitManager
+     *
      * @covers \PlanB\Wand\Core\Context\Exception\UnknowPathException::create
      * @covers \PlanB\Wand\Core\Context\Exception\UnknowParamException::create
      */
@@ -61,8 +64,8 @@ class ContextTest extends Unit
             'pathA' => 'valueA',
             'pathB' => 'valueB',
             'pathC' => 'valueC',
+            'project' => realpath('.'),
         ];
-
 
         $context = Context::create($params, $paths);
 
@@ -79,10 +82,13 @@ class ContextTest extends Unit
         $this->tester->assertEquals('valueA', $context->getPath('pathA'));
         $this->tester->assertEquals('valueB', $context->getPath('pathB'));
         $this->tester->assertEquals('valueC', $context->getPath('pathC'));
+        $this->tester->assertEquals(realpath('.'), $context->getPath('project'));
 
         $this->tester->expectException(UnknowPathException::class, function () use ($context) {
             $context->getPath('pathXXX');
         });
+
+        $this->tester->assertInstanceOf(GitManager::class, $context->getGitManager());
     }
 
 }

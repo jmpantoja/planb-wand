@@ -12,6 +12,7 @@ namespace PlanB\Wand\Core\Context;
 
 use PlanB\Wand\Core\Context\Exception\UnknowParamException;
 use PlanB\Wand\Core\Context\Exception\UnknowPathException;
+use PlanB\Wand\Core\Git\GitManager;
 
 /**
  * Contexto de la aplicación.
@@ -31,6 +32,11 @@ class Context
     private $paths = [];
 
     /**
+     * @var \PlanB\Wand\Core\Git\GitManager
+     */
+    private $gitManager;
+
+    /**
      * Context constructor.
      *
      * @param string[] $params
@@ -40,6 +46,9 @@ class Context
     {
         $this->params = $params;
         $this->paths = $paths;
+
+        $base = $this->getPath('project');
+        $this->gitManager = GitManager::create($base);
     }
 
     /**
@@ -97,5 +106,15 @@ class Context
         }
 
         return $this->params[$name];
+    }
+
+    /**
+     * Devuelve el gestor de Git
+     *
+     * @return \PlanB\Wand\Core\Git\GitManager
+     */
+    public function getGitManager(): GitManager
+    {
+        return $this->gitManager;
     }
 }

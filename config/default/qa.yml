@@ -16,6 +16,7 @@ tasks:
       phpmd:
       phpcbf:
       phpcs:
+      restage:
 
 actions:
   phpcs_xml:

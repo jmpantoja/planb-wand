@@ -150,7 +150,9 @@ class ContextManagerTest extends Unit
 
         $pathManager = $this->stub(PathManager::class, [
             'composerJsonPath' => $fileName,
-            'getPaths' => []
+            'getPaths' => [
+                'project' => realpath('.')
+            ]
         ]);
 
         return $pathManager;
