@@ -19,6 +19,7 @@ use PlanB\Wand\Legacy\Phpmd\CommandPhpmd;
 
 /**
  * Ejecuta el comando phpmd
+ *
  * @package PlanB\Wand\Qa\Command
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */

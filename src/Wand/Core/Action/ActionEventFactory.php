@@ -29,7 +29,6 @@ class ActionEventFactory
      * Crea el objeto ActionEvent que corresponde a un action.
      *
      * @param \PlanB\Wand\Core\Action\ActionInterface $action
-     *
      * @return \PlanB\Wand\Core\Action\ActionEvent
      */
     public static function fromAction(ActionInterface $action): ActionEvent

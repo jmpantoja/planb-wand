@@ -3,7 +3,7 @@
 
     <rule ref="PSR2" />
 
-    <rule ref="phar://vendor/bin/wand.phar/vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
+    <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
         <exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes"/>
         <exclude name="SlevomatCodingStandard.Files.TypeNameMatchesFileName"/>
         <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions"/>

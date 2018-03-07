@@ -22,7 +22,8 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Files\FileList;
 
 use PHP_CodeSniffer\Ruleset;
-use PHP_CodeSniffer\Util;
+use PHP_CodeSniffer\Util\Standards;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Class CodeSniffer
@@ -265,7 +266,7 @@ class CodeSniffer
 
         // Check that the standards are valid.
         foreach ($this->config->standards as $standard) {
-            if (Util\Standards::isInstalledStandard($standard) === false) {
+            if (Standards::isInstalledStandard($standard) === false) {
                 // They didn't select a valid coding standard, so help them
                 // out by letting them know which standards are installed.
                 $error = 'ERROR: the "' . $standard . '" coding standard is not installed. ';
@@ -285,10 +286,10 @@ class CodeSniffer
 
         // Create this class so it is autoloaded and sets up a bunch
         // of PHP_CodeSniffer-specific token type constants.
-        new Util\Tokens();
+        new Tokens();
 
         // Allow autoloading of custom files inside installed standards.
-        $installedStandards = Util\Standards::getInstalledStandardDetails();
+        $installedStandards = Standards::getInstalledStandardDetails();
         foreach ($installedStandards as $name => $details) {
             Autoload::addSearchPath($details['path'], $details['namespace']);
         }

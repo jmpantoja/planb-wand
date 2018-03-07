@@ -169,7 +169,7 @@ class TaskManager implements EventSubscriberInterface
         $task = $event->getTask();
         $exitCode = $task->launch();
 
-        $event->blank();
+        $event->blank($exitCode);
 
         return $exitCode;
     }

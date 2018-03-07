@@ -22,7 +22,6 @@ class InvalidProjectDirectoryException extends \RuntimeException
      *
      * @param string     $path
      * @param \Throwable $previous
-     *
      * @return \PlanB\Wand\Core\Path\Exception\InvalidProjectDirectoryException
      */
     public static function notFound(string $path, ?\Throwable $previous = null): self
@@ -37,7 +36,6 @@ class InvalidProjectDirectoryException extends \RuntimeException
      *
      * @param string          $path
      * @param \Throwable|null $previous
-     *
      * @return \PlanB\Wand\Core\Path\Exception\InvalidProjectDirectoryException
      */
     public static function composerMissing(string $path, ?\Throwable $previous = null): self

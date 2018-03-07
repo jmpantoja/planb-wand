@@ -44,9 +44,12 @@ abstract class ActionEvent extends Event
      *
      * @return \PlanB\Wand\Core\Action\ActionEvent
      */
-    public function blank(): self
+    public function blank(int $exitCode): self
     {
         $this->message = LogMessage::info();
+        if ($exitCode != 0) {
+            $this->message = LogMessage::error();
+        }
 
         return $this;
     }

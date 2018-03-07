@@ -16,6 +16,7 @@ use Codeception\Test\Unit;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\File\File;
 use PlanB\Wand\Core\File\FileEvent;
+use Mockery as m;
 
 /**
  * Class CustomConfigTest
@@ -53,9 +54,14 @@ class ActionEventTest extends Unit
         $event = $this->getEvent();
 
 
-        $event->blank();
+        $event->blank(0);
         $this->tester->assertTrue($event->getMessage()->isInfo());
         $this->tester->assertTrue($event->isNotError());
+
+        $event->blank(1);
+        $this->tester->assertTrue($event->getMessage()->isError());
+        $this->tester->assertFalse($event->isNotError());
+
 
         $event->success();
         $this->tester->assertTrue($event->getMessage()->isSuccessful());
@@ -77,7 +83,6 @@ class ActionEventTest extends Unit
         $this->tester->assertContains('<fg=red>ERROR</>', $lines[0]);
         $this->tester->assertContains('Action file target', $lines[0]);
         $this->tester->assertFalse($event->isNotError());
-
 
     }
 

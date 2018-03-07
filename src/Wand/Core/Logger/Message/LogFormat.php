@@ -38,8 +38,8 @@ final class LogFormat
      * LogFormat constructor.
      *
      * @param \PlanB\Wand\Core\Logger\Message\MessageType $type
-     * @param string                                      $color
-     * @param null|string                                 $resume
+     * @param string $color
+     * @param null|string $resume
      */
     private function __construct(MessageType $type, string $color, ?string $resume = null)
     {
@@ -198,7 +198,7 @@ final class LogFormat
     /**
      * Devuelve las lineas de verbose, ordenadas y formateadas.
      *
-     * @param string   $key
+     * @param string $key
      * @param string[] $body
      *
      * @return string[]
@@ -208,13 +208,13 @@ final class LogFormat
         $key = sprintf('%s:', strtoupper($key));
         $head = $this->colorize($key);
 
-        $total = count($body);
+        $total = count(array_filter($body));
 
         $lines = [];
 
         if ($total === 1) {
             $lines[] = sprintf('%s %s', $head, implode('', $body));
-        } else {
+        } elseif ($total > 1) {
             $lines[] = $head;
 
             $lines = array_merge($lines, $body);
@@ -222,7 +222,7 @@ final class LogFormat
 
         $lines[] = "\n";
 
-        return (array) $lines;
+        return (array)$lines;
     }
 
     /**

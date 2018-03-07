@@ -278,11 +278,10 @@ final class LogMessage
     public function mergeType(LogMessage $message): self
     {
         if (!$this->isError()) {
-            if (!$message->isSuccessful()) {
+            if (!$message->isSuccessful() && !$message->isInfo()) {
                 $this->type = $message->getType();
             }
         }
-
-        return $message;
+        return $this;
     }
 }

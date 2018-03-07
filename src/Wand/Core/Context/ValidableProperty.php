@@ -23,7 +23,6 @@ interface ValidableProperty
      * Realiza las comprobaciones especificas de esta propiedad.
      *
      * @param mixed $answer
-     *
      * @return bool
      */
     public function validate($answer): bool;

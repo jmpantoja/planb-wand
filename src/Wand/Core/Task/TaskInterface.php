@@ -25,7 +25,6 @@ interface TaskInterface extends ActionInterface
      * Crea una nueva instancia.
      *
      * @param mixed[] $params
-     *
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
     public static function create(array $params): TaskInterface;
@@ -34,7 +33,6 @@ interface TaskInterface extends ActionInterface
      * Asigna el controlador de eventos.
      *
      * @param \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
-     *
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
     public function setEventDispatcher(EventDispatcher $dispatcher): TaskInterface;
@@ -43,7 +41,6 @@ interface TaskInterface extends ActionInterface
      * Asigna el gestor de logs.
      *
      * @param \PlanB\Wand\Core\Logger\LogManager $logger
-     *
      * @return \PlanB\Wand\Core\Task\TaskInterface
      */
     public function setLogger(LogManager $logger): TaskInterface;

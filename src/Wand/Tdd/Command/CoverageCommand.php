@@ -22,7 +22,6 @@ class CoverageCommand extends SystemCommand
      * Indica si el comando se ha ejecutado con exito.
      *
      * @param \Symfony\Component\Process\Process $process
-     *
      * @return bool
      */
     protected function isSuccessful(Process $process): bool

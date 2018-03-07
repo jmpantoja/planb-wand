@@ -24,7 +24,7 @@ actions:
         classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.qa/phpcs.twig'
-          target: phpcs.xml
+          target: .phpcs.xml
           action: create
           chmod: 0644
 
@@ -33,7 +33,7 @@ actions:
         classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.qa/phpmd.twig'
-          target: phpmd.xml
+          target: .phpmd.xml
           action: create
           chmod: 0644
 
@@ -42,14 +42,14 @@ actions:
     group: qa
     classname: \PlanB\Wand\Core\Command\SymfonyCommand
     params:
-      pattern: phplint --no-configuration %src%
+      pattern: vendor/bin/phplint --no-configuration %src%
       command: \Overtrue\PHPLint\Command\LintCommand
 
   phpcpd:
     group: qa
     classname: \PlanB\Wand\Core\Command\SymfonyCommand
     params:
-      pattern: phpcpd --min-tokens 30 %src%
+      pattern: vendor/bin/phpcpd --min-tokens 30 %src%
       command: \PlanB\Wand\Legacy\Phpcpd\PhpcpdCommand
 
 
@@ -57,19 +57,19 @@ actions:
     group: qa
     classname: \PlanB\Wand\Qa\Command\PhpmdCommand
     params:
-      pattern: phpmd %src% text %project%/phpmd.xml --minimumpriority 3
+      pattern: vendor/bin/phpmd %src% text %project%/.phpmd.xml --minimumpriority 3
 
   phpcbf:
     group: qa
     classname: \PlanB\Wand\Qa\Command\PhpcbfCommand
     params:
-      pattern: phpcbf %src% -p --standard=%project%/phpcs.xml -q
+      pattern: vendor/bin/phpcbf %src% -p --standard=%project%/.phpcs.xml -q
 
   phpcs:
     group: qa
     classname: \PlanB\Wand\Qa\Command\PhpcsCommand
     params:
-      pattern: phpcs %src% -p --standard=%project%/phpcs.xml -q
+      pattern: vendor/bin/phpcs %src% -p --standard=%project%/.phpcs.xml -q
 
 
 

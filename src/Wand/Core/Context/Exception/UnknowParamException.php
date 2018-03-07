@@ -23,7 +23,6 @@ class UnknowParamException extends \RuntimeException
      * @param string          $path
      * @param string[]        $availables
      * @param \Throwable|null $previous
-     *
      * @return \PlanB\Wand\Core\Context\Exception\UnknowParamException
      */
     public static function create(string $path, array $availables, ?\Throwable $previous = null): self

@@ -35,7 +35,6 @@ class GitRestageCommand extends Command
 
     /**
      * @inheritdoc
-     *
      * @return string
      */
     public function getCommandLine(): string
@@ -48,6 +47,7 @@ class GitRestageCommand extends Command
 
     /**
      * Devuelve el gestor de Git
+     *
      * @return \PlanB\Wand\Core\Git\GitManager
      */
     private function getGitManager(): GitManager

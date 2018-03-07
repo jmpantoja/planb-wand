@@ -33,6 +33,24 @@ class ComposerInfoTest extends Unit
      * @covers ::__construct
      * @covers ::load
      * @covers ::initialize
+     * @covers \PlanB\Wand\Core\Context\Exception\BadFormedJsonException::create
+     *
+     * @expectedException \PlanB\Wand\Core\Context\Exception\BadFormedJsonException
+     */
+    public function testBadFormed()
+    {
+        $pathManager = $this->getPathManager('badformed');
+        ComposerInfo::load($pathManager);
+
+    }
+
+
+    /**
+     * @test
+     *
+     * @covers ::__construct
+     * @covers ::load
+     * @covers ::initialize
      * @covers ::populateSortedKeys
      * @covers ::optimize
      *
@@ -52,6 +70,7 @@ class ComposerInfoTest extends Unit
         $manager->save();
 
     }
+
 
     /**
      * @test

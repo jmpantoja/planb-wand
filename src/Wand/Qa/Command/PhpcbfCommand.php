@@ -13,6 +13,7 @@ namespace PlanB\Wand\Qa\Command;
 
 /**
  * Ejecuta phpccbf
+ *
  * @package PlanB\Wand\Qa\Command
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */

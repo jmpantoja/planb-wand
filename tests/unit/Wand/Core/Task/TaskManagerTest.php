@@ -26,6 +26,7 @@ use PlanB\Wand\Core\Task\TaskInterface;
 use PlanB\Wand\Core\Task\TaskManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
+use Mockery as m;
 
 /**
  * Class TaskManagerTest
@@ -126,7 +127,7 @@ class TaskManagerTest extends Unit
         ]);
 
         $event->allows()
-            ->blank()
+            ->blank(m::any())
             ->once();
 
         $manager->execute($event);
@@ -156,7 +157,7 @@ class TaskManagerTest extends Unit
         ]);
 
         $event->allows()
-            ->blank();
+            ->blank(m::any());
 
         $manager->executeByName('taskA');
     }

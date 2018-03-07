@@ -16,6 +16,7 @@ use PlanB\Wand\Core\Task\Task;
 
 /**
  * Quality Assurance
+ *
  * @package PlanB\Wand\Qa\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */

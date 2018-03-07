@@ -24,7 +24,6 @@ class UndefinidedTaskNameException extends \RuntimeException
      * @param string[]        $availables
      * @param \Throwable|null $previous
      *                                    s
-     *
      * @return \PlanB\Wand\Core\Config\Exception\UndefinidedTaskNameException
      */
     public static function create(array $names, array $availables, ?\Throwable $previous = null): self

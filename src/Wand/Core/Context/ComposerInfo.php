@@ -10,6 +10,7 @@
 
 namespace PlanB\Wand\Core\Context;
 
+use PlanB\Wand\Core\Context\Exception\BadFormedJsonException;
 use PlanB\Wand\Core\Path\PathManager;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -81,6 +82,12 @@ class ComposerInfo
 
         $this->composerPath = $composerPath;
         $this->contents = json_decode($json, true);
+
+        if (!is_array($this->contents)) {
+
+            throw  BadFormedJsonException::create($composerPath);
+        }
+
         $this->propertyAccess = PropertyAccess::createPropertyAccessor();
     }
 
@@ -145,6 +152,7 @@ class ComposerInfo
      */
     public function get(string $path)
     {
+
         return $this->propertyAccess->getValue($this->contents, $path);
     }
 
@@ -152,7 +160,7 @@ class ComposerInfo
      * Asigna un valor a un path.
      *
      * @param string $path
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return \PlanB\Wand\Core\Context\ComposerInfo
      */

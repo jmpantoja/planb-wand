@@ -284,7 +284,9 @@ abstract class Task extends Action implements TaskInterface
     public function sequence(string ...$actions): LogMessage
     {
         $message = LogMessage::success();
-        return $this->sequenceFrom($message, ...$actions);
+        $this->sequenceFrom($message, ...$actions);
+
+        return $message;
     }
 
     /**

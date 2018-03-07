@@ -23,7 +23,6 @@ class InvalidAnswerException extends \RuntimeException
      * Parámetro requerido.
      *
      * @param \Throwable $previous
-     *
      * @return \PlanB\Wand\Core\Context\Exception\InvalidAnswerException
      */
     public static function required(?\Throwable $previous = null): self
@@ -37,7 +36,6 @@ class InvalidAnswerException extends \RuntimeException
      * @param mixed      $answer
      * @param string[]   $options
      * @param \Throwable $previous
-     *
      * @return \PlanB\Wand\Core\Context\Exception\InvalidAnswerException
      */
     public static function notInOptions($answer, array $options, ?\Throwable $previous = null): self
@@ -53,7 +51,6 @@ class InvalidAnswerException extends \RuntimeException
      *
      * @param string     $message
      * @param \Throwable $previous
-     *
      * @return \PlanB\Wand\Core\Context\Exception\InvalidAnswerException
      */
     public static function custom(string $message, ?\Throwable $previous = null): self

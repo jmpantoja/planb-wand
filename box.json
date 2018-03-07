@@ -6,30 +6,31 @@
     "legacy",
     "config"
   ],
-  "directories-bin": [
-     "vendor/bin"
-  ],
   "files": [
-    "LICENSE"
+    "LICENSE",
+    "vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml",
+    "vendor/pdepend/pdepend/src/main/resources/services.xml"
   ],
   "finder": [
     {
       "name": "*.php",
-      "exclude": ["Tests"],
+      "exclude": ["Tests", "tests"],
       "in": "vendor"
     },
     {
       "name": "*.xsd",
-      "exclude": ["Tests"],
       "in": "vendor"
     },
     {
+      "name": "ruleset.xml",
+      "in": "vendor/squizlabs/php_codesniffer/src/Standards"
+    },
+    {
       "name": "*.xml",
-      "exclude": ["Tests"],
-      "in": "vendor"
+      "in": "vendor/phpmd/phpmd/src/main/resources/rulesets"
     }
   ],
   "main": "bin/wand.php",
-  "output": "bin/wand.phar",
+  "output": "build/wand.phar",
   "stub": true
 }
