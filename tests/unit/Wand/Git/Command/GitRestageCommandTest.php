@@ -70,6 +70,10 @@ class GitRestageCommandTest extends Unit
             'getGitManager' => $gitManager
         ]);
 
+        $context->allows()
+            ->getPath('src')
+            ->andReturn(realpath('.'));
+
         $command = $this->stub(GitRestageCommand::class);
         $command->setContext($context);
 

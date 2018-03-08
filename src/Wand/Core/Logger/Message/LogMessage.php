@@ -262,6 +262,7 @@ final class LogMessage
         if (!$type->isError()) {
             $exitCode = 0;
         }
+
         return $exitCode;
     }
 
@@ -273,6 +274,7 @@ final class LogMessage
      * 3. success
      *
      * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
+     *
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
     public function mergeType(LogMessage $message): self
@@ -282,6 +284,7 @@ final class LogMessage
                 $this->type = $message->getType();
             }
         }
+
         return $this;
     }
 }

@@ -11,6 +11,7 @@
 namespace PlanB\Wand\Core\Command;
 
 use PlanB\Wand\Core\Action\Action;
+use PlanB\Wand\Core\Logger\Message\MessageType;
 
 /**
  * Modela un commando.
@@ -35,6 +36,11 @@ abstract class Command extends Action
     protected $title;
 
     /**
+     * @var bool
+     */
+    private $onlyModified;
+
+    /**
      * @var string ;
      */
     protected $output = '';
@@ -46,9 +52,10 @@ abstract class Command extends Action
      */
     protected function __construct(array $params)
     {
-        $this->group = (string)$params['group'];
-        $this->pattern = (string)$params['pattern'];
-        $this->title = (string)$params['title'];
+        $this->group = (string) $params['group'];
+        $this->pattern = (string) $params['pattern'];
+        $this->title = (string) $params['title'];
+        $this->onlyModified = (bool) $params['only_modified'];
     }
 
     /**
@@ -83,9 +90,63 @@ abstract class Command extends Action
             '%target%' => $this->context->getPath('target'),
             '%src%' => $this->context->getPath('src'),
             '%wand%' => $this->context->getPath('wand'),
+            '%changes%' => $this->getModifiedFiles(),
         ];
 
         return str_replace(array_keys($replacements), array_values($replacements), $commandLine);
+    }
+
+    /**
+     * Resuelve el valor de una ruta, en función de si queremos la ruta completa, o solo los archivos modificados
+     *
+     * @return string
+     */
+    private function getModifiedFiles(): string
+    {
+        $project = $this->context->getPath('project');
+        $target = $this->context->getPath('target');
+
+        $name = 'target';
+        if ($project === $target) {
+            $name = 'src';
+        }
+
+        if ($this->onlyModified) {
+            $files = $this->context->getModifiedFiles($name);
+            $path = $this->parseModifiedFiles($files);
+        } else {
+            $path = $this->context->getPath($name);
+        }
+
+        return $path;
+    }
+
+    /**
+     * Formatea el argumento ruta
+     *
+     * @param string[] $files
+     *
+     * @return string
+     */
+    public function parseModifiedFiles(array $files): string
+    {
+        return implode(' ', $files);
+    }
+
+    /**
+     * Indica si hay archivos sobre los que se necesite ejecutar este comando
+     *
+     * @return bool
+     */
+    private function isRunnable(): bool
+    {
+        $hasFiles = true;
+        if ($this->onlyModified) {
+            $modifiedFiles = $this->getModifiedFiles();
+            $hasFiles = !empty($modifiedFiles);
+        }
+
+        return $hasFiles;
     }
 
     /**
@@ -124,6 +185,7 @@ abstract class Command extends Action
         if (empty($this->title)) {
             $this->title = $this->getDefaultTitle();
         }
+
         return $this->title;
     }
 
@@ -146,6 +208,26 @@ abstract class Command extends Action
     public function getGroup(): string
     {
         return ucfirst($this->group);
+    }
+
+    /**
+     * Ejecuta el comando
+     *
+     * @return \PlanB\Wand\Core\Logger\Message\MessageType
+     */
+    public function execute(): MessageType
+    {
+        if (!$this->isRunnable()) {
+            $this->output = sprintf('No se ha modificado nigún archivo desde la última ejecución');
+
+            return MessageType::SKIP();
+        }
+
+        if ($this->run()) {
+            return MessageType::SUCCESS();
+        }
+
+        return MessageType::ERROR();
     }
 
     /**

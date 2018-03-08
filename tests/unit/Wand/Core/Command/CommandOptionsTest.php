@@ -44,6 +44,7 @@ class CommandOptionsTest extends Unit
      * @covers ::definePattern
      * @covers ::defineCwd
      * @covers ::defineTitle
+     * @covers ::defineOnlyModified
      */
     public function testResolve()
     {
@@ -51,7 +52,8 @@ class CommandOptionsTest extends Unit
             'group' => 'el grupo',
             'pattern' => 'el pattern',
             'cwd' => 'vendor/bin',
-            'title' => 'title'
+            'title' => 'title',
+            'only_modified' => false
         ];
 
         $params = CommandOptions::create()
@@ -70,6 +72,7 @@ class CommandOptionsTest extends Unit
      * @covers ::defineGroup
      * @covers ::definePattern
      * @covers ::defineCwd
+     * @covers ::defineOnlyModified
      *
      * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
      */
@@ -113,7 +116,9 @@ class CommandOptionsTest extends Unit
      * @covers ::defineGroup
      * @covers ::definePattern
      * @covers ::defineCommand
+     * @covers ::validateCommand
      * @covers ::defineTitle
+     * @covers ::defineOnlyModified
      */
     public function testResolveSymfony()
     {
@@ -121,7 +126,8 @@ class CommandOptionsTest extends Unit
             'group' => 'el grupo',
             'pattern' => 'el pattern',
             'command' => WandCommand::class,
-            'title' => 'title'
+            'title' => 'title',
+            'only_modified' => true
         ];
 
         $params = CommandOptions::create('symfony')
@@ -140,6 +146,7 @@ class CommandOptionsTest extends Unit
      * @covers ::defineGroup
      * @covers ::definePattern
      * @covers ::defineCwd
+     * @covers ::defineOnlyModified
      *
      * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
      */

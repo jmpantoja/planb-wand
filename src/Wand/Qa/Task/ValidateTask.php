@@ -8,26 +8,31 @@
  * file that was distributed with this source code.
  */
 
-namespace PlanB\Wand\Core\Task;
+
+namespace PlanB\Wand\Qa\Task;
 
 use PlanB\Wand\Core\Logger\Message\LogMessage;
+use PlanB\Wand\Core\Task\Task;
 
 /**
- * Tareas.
+ * Quality Assurance
  *
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
-class SimpleTask extends Task
+class ValidateTask extends Task
 {
+
     /**
-     * Ejecuta la tarea.
-     *
-     * @return \PlanB\Wand\Core\Logger\Message\LogMessage
+     * {@inheritdoc}
      */
     public function execute(): LogMessage
     {
-        $actions = array_keys($this->getActions());
+        $message = $this->sequence('@composer/validate', '@qa');
 
-        return $this->sequence(...$actions);
+        if ($message->isSuccessful()) {
+            $message = $this->sequenceFrom($message, '@tdd/unit');
+        }
+        
+        return $message;
     }
 }

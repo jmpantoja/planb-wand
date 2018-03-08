@@ -12,7 +12,6 @@ namespace PlanB\WandBundle\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -29,8 +28,7 @@ class WandCommand extends BaseCommand
     {
         $this->setName('wand')
             ->addArgument('task', InputArgument::REQUIRED, 'Nombre de la tarea')
-            ->addArgument('path', InputArgument::OPTIONAL, 'Ruta de la raiz del proyecto')
-            ->addOption('only-staged', null, InputOption::VALUE_NONE, 'aplicar solo al stage de git');
+            ->addArgument('path', InputArgument::OPTIONAL, 'Ruta de la raiz del proyecto');
     }
 
     /**
@@ -41,6 +39,7 @@ class WandCommand extends BaseCommand
 
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -52,6 +51,7 @@ class WandCommand extends BaseCommand
         $this->getContextManager()->execute();
 
         $taskName = $input->getArgument('task');
+
         return $this->getTaskManager()->executeByName($taskName);
     }
 
@@ -69,7 +69,7 @@ class WandCommand extends BaseCommand
     /**
      * Prepara una tarea para ser ejecutada.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     private function initConsole(InputInterface $input, OutputInterface $output): void

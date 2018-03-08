@@ -23,12 +23,15 @@ interface ValidableProperty
      * Realiza las comprobaciones especificas de esta propiedad.
      *
      * @param mixed $answer
+     *
      * @return bool
      */
     public function validate($answer): bool;
 
     /**
      * Devuelve el mensaje de error personalizado.
+     *
+     * @param string $answer
      *
      * @return string
      */

@@ -42,12 +42,14 @@ abstract class ActionEvent extends Event
     /**
      * Termina una acción en modo silencioso.
      *
+     * @param int $exitCode
+     *
      * @return \PlanB\Wand\Core\Action\ActionEvent
      */
     public function blank(int $exitCode): self
     {
         $this->message = LogMessage::info();
-        if ($exitCode != 0) {
+        if (0 !== $exitCode) {
             $this->message = LogMessage::error();
         }
 

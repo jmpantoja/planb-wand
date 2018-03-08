@@ -47,6 +47,13 @@ class LogManager
         $this->dispatcher = $dispatcher;
     }
 
+    /**
+     * Asigna el nivel actual
+     *
+     * @param int $level
+     *
+     * @return \PlanB\Wand\Core\Logger\LogManager
+     */
     public function setLevel(int $level): LogManager
     {
         $this->level = $level;
@@ -54,6 +61,11 @@ class LogManager
         return $this;
     }
 
+    /**
+     * Muestra por consola el mensaje de incio de una tarea
+     *
+     * @param \PlanB\Wand\Core\Task\TaskInterface $task
+     */
     public function begin(TaskInterface $task): void
     {
         $level = $task->getLevel();
@@ -165,6 +177,7 @@ class LogManager
 
     /**
      * Pide confirmación al usuario.
+     *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      *
      * @param string $message

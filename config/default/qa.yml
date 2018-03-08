@@ -37,39 +37,42 @@ actions:
           action: create
           chmod: 0644
 
-
   lint:
     group: qa
     classname: \PlanB\Wand\Core\Command\SymfonyCommand
     params:
-      pattern: vendor/bin/phplint --no-configuration %src%
+      pattern: vendor/bin/phplint --no-configuration %changes%
       command: \Overtrue\PHPLint\Command\LintCommand
+      only_modified: true
 
   phpcpd:
     group: qa
     classname: \PlanB\Wand\Core\Command\SymfonyCommand
     params:
-      pattern: vendor/bin/phpcpd --min-tokens 30 %src%
+      pattern: vendor/bin/phpcpd --min-tokens 30 %changes%
       command: \PlanB\Wand\Legacy\Phpcpd\PhpcpdCommand
-
+      only_modified: true
 
   phpmd:
     group: qa
     classname: \PlanB\Wand\Qa\Command\PhpmdCommand
     params:
-      pattern: vendor/bin/phpmd %src% text %project%/.phpmd.xml --minimumpriority 3
+      pattern: vendor/bin/phpmd %changes% text %project%/.phpmd.xml --minimumpriority 3
+      only_modified: true
 
   phpcbf:
     group: qa
     classname: \PlanB\Wand\Qa\Command\PhpcbfCommand
     params:
-      pattern: vendor/bin/phpcbf %src% -p --standard=%project%/.phpcs.xml -q
+      pattern: vendor/bin/phpcbf %changes% -p --standard=%project%/.phpcs.xml -q
+      only_modified: true
 
   phpcs:
     group: qa
     classname: \PlanB\Wand\Qa\Command\PhpcsCommand
     params:
-      pattern: vendor/bin/phpcs %src% -p --standard=%project%/.phpcs.xml -q
+      pattern: vendor/bin/phpcs %changes% -p --standard=%project%/.phpcs.xml -q
+      only_modified: true
 
 
 

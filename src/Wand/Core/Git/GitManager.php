@@ -17,7 +17,6 @@ use Symfony\Component\Process\Process;
 /**
  * Control del stage de git
  *
- * @package PlanB\Spine\Core\Git
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class GitManager
@@ -27,6 +26,11 @@ class GitManager
      * @var string
      */
     private $projectPath;
+
+    /**
+     * @var null|string[]
+     */
+    private $whiteList = null;
 
     /**
      * GitManager constructor.
@@ -42,6 +46,7 @@ class GitManager
      * Crea una nueva instancia del manager
      *
      * @param string $base
+     *
      * @return \PlanB\Wand\Core\Git\GitManager
      */
     public static function create(string $base): self
@@ -59,6 +64,22 @@ class GitManager
         return $this->run('git status')->isSuccessful();
     }
 
+
+    /**
+     * Asigna una lista de archivos sobre los que si podemos actuar
+     *
+     * @param null|string[] $files
+     *
+     * @return \PlanB\Wand\Core\Git\GitManager
+     */
+    public function setWhiteList(?array $files): self
+    {
+        $this->whiteList = $files;
+
+        return $this;
+    }
+
+
     /**
      * Devuelve los archivos que estan en el stage
      *
@@ -73,13 +94,33 @@ class GitManager
         $files = explode("\n", $output);
 
         $files = array_filter($files, function ($file) {
-            if (empty($file)) {
-                return false;
-            }
-            return Path::create($file)->extension() === 'php';
+            return $this->verifyFile($file);
         });
 
         return array_values($files);
+    }
+
+    /**
+     * Indica si un archivo es procesable o no
+     *
+     * @param string $file
+     *
+     * @return bool
+     */
+    private function verifyFile(string $file): bool
+    {
+        if (empty($file)) {
+            return false;
+        }
+
+        $verified = 'php' === Path::create($file)->extension();
+
+
+        if (!is_null($this->whiteList)) {
+            $verified = in_array($file, $this->whiteList);
+        }
+
+        return $verified;
     }
 
 
@@ -91,6 +132,7 @@ class GitManager
     public function hasStagedFiles(): bool
     {
         $files = $this->getStagedFiles();
+
         return count($files) > 0;
     }
 
@@ -115,6 +157,7 @@ class GitManager
      * Añade un archivo al stage de git
      *
      * @param string $file
+     *
      * @return bool
      */
     protected function gitAdd(string $file): bool
@@ -146,6 +189,7 @@ class GitManager
      * Devuelve un proceso despues de ejecutar un comando git
      *
      * @param string $cmd
+     *
      * @return \Symfony\Component\Process\Process
      */
     protected function run(string $cmd): Process

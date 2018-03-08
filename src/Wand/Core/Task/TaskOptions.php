@@ -49,6 +49,7 @@ class TaskOptions extends Options
      * Indica si todos los elementos del array son instancias de ActionInterface.
      *
      * @param mixed[] $actions
+     *
      * @return mixed
      */
     public function isValidActions(array $actions)

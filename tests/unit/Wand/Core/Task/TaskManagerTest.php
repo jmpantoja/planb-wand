@@ -173,7 +173,10 @@ class TaskManagerTest extends Unit
     private function getTaskManager(): TaskManager
     {
         $context = $this->stub(ContextManager::class, [
-            'getContext' => $this->stub(Context::class)
+            'getContext' => $this->stub(Context::class, [
+                'updateLastExecution' => null
+            ]),
+
         ]);
 
         $logger = $this->stub(LogManager::class);

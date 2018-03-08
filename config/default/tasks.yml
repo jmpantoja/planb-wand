@@ -4,7 +4,7 @@ tasks:
     classname: \PlanB\Wand\Core\Task\SimpleTask
     description: wubba lubba dub dub
     actions:
-      "@composer":
+      "@composer/validate":
       "@init/project":
       "@init/info":
       "@init/codecept":
@@ -14,9 +14,9 @@ tasks:
       "@init/documentation":
 
   validate:
-    classname: \PlanB\Wand\Core\Task\SimpleTask
+    classname: \PlanB\Wand\Qa\Task\ValidateTask
     description: wubba lubba dub dub
     actions:
-      "@composer":
+      "@composer/validate":
       "@qa":
-      "@tdd/coverage":
+      "@tdd/unit":

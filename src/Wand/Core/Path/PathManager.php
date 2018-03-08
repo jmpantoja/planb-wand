@@ -77,7 +77,6 @@ class PathManager
      * Localiza el directorio del proyecto
      * Busca un fichero composer.json en el projectDir o en sus padres, hasta encontralo.
      *
-     *
      * @param string $projectDir
      *
      * @return string

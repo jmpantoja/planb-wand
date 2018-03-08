@@ -23,6 +23,7 @@ class TaskMissingException extends \RuntimeException
      * @param string          $task
      * @param string[]        $availables
      * @param null|\Throwable $previous
+     *
      * @return \PlanB\Wand\Core\Task\Exception\TaskMissingException
      */
     public static function create(string $task, array $availables, ?\Throwable $previous = null): self

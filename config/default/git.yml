@@ -17,10 +17,9 @@ actions:
       pattern: git init %project%
       title: git init
 
-
   gitignore:
         group: git
-        classname: \PlanB\Wand\Core\File\File
+        classname: \PlanB\Wand\Git\File\GitIgnoreFile
         params:
           template: '@wand.git/gitignore.twig'
           target: .gitignore

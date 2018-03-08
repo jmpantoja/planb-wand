@@ -104,7 +104,7 @@ final class PhpcpdCommand extends AbstractCommand
     /**
      * Executes the current command.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return null|int null or 0 if everything went fine, or an error code
@@ -124,6 +124,7 @@ final class PhpcpdCommand extends AbstractCommand
 
         if (empty($files)) {
             $output->writeln('No files found to scan');
+
             return 0;
         }
 
@@ -136,7 +137,7 @@ final class PhpcpdCommand extends AbstractCommand
 
         $strategy = new DefaultStrategy();
         $detector = new Detector($strategy, $progressBar);
-        $quiet = $output->getVerbosity() === OutputInterface::VERBOSITY_QUIET;
+        $quiet = OutputInterface::VERBOSITY_QUIET === $output->getVerbosity();
 
         $clones = $detector->copyPasteDetection(
             $files,
@@ -178,7 +179,7 @@ final class PhpcpdCommand extends AbstractCommand
 
     /**
      * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param string $option
+     * @param string                                          $option
      *
      * @return string[]
      */

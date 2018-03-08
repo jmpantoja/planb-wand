@@ -18,6 +18,7 @@ namespace PlanB\Wand\Core\Logger\Question;
  */
 final class QuestionMessage
 {
+
     /**
      * @var string
      */

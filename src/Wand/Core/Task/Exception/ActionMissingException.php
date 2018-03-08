@@ -23,6 +23,7 @@ class ActionMissingException extends \RuntimeException
      * @param string          $action
      * @param string[]        $availables
      * @param null|\Throwable $previous
+     *
      * @return \PlanB\Wand\Core\Task\Exception\ActionMissingException
      */
     public static function create(string $action, array $availables, ?\Throwable $previous = null): self

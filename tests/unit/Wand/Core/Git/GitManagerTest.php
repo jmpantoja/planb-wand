@@ -13,7 +13,6 @@ namespace PlanB\Wand\Core\Git;
 
 
 use Codeception\Test\Unit;
-use Composer\Util\Git;
 use PlanB\Utils\Dev\Tdd\Data\Data;
 use PlanB\Utils\Dev\Tdd\Data\Provider;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
@@ -82,6 +81,9 @@ class GitManagerTest extends Unit
      *
      * @covers ::hasStagedFiles
      * @covers ::getStagedFiles
+     * @covers ::verifyFile
+     * @covers ::setWhiteList
+     *
      * @covers ::run
      */
     public function testStageFiles()
@@ -97,14 +99,33 @@ class GitManagerTest extends Unit
         $this->tester->assertTrue($manager->hasStagedFiles());
 
         $files = $manager->getStagedFiles();
-        $this->tester->assertCount(3, $files);
-
         $this->assertEquals([
             'src/FileA.php',
             'src/FileC.php',
             'src/FileD.php',
         ], $files);
 
+
+
+        $manager->setWhiteList([
+            'src/FileA.php',
+            'src/FileD.php',
+        ]);
+
+        $files = $manager->getStagedFiles();
+        $this->assertEquals([
+            'src/FileA.php',
+            'src/FileD.php',
+        ], $files);
+
+
+        $manager->setWhiteList(null);
+        $files = $manager->getStagedFiles();
+        $this->assertEquals([
+            'src/FileA.php',
+            'src/FileC.php',
+            'src/FileD.php',
+        ], $files);
     }
 
 

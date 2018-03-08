@@ -279,6 +279,7 @@ abstract class Task extends Action implements TaskInterface
      * Ejecuta varias acciones
      *
      * @param string[] ...$actions
+     *
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
     public function sequence(string ...$actions): LogMessage
@@ -293,7 +294,8 @@ abstract class Task extends Action implements TaskInterface
      * Ejecuta varias acciones
      *
      * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
-     * @param string[] ...$actions
+     * @param string[]                                   ...$actions
+     *
      * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
     public function sequenceFrom(LogMessage $message, string ...$actions): LogMessage

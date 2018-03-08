@@ -4,6 +4,7 @@ tasks:
     classname: \PlanB\Wand\Tdd\Task\CodeceptTask
     description: wubba lubba dub dub
     actions:
+      phpunit:
       codeception:
       codecept_bootstrap:
       unit_bootstrap:
@@ -11,6 +12,14 @@ tasks:
       functional_bootstrap:
 
 actions:
+  phpunit:
+        group: git
+        classname: \PlanB\Wand\Core\File\File
+        params:
+          template: ''
+          target: phpunit.xml
+          action: remove
+
   codeception:
         group: tdd
         classname: \PlanB\Wand\Core\File\File

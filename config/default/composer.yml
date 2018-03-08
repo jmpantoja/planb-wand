@@ -1,6 +1,6 @@
 ---
 tasks:
-  composer:
+  "composer/validate":
     classname: \PlanB\Wand\Composer\Task\ComposerTask
     description: wubba lubba dub dub
     actions:
@@ -9,14 +9,14 @@ tasks:
 
 actions:
   validate:
-        group: project
+        group: composer
         classname: \PlanB\Wand\Core\Command\SystemCommand
         params:
           pattern: composer validate -d %project%
           title: composer validate
 
   update:
-        group: project
+        group: composer
         classname: \PlanB\Wand\Core\Command\SystemCommand
         params:
           pattern: composer update -d %project%

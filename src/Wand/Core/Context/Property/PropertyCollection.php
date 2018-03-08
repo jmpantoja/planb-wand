@@ -14,7 +14,6 @@ namespace PlanB\Wand\Core\Context\Property;
 /**
  * Gestiona el listado de propiedades
  *
- * @package PlanB\Wand\Core\Context\Property
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class PropertyCollection

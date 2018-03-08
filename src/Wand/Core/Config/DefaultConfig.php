@@ -18,6 +18,11 @@ use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
+/**
+ * Valida la configuración por defecto
+ *
+ * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
+ */
 final class DefaultConfig extends BaseConfig
 {
     /**
@@ -38,6 +43,11 @@ final class DefaultConfig extends BaseConfig
         return $treeBuilder;
     }
 
+    /**
+     * Define el nodo acciones
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $root
+     */
     private function defineActions(NodeBuilder $root): void
     {
         $root->arrayNode('actions')
@@ -49,6 +59,11 @@ final class DefaultConfig extends BaseConfig
             ->end();
     }
 
+    /**
+     * Define el nodo action/group
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
+     */
     private function getActionGroupNode(): ScalarNodeDefinition
     {
         $node = new ScalarNodeDefinition('group');
@@ -58,6 +73,14 @@ final class DefaultConfig extends BaseConfig
         return $node;
     }
 
+    /**
+     * Define el nodo classname
+     *
+     * @param string      $interface
+     * @param null|string $default
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
+     */
     private function getClassNameNode(string $interface, ?string $default = null): ScalarNodeDefinition
     {
         $node = new ScalarNodeDefinition('classname');
@@ -76,6 +99,11 @@ final class DefaultConfig extends BaseConfig
         return $node;
     }
 
+    /**
+     * Define el nodo params
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     */
     private function getParamsNode(): ArrayNodeDefinition
     {
         $node = new ArrayNodeDefinition('params');
@@ -86,6 +114,11 @@ final class DefaultConfig extends BaseConfig
         return $node;
     }
 
+    /**
+     * Define el nodo tasks
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $root
+     */
     private function defineTasks(NodeBuilder $root): void
     {
         $root->arrayNode('tasks')
@@ -96,6 +129,12 @@ final class DefaultConfig extends BaseConfig
             ->end();
     }
 
+
+    /**
+     * Define el nodo task/description
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
+     */
     private function getDescriptionNode(): ScalarNodeDefinition
     {
         $node = new ScalarNodeDefinition('description');
@@ -105,14 +144,18 @@ final class DefaultConfig extends BaseConfig
         return $node;
     }
 
+    /**
+     * Define le nodo task/actions
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     */
     private function getActionsNode(): ArrayNodeDefinition
     {
         $node = new ArrayNodeDefinition('actions');
 
         $node->arrayPrototype()
-        ->children()
-
-        ->end();
+            ->children()
+            ->end();
 
         return $node;
     }

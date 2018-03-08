@@ -24,6 +24,7 @@ class ActionEventFactoryException extends \RuntimeException
      *
      * @param \PlanB\Wand\Core\Action\ActionInterface $action
      * @param \Throwable|null                         $previous
+     *
      * @return \PlanB\Wand\Core\Action\Exception\ActionEventFactoryException
      */
     public static function create(ActionInterface $action, ?\Throwable $previous = null): self

@@ -80,6 +80,7 @@ class ConfirmEvent extends Event
     public function setAnswer(bool $answer): ConfirmEvent
     {
         $this->answer = $answer;
+
         return $this;
     }
 }

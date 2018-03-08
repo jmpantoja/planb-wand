@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 /**
  * This file is part of the planb project.
@@ -42,10 +42,8 @@ class CommandManager implements EventSubscriberInterface
     {
         $command = $event->getCommand();
 
-        if ($command->run()) {
-            $event->success();
-        } else {
-            $event->error();
-        }
+        $type = $command->execute();
+
+        $event->type($type);
     }
 }

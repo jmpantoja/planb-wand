@@ -1,7 +1,12 @@
 <ruleset name="Custom Standard">
     <description>My custom coding standard</description>
 
-    <rule ref="PSR2" />
+    <rule ref="vendor/escapestudios/symfony2-coding-standard/Symfony/ruleset.xml">
+        <exclude name="Symfony.Commenting.Annotations"/>
+        <exclude name="Symfony.Functions.ScopeOrder"/>
+        <exclude name="Symfony.NamingConventions.ValidClassName"/>
+        <exclude name="Symfony.WhiteSpace.DiscourageFitzinator"/>
+    </rule>
 
     <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
         <exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes"/>
@@ -10,10 +15,21 @@
         <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants"/>
         <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions"/>
         <exclude name="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces"/>
-        <exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison"/>
         <exclude name="SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces"/>
         <exclude name="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly"/>
+        <exclude name="SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming"/>
     </rule>
+
+    <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing" >
+        <properties>
+            <property name="linesCountBetweenDifferentAnnotationsTypes" value="1"/>
+        </properties>
+    </rule>
+
 
     <arg name="parallel" value="16"/>
 </ruleset>

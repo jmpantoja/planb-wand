@@ -22,6 +22,7 @@ class InvalidProjectDirectoryException extends \RuntimeException
      *
      * @param string     $path
      * @param \Throwable $previous
+     *
      * @return \PlanB\Wand\Core\Path\Exception\InvalidProjectDirectoryException
      */
     public static function notFound(string $path, ?\Throwable $previous = null): self
@@ -36,12 +37,12 @@ class InvalidProjectDirectoryException extends \RuntimeException
      *
      * @param string          $path
      * @param \Throwable|null $previous
+     *
      * @return \PlanB\Wand\Core\Path\Exception\InvalidProjectDirectoryException
      */
     public static function composerMissing(string $path, ?\Throwable $previous = null): self
     {
-        $message = sprintf("No se encuentra el archivo composer.json en el directorio '%s', ".
-        'ni en ninguno de sus padres', $path);
+        $message = sprintf("No se encuentra el archivo composer.json en el directorio '%s', ".'ni en ninguno de sus padres', $path);
 
         return new self($message, 0, $previous);
     }

@@ -198,7 +198,36 @@ class SystemCommandTest extends Unit
     /**
      * @test
      *
+     * @covers ::execute
      * @covers ::run
+     *
+     * @covers ::getModifiedFiles
+     * @covers ::parseModifiedFiles
+     * @covers ::isRunnable
+     *
+     * @covers ::isSuccessful
+     * @covers ::buildOutput
+     * @covers ::getSuccessOutput
+     * @covers ::getOutput
+     */
+    public function testRunSkip()
+    {
+        $command = $this->getCommmand(true);
+
+        $this->assertTrue($command->execute()->isSkipped());
+        $this->assertEquals('No se ha modificado nigún archivo desde la última ejecución', $command->getOutput());
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::execute
+     * @covers ::run
+     *
+     * @covers ::getModifiedFiles
+     * @covers ::parseModifiedFiles
+     * @covers ::isRunnable
+     *
      * @covers ::isSuccessful
      * @covers ::buildOutput
      * @covers ::getSuccessOutput
@@ -217,7 +246,7 @@ class SystemCommandTest extends Unit
 
 
         $command = $this->getCommmand();
-        $command->run();
+        $this->assertTrue($command->execute()->isSuccessful());
 
         $this->assertEquals('output', $command->getOutput());
     }
@@ -226,7 +255,13 @@ class SystemCommandTest extends Unit
     /**
      * @test
      *
+     * @covers ::execute
      * @covers ::run
+     *
+     * @covers ::getModifiedFiles
+     * @covers ::parseModifiedFiles
+     * @covers ::isRunnable
+     *
      * @covers ::isSuccessful
      * @covers ::buildOutput
      * @covers ::getErrorOutput
@@ -246,6 +281,8 @@ class SystemCommandTest extends Unit
 
         $command = $this->getCommmand();
         $command->run();
+
+        $this->assertTrue($command->execute()->isError());
 
         $this->assertEquals('output', $command->getOutput());
     }
@@ -278,12 +315,15 @@ class SystemCommandTest extends Unit
         $this->assertEquals('output', $command->getOutput());
     }
 
+
     /**
      * @return Command
      */
-    protected function getCommmand(): Command
+    protected function getCommmand(bool $onlyModified = false, array $files = []): Command
     {
-        $context = $this->stub(Context::class);
+        $context = $this->stub(Context::class, [
+            'getModifiedFiles' => $files
+        ]);
         $context->allows()
             ->getPath('vendor/bin')
             ->andReturn(Path::join(realpath('.'), 'vendor/bin'));
@@ -309,7 +349,8 @@ class SystemCommandTest extends Unit
             'group' => 'group',
             'params' => [
                 'pattern' => 'ls -la %target%',
-                'cwd' => 'vendor/bin'
+                'cwd' => 'vendor/bin',
+                'only_modified' => $onlyModified
             ]
         ]);
 

@@ -19,6 +19,14 @@ actions:
           action: create
           chmod: 0644
 
+  bin:
+        group: project
+        classname: \PlanB\Wand\Core\File\Directory
+        params:
+          target: bin
+          action: create
+          chmod: 0644
+
   tests:
         group: project
         classname: \PlanB\Wand\Core\File\Directory

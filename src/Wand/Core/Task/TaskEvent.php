@@ -59,6 +59,8 @@ class TaskEvent extends ActionEvent
      * Configura el mensaje de log.
      *
      * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function configureLog(LogMessage $message): void
     {

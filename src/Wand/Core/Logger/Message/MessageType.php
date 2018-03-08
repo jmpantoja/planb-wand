@@ -16,6 +16,7 @@ use MabeEnum\Enum;
  * Tipos de mensaje de log.
  *
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
+ *
  *  @method static MessageType ERROR()
  *  @method static MessageType SUCCESS()
  *  @method static MessageType SKIP()

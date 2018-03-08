@@ -45,6 +45,7 @@ class QaTaskTest extends Unit
      *
      * @covers ::execute
      * @covers ::hasStagedFiles
+     * @covers ::shouldBeRestaged
      */
     public function testExecute()
     {
@@ -103,6 +104,7 @@ class QaTaskTest extends Unit
      *
      * @covers ::execute
      * @covers ::hasStagedFiles
+     * @covers ::shouldBeRestaged
      */
     public function testExecuteFail()
     {

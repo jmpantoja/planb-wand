@@ -31,19 +31,42 @@ class PropertyOptions extends Options
         $this->defineMessage($resolver);
     }
 
+    /**
+     * Define el atributo path
+     *
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
+     */
     private function definePath(OptionsResolver $resolver): void
     {
         $resolver->setRequired('path');
         $resolver->setAllowedTypes('path', ['string']);
     }
 
+    /**
+     * Define el atributo message
+     *
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
+     */
     private function defineMessage(OptionsResolver $resolver): void
     {
         $resolver->setRequired('message');
 
         $resolver->setAllowedTypes('message', ['string']);
-        $resolver->setNormalizer('message', function (OptionsResolver $resolver, string $message) {
-            return sprintf('%s: ', trim($message));
-        });
+        $resolver->setNormalizer('message', \Closure::fromCallable([$this, 'normalizeMessage']));
+    }
+
+    /**
+     * Normaliza el texto del mensaje
+     *
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
+     * @param string                                             $message
+     *
+     * @@SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @return string
+     */
+    protected function normalizeMessage(OptionsResolver $resolver, string $message): string
+    {
+        return sprintf('%s: ', trim($message));
     }
 }

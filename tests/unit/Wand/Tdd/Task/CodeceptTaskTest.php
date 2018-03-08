@@ -63,6 +63,11 @@ class CodeceptTaskTest extends Unit
             ->andReturn($file);
 
         $task->allows()
+            ->run('phpunit')
+            ->once()
+            ->andReturn(LogMessage::info());
+
+        $task->allows()
             ->run('codecept_bootstrap')
             ->once()
             ->andReturns(LogMessage::info());
@@ -119,6 +124,11 @@ class CodeceptTaskTest extends Unit
         $task->allows()
             ->file('codeception')
             ->andReturn($file);
+
+        $task->allows()
+            ->run('phpunit')
+            ->once()
+            ->andReturn(LogMessage::info());
 
         $task->allows()
             ->run('codecept_bootstrap')

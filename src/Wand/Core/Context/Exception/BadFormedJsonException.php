@@ -14,7 +14,6 @@ namespace PlanB\Wand\Core\Context\Exception;
 /**
  * Se lanza cuando se encuentran errores de sintaxis en composer.json
  *
- * @package PlanB\Wand\Core\Context\Exception
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class BadFormedJsonException extends \RuntimeException
@@ -23,13 +22,15 @@ class BadFormedJsonException extends \RuntimeException
     /**
      * Crea una excepción
      *
-     * @param string $path
+     * @param string     $path
      * @param \Throwable $previous
+     *
      * @return \PlanB\Wand\Core\Context\Exception\BadFormedJsonException
      */
     public static function create(string $path, ?\Throwable $previous = null): self
     {
         $message = sprintf('El archivo %s no está bien formado', $path);
+
         return new self($message, 0, $previous);
     }
 }

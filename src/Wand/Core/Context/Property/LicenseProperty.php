@@ -12,6 +12,11 @@ namespace PlanB\Wand\Core\Context\Property;
 
 use PlanB\Wand\Core\Context\Property;
 
+/**
+ * Propiedad License
+ *
+ * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
+ */
 class LicenseProperty extends Property
 {
     /**

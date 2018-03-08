@@ -22,6 +22,6 @@ actions:
         classname: \PlanB\Wand\Core\File\File
         params:
           template: '@wand.docs/sami.twig'
-          target: sami.php
+          target: .sami.php
           action: create
           chmod: 0644

@@ -29,6 +29,7 @@ class PropertyOptionsTest extends Unit
      * @covers ::configure
      * @covers ::definePath
      * @covers ::defineMessage
+     * @covers ::normalizeMessage
      * @covers ::resolve
      *
      */
@@ -59,6 +60,7 @@ class PropertyOptionsTest extends Unit
      * @covers ::configure
      * @covers ::definePath
      * @covers ::defineMessage
+     * @covers ::normalizeMessage
      * @covers ::resolve
      *
      * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException

@@ -14,6 +14,11 @@ namespace PlanB\Wand\Core\Command;
 use PlanB\Utils\Path\Path;
 use Symfony\Component\Process\Process;
 
+/**
+ * Comandos del sistema
+ *
+ * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
+ */
 class SystemCommand extends Command
 {
 
@@ -30,7 +35,7 @@ class SystemCommand extends Command
     protected function __construct(array $params)
     {
         parent::__construct($params);
-        $this->cwd = (string)$params['cwd'];
+        $this->cwd = (string) $params['cwd'];
     }
 
     /**
@@ -52,6 +57,8 @@ class SystemCommand extends Command
 
     /**
      * @inheritDoc
+     *
+     * @return string
      */
     public function getCommandLine(): string
     {
@@ -61,6 +68,7 @@ class SystemCommand extends Command
         if (!empty($cwd)) {
             $commandLine = Path::join($cwd, $commandLine);
         }
+
         return $commandLine;
     }
 

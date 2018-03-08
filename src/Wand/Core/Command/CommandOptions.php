@@ -33,10 +33,10 @@ class CommandOptions extends Options
         $this->definePattern($resolver);
         $this->defineGroup($resolver);
         $this->defineTitle($resolver);
+        $this->defineOnlyModified($resolver);
 
         $profile = $this->getProfile();
-
-        if ($profile === 'symfony') {
+        if ('symfony' === $profile) {
             $this->defineCommand($resolver);
         } else {
             $this->defineCwd($resolver);
@@ -76,9 +76,19 @@ class CommandOptions extends Options
     {
         $resolver->setRequired('command');
         $resolver->addAllowedTypes('command', ['string']);
-        $resolver->addAllowedValues('command', function ($value) {
-            return is_subclass_of($value, ConsoleCommand::class);
-        });
+        $resolver->addAllowedValues('command', \Closure::fromCallable([$this, 'validateCommand']));
+    }
+
+    /**
+     * Indica si un comando es correcto
+     *
+     * @param string $value
+     *
+     * @return bool
+     */
+    protected function validateCommand(string $value): bool
+    {
+        return is_subclass_of($value, ConsoleCommand::class);
     }
 
     /**
@@ -102,5 +112,18 @@ class CommandOptions extends Options
         $resolver->setDefined('title');
         $resolver->addAllowedTypes('title', ['string', 'null']);
         $resolver->setDefault('title', null);
+    }
+
+
+    /**
+     * Define el atributo 'group'.
+     *
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
+     */
+    private function defineOnlyModified(OptionsResolver $resolver): void
+    {
+        $resolver->setDefined('only_modified');
+        $resolver->addAllowedTypes('only_modified', ['bool']);
+        $resolver->setDefault('only_modified', false);
     }
 }

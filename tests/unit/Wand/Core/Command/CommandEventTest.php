@@ -17,6 +17,7 @@ use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Utils\Path\Path;
 use PlanB\Wand\Core\Context\Context;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
+use PlanB\Wand\Core\Logger\Message\MessageType;
 
 /**
  * Class CommandText
@@ -47,6 +48,55 @@ class CommandEventTest extends Unit
     public function testCreate()
     {
 
+        $command = $this->getCommand();
+        $event = new CommandEvent($command);
+
+        $this->tester->assertEquals($command, $event->getCommand());
+        $this->tester->assertEquals('wand.cmd.execute', $event->getName());
+
+        $message = LogMessage::success();
+        $event->configureLog($message);
+
+        $lines = $message->parseVerbose();
+        $this->tester->assertContains('Execute command', $lines[0]);
+
+
+        $message = LogMessage::skip();
+        $event->configureLog($message);
+
+        $lines = $message->parseVerbose();
+        $this->tester->assertContains('Execute command', $lines[0]);
+
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::type
+     */
+    public function testType()
+    {
+
+        $command = $this->getCommand();
+        $event = new CommandEvent($command);
+
+        $event->type(MessageType::SUCCESS());
+        $this->assertTrue($event->getMessage()->isSuccessful());
+
+        $event->type(MessageType::SKIP());
+        $this->assertTrue($event->getMessage()->isSkipped());
+
+
+        $event->type(MessageType::ERROR());
+        $this->assertTrue($event->getMessage()->isError());
+
+    }
+
+    /**
+     * @return Command
+     */
+    protected function getCommand(): Command
+    {
         $context = $this->stub(Context::class);
         $context->allows()
             ->getPath('vendor/bin')
@@ -64,11 +114,9 @@ class CommandEventTest extends Unit
             ->getPath('target')
             ->andReturn(realpath('.'));
 
-
         $context->allows()
             ->getPath('wand')
             ->andReturn(realpath('.'));
-
 
         $command = SystemCommand::create([
             'group' => 'metainfo',
@@ -78,19 +126,6 @@ class CommandEventTest extends Unit
         ]);
 
         $command->setContext($context);
-
-        $event = new CommandEvent($command);
-
-        $this->tester->assertEquals($command, $event->getCommand());
-        $this->tester->assertEquals('wand.cmd.execute', $event->getName());
-
-
-        $message = LogMessage::success();
-        $event->configureLog($message);
-
-        $lines = $message->parseVerbose();
-
-        $this->tester->assertContains('Execute command', $lines[0]);
-
+        return $command;
     }
 }

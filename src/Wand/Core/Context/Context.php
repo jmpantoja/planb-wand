@@ -10,9 +10,12 @@
 
 namespace PlanB\Wand\Core\Context;
 
+use PlanB\Utils\Path\Path;
 use PlanB\Wand\Core\Context\Exception\UnknowParamException;
 use PlanB\Wand\Core\Context\Exception\UnknowPathException;
 use PlanB\Wand\Core\Git\GitManager;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Contexto de la aplicación.
@@ -37,6 +40,11 @@ class Context
     private $gitManager;
 
     /**
+     * @var \PlanB\Wand\Core\Context\ContextCache
+     */
+    private $cache;
+
+    /**
      * Context constructor.
      *
      * @param string[] $params
@@ -49,6 +57,8 @@ class Context
 
         $base = $this->getPath('project');
         $this->gitManager = GitManager::create($base);
+
+        $this->cache = ContextCache::create($base);
     }
 
     /**
@@ -79,6 +89,60 @@ class Context
         }
 
         return $this->paths[$name];
+    }
+
+    /**
+     * Devuelve una ruta, relativa a una de las rutas del contexto
+     *
+     * @param string $path
+     * @param string $base
+     *
+     * @return string
+     */
+    public function getPathRelativeTo(string $path, string $base = 'project'): string
+    {
+        $fileSystem = new Filesystem();
+        $base = $this->getPath($base);
+
+        $relative = $fileSystem->makePathRelative($path, $base);
+
+        return Path::normalize($relative);
+    }
+
+    /**
+     * Devuelve los archivos php modificados en una ruta
+     *
+     * @param string $name
+     *
+     * @return string[]
+     */
+    public function getModifiedFiles(string $name): array
+    {
+
+        $files = [];
+        $path = $this->getPath($name);
+
+        $finder = new Finder();
+        $finder->in($path)->name('*.php');
+
+        foreach ($finder as $fileInfo) {
+            if (!$this->cache->filter($fileInfo)) {
+                continue;
+            }
+
+            $files[] = $this->getPathRelativeTo($fileInfo->getPathname());
+        }
+
+        return $files;
+    }
+
+
+    /**
+     * Actualiza el timestamp de última ejecución
+     */
+    public function updateLastExecution(): void
+    {
+        $this->cache->update();
     }
 
     /**
@@ -115,6 +179,11 @@ class Context
      */
     public function getGitManager(): GitManager
     {
+        $files = $this->getModifiedFiles('src');
+
+
+        $this->gitManager->setWhiteList($files);
+
         return $this->gitManager;
     }
 }

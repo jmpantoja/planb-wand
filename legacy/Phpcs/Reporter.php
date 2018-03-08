@@ -3,6 +3,51 @@
  * Manages reporting of errors and warnings.
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
+}//end class *
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
@@ -18,7 +63,9 @@ use PHP_CodeSniffer\Util\Common;
 
 /**
  * Class Reporter
+ *
  * @package PlanB\WandBundle\Phpcs
+ *
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  *
  * @SuppressWarnings(PHPMD)
@@ -100,6 +147,7 @@ class Reporter
      * @param \PHP_CodeSniffer\Config $config The config data for the run.
      *
      * @return void
+     *
      * @throws \PHP_CodeSniffer\Exceptions\RuntimeException If a report is not available.
      */
     public function __construct(Config $config)
@@ -109,26 +157,26 @@ class Reporter
         foreach ($config->reports as $type => $output) {
             $type = ucfirst($type);
 
-            if ($output === null) {
+            if (null === $output) {
                 $output = $config->reportFile;
             }
 
-            if (strpos($type, '.') !== false) {
+            if (false !== strpos($type, '.')) {
                 // This is a path to a custom report class.
                 $filename = realpath($type);
-                if ($filename === false) {
-                    $error = "ERROR: Custom report \"$type\" not found" . PHP_EOL;
+                if (false === $filename) {
+                    $error = "ERROR: Custom report \"$type\" not found".PHP_EOL;
                     throw new DeepExitException($error, 3);
                 }
 
                 $reportClassName = Autoload::loadFile($filename);
             } else {
-                $reportClassName = 'PHP_CodeSniffer\Reports\\' . $type;
+                $reportClassName = 'PHP_CodeSniffer\Reports\\'.$type;
             }
 
             $reportClass = new $reportClassName();
-            if (($reportClass instanceof Report) === false) {
-                throw new RuntimeException('Class "' . $reportClassName . '" must implement the "PHP_CodeSniffer\Report" interface.');
+            if (false === ($reportClass instanceof Report)) {
+                throw new RuntimeException('Class "'.$reportClassName.'" must implement the "PHP_CodeSniffer\Report" interface.');
             }
 
             $this->reports[$type] = [
@@ -136,7 +184,7 @@ class Reporter
                 'class' => $reportClass,
             ];
 
-            if ($output === null) {
+            if (null === $output) {
                 // Using a temp file.
                 // This needs to be set in the constructor so that all
                 // child procs use the same report file when running in parallel.
@@ -161,7 +209,7 @@ class Reporter
     {
         $lines = [];
         foreach ($this->reports as $type => $output) {
-            if ($output['output'] === null) {
+            if (null === $output['output']) {
                 $toScreen = true;
             }
 
@@ -185,11 +233,11 @@ class Reporter
         $reportClass = $this->reports[$report]['class'];
         $reportFile = $this->reports[$report]['output'];
 
-        if ($reportFile !== null) {
+        if (null !== $reportFile) {
             $filename = $reportFile;
             $toScreen = false;
         } else {
-            if (isset($this->tmpFiles[$report]) === true) {
+            if (true === isset($this->tmpFiles[$report])) {
                 $filename = $this->tmpFiles[$report];
             } else {
                 $filename = null;
@@ -199,7 +247,7 @@ class Reporter
         }
 
         $reportCache = '';
-        if ($filename !== null) {
+        if (null !== $filename) {
             $reportCache = file_get_contents($filename);
         }
 
@@ -218,19 +266,20 @@ class Reporter
         $generatedReport = ob_get_contents();
         ob_end_clean();
 
-        if ($this->config->colors !== true || $reportFile !== null) {
+        if (true !== $this->config->colors || null !== $reportFile) {
             $generatedReport = preg_replace('`\033\[[0-9;]+m`', '', $generatedReport);
         }
 
-        if ($reportFile !== null) {
-            file_put_contents($reportFile, $generatedReport . PHP_EOL);
+        if (null !== $reportFile) {
+            file_put_contents($reportFile, $generatedReport.PHP_EOL);
         } else {
-            if ($filename !== null && file_exists($filename) === true) {
+            if (null !== $filename && true === file_exists($filename)) {
                 unlink($filename);
                 unset($this->tmpFiles[$report]);
             }
         }
-        return (array)$generatedReport;
+
+        return (array) $generatedReport;
     }//end printReport()
 
 
@@ -242,11 +291,10 @@ class Reporter
      * and not reflect the final report output.
      *
      * @param \PHP_CodeSniffer\Files\File $phpcsFile The file that has been processed.
-     *
      */
     public function cacheFileReport(File $phpcsFile): void
     {
-        if (isset($this->config->reports) === false) {
+        if (false === isset($this->config->reports)) {
             // This happens during unit testing, or any time someone just wants
             // the error data and not the printed report.
             return;
@@ -260,16 +308,16 @@ class Reporter
 
             ob_start();
             $result = $reportClass->generateFileReport($reportData, $phpcsFile, $this->config->showSources, $this->config->reportWidth);
-            if ($result === true) {
+            if (true === $result) {
                 $errorsShown = true;
             }
 
             $generatedReport = ob_get_contents();
             ob_end_clean();
 
-            if ($report['output'] === null) {
+            if (null === $report['output']) {
                 // Using a temp file.
-                if (isset($this->tmpFiles[$type]) === false) {
+                if (false === isset($this->tmpFiles[$type])) {
                     // When running in interactive mode, the reporter prints the full
                     // report many times, which will unlink the temp file. So we need
                     // to create a new one if it doesn't exist.
@@ -283,7 +331,7 @@ class Reporter
             }//end if
         }//end foreach
 
-        if ($errorsShown !== true && PHP_CODESNIFFER_CBF !== true) {
+        if (true !== $errorsShown && true !== PHP_CODESNIFFER_CBF) {
             return;
         }
 
@@ -293,7 +341,7 @@ class Reporter
 
         // When PHPCBF is running, we need to use the fixable error values
         // after the report has run and fixed what it can.
-        if (PHP_CODESNIFFER_CBF === true) {
+        if (true === PHP_CODESNIFFER_CBF) {
             $this->totalFixable += $phpcsFile->getFixableCount();
             $this->totalFixed += $phpcsFile->getFixedCount();
         } else {
@@ -319,12 +367,12 @@ class Reporter
             'messages' => [],
         ];
 
-        if ($report['errors'] === 0 && $report['warnings'] === 0) {
+        if (0 === $report['errors'] && 0 === $report['warnings']) {
             // Prefect score!
             return $report;
         }
 
-        if ($this->config->recordErrors === false) {
+        if (false === $this->config->recordErrors) {
             $message = 'Errors are not being recorded but this report requires error messages. ';
             $message .= 'This report will not show the correct information.';
             $report['messages'][1][1] = [
@@ -336,6 +384,7 @@ class Reporter
                     'type' => 'ERROR',
                 ],
             ];
+
             return $report;
         }
 
@@ -374,11 +423,11 @@ class Reporter
                     ];
                 }
 
-                if (isset($errors[$line]) === false) {
+                if (false === isset($errors[$line])) {
                     $errors[$line] = [];
                 }
 
-                if (isset($errors[$line][$column]) === true) {
+                if (true === isset($errors[$line][$column])) {
                     $errors[$line][$column] = array_merge(
                         $newWarnings,
                         $errors[$line][$column]
@@ -393,6 +442,7 @@ class Reporter
 
         ksort($errors);
         $report['messages'] = $errors;
+
         return $report;
     }//end prepareFileReport()
 }//end class

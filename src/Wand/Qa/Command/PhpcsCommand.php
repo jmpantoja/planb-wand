@@ -18,7 +18,6 @@ use PlanB\Wand\Legacy\Phpcs\CodeSniffer;
 /**
  * Ejecuta phpcs
  *
- * @package PlanB\Wand\Qa\Command
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class PhpcsCommand extends Command
@@ -37,13 +36,12 @@ class PhpcsCommand extends Command
      */
     public function run(): bool
     {
-
         $this->initialize();
         $tokens = $this->getTokens();
 
         $exitCode = $this->runMethod($tokens);
 
-        return $exitCode === 0;
+        return 0 === $exitCode;
     }
 
 
@@ -65,16 +63,19 @@ class PhpcsCommand extends Command
      * Asigna el objeto CodeSniffer
      *
      * @param \PlanB\Wand\Legacy\Phpcs\CodeSniffer $runner
+     *
      * @return \PlanB\Wand\Qa\Command\PhpcsCommand
      */
     public function setRunner(CodeSniffer $runner): PhpcsCommand
     {
         $this->runner = $runner;
+
         return $this;
     }
 
     /**
      * Nos aseguramos de que las clases de codesniffer esten incluidas
+     *
      * @codeCoverageIgnore
      */
     protected function initialize(): void
@@ -87,12 +88,14 @@ class PhpcsCommand extends Command
 
     /**
      * Devuelve los tokens del comando
+     *
      * @return string[]
      */
     protected function getTokens(): array
     {
         $tokens = $this->getCommandTokens();
         array_shift($tokens);
+
         return $tokens;
     }
 
@@ -101,12 +104,14 @@ class PhpcsCommand extends Command
      * Ejecuta el método phpcs
      *
      * @param mixed[] $tokens
+     *
      * @return int
      */
     protected function runMethod(array $tokens): int
     {
-        $exitCode =$this->getRunner()->runPHPCS($tokens);
+        $exitCode = $this->getRunner()->runPHPCS($tokens);
         $this->output = $this->getRunner()->getOutput();
+
         return $exitCode;
     }
 }

@@ -55,7 +55,7 @@ class ConfigManagerTest extends Unit
         $config = $manager->getConfig();
         $tasks = $config['tasks'];
 
-        $this->assertArrayHasKey('composer', $tasks);
+        $this->assertArrayHasKey('composer/validate', $tasks);
         $this->assertArrayHasKey('init/ci', $tasks);
         $this->assertArrayHasKey('init/git', $tasks);
         $this->assertArrayHasKey('init/qa', $tasks);
@@ -66,7 +66,7 @@ class ConfigManagerTest extends Unit
         $this->assertArrayHasKey('init/project', $tasks);
         $this->assertArrayHasKey('init/info', $tasks);
         $this->assertArrayHasKey('init/codecept', $tasks);
-        $this->assertArrayHasKey('tdd/coverage', $tasks);
+        $this->assertArrayHasKey('tdd/unit', $tasks);
 
         $this->assertCount(12, $tasks);
 

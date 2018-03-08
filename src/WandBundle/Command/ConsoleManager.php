@@ -49,6 +49,7 @@ class ConsoleManager implements EventSubscriberInterface
      *
      * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\Console\Helper\HelperSet       $helperSet
      */
     private function __construct(InputInterface $input, OutputInterface $output, HelperSet $helperSet)
     {
@@ -62,6 +63,7 @@ class ConsoleManager implements EventSubscriberInterface
      *
      * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\Console\Helper\HelperSet       $helperSet
      *
      * @return \PlanB\WandBundle\Command\ConsoleManager
      */

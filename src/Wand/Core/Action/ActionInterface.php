@@ -23,6 +23,7 @@ interface ActionInterface
      * Asigna el nivel en la jerarquia de tareas/acciones.
      *
      * @param int $level
+     *
      * @return \PlanB\Wand\Core\Action\ActionInterface
      */
     public function setLevel(int $level): ActionInterface;
@@ -31,6 +32,7 @@ interface ActionInterface
      * Asigna el contexto.
      *
      * @param \PlanB\Wand\Core\Context\Context $context
+     *
      * @return \PlanB\Wand\Core\Action\ActionInterface
      */
     public function setContext(Context $context): ActionInterface;

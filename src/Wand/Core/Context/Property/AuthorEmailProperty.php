@@ -35,15 +35,18 @@ class AuthorEmailProperty extends Property implements ValidableProperty
      * Realiza las comprobaciones especificas de esta propiedad.
      *
      * @param mixed $answer
+     *
      * @return bool
      */
     public function validate($answer): bool
     {
-        return filter_var($answer, FILTER_VALIDATE_EMAIL) !== false;
+        return false !== filter_var($answer, FILTER_VALIDATE_EMAIL);
     }
 
     /**
      * Devuelve el mensaje de error personalizado.
+     *
+     * @param string $answer
      *
      * @return string
      */

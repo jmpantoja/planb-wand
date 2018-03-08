@@ -16,7 +16,6 @@ use PlanB\Wand\Core\Git\GitManager;
 /**
  * Vuelve a añadir al stage los archivos modificados
  *
- * @package PlanB\Wand\Git\Command
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class GitRestageCommand extends Command
@@ -30,11 +29,13 @@ class GitRestageCommand extends Command
     public function run(): bool
     {
         $manager = $this->getGitManager();
+
         return $manager->reStageFiles();
     }
 
     /**
      * @inheritdoc
+     *
      * @return string
      */
     public function getCommandLine(): string

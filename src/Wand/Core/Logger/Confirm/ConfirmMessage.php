@@ -41,6 +41,7 @@ class ConfirmMessage
      * Crea una nueva instancia.
      *
      * @param string $message
+     *
      * @return \PlanB\Wand\Core\Logger\Confirm\ConfirmMessage
      */
     public static function create(string $message): self
@@ -52,6 +53,7 @@ class ConfirmMessage
      * Asigna el valor por defecto.
      *
      * @param bool $default
+     *
      * @return \PlanB\Wand\Core\Logger\Confirm\ConfirmMessage
      */
     public function setDefault(bool $default): ConfirmMessage

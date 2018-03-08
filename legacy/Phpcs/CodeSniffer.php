@@ -133,7 +133,6 @@ class CodeSniffer
             return $e->getCode();
         }//end try
 
-
         if ($numErrors === 0) {
             // No errors found.
             return 0;
@@ -203,6 +202,12 @@ class CodeSniffer
 
 
         $total = $this->reporter->totalErrors + $this->reporter->totalWarnings;
+
+
+//        print_r("\nTotal: " . $total);
+//        print_r("\nFixed: " . $this->reporter->totalFixed);
+//        print_r("\nFixable: " . $this->reporter->totalFixable);
+//        print_r("\n" . $this->output);
 
         if ($total <= $this->reporter->totalFixed) {
             //No quedan errores por arreglar

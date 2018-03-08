@@ -13,10 +13,14 @@ namespace PlanB\Wand\Core\Context;
 
 
 use Codeception\Test\Unit;
+use PlanB\Utils\Dev\Tdd\Data\Data;
+use PlanB\Utils\Dev\Tdd\Data\Provider;
 use PlanB\Utils\Dev\Tdd\Feature\Mocker;
 use PlanB\Wand\Core\Context\Exception\UnknowParamException;
 use PlanB\Wand\Core\Context\Exception\UnknowPathException;
 use PlanB\Wand\Core\Git\GitManager;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class ContextTest
@@ -65,6 +69,7 @@ class ContextTest extends Unit
             'pathB' => 'valueB',
             'pathC' => 'valueC',
             'project' => realpath('.'),
+            'src' => realpath('.') . '/src'
         ];
 
         $context = Context::create($params, $paths);
@@ -89,6 +94,89 @@ class ContextTest extends Unit
         });
 
         $this->tester->assertInstanceOf(GitManager::class, $context->getGitManager());
+    }
+
+
+    /**
+     * @test
+     * @covers ::updateLastExecution
+     */
+    public function testUpdateLastExecution()
+    {
+        $cache = $this->double(ContextCache::class);
+
+        $context = Context::create([], [
+            'project' => realpath('.')
+        ]);
+        $context->updateLastExecution();
+        $cache->verifyInvokedOnce('update');
+    }
+
+
+    /**
+     * @test
+     * @covers ::getModifiedFiles
+     */
+    public function testGetModifiedFiles()
+    {
+        $this->double(ContextCache::class, [
+            'filter' => function (SplFileInfo $fileInfo) {
+                return $fileInfo->getBasename() == 'ContextManager.php';
+            }
+        ]);
+
+        $context = Context::create([], [
+            'project' => realpath('.'),
+            'src' => realpath('.') . '/src',
+            'target' => realpath('.') . '/src'
+        ]);
+
+        $files = $context->getModifiedFiles('src');
+
+        $this->assertEquals([
+            'src/Wand/Core/Context/ContextManager.php'
+        ], $files);
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider providerRelativePath
+     *
+     * @covers ::getPathRelativeTo
+     */
+    public function testRelativePath(Data $data)
+    {
+        $context = Context::create([], [
+            'project' => realpath('.'),
+            'src' => realpath('.') . '/src',
+            'target' => realpath('.') . '/src/path'
+        ]);
+
+        $this->tester->assertEquals($data->expected, $context->getPathRelativeTo($data->absolute, $data->base));
+    }
+
+    public function providerRelativePath()
+    {
+        $absolute = sprintf('%s/src/path/to/fileA.php', realpath('.'));
+
+        return Provider::create()
+            ->add([
+                'base' => 'project',
+                'absolute' => $absolute,
+                'expected' => 'src/path/to/fileA.php'
+            ])
+            ->add([
+                'base' => 'src',
+                'absolute' => $absolute,
+                'expected' => 'path/to/fileA.php'
+            ])
+            ->add([
+                'base' => 'target',
+                'absolute' => $absolute,
+                'expected' => 'to/fileA.php'
+            ])
+            ->end();
     }
 
 }

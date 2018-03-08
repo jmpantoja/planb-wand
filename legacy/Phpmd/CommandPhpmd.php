@@ -35,6 +35,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Manuel Pichler <mapi@phpmd.org>
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
+} *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
@@ -50,7 +91,9 @@ use PHPMD\Writer\StreamWriter;
  * This class provides a command line interface for PHPMD
  *
  * @author Manuel Pichler <mapi@phpmd.org>
+ *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
+ *
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 class CommandPhpmd
@@ -81,13 +124,15 @@ class CommandPhpmd
      * <b>EXIT_SUCCESS</b> even if any violation is found.
      *
      * @param \PHPMD\TextUI\CommandLineOptions $opts
-     * @param \PHPMD\RuleSetFactory $ruleSetFactory
+     * @param \PHPMD\RuleSetFactory            $ruleSetFactory
+     *
      * @return int
      */
     public function run(CommandLineOptions $opts, RuleSetFactory $ruleSetFactory): int
     {
         if ($opts->hasVersion()) {
-            fwrite(STDOUT, sprintf('PHPMD %s', $this->getVersion()) . PHP_EOL);
+            fwrite(STDOUT, sprintf('PHPMD %s', $this->getVersion()).PHP_EOL);
+
             return self::EXIT_SUCCESS;
         }
 
@@ -121,18 +166,18 @@ class CommandPhpmd
         $phpmd->setOptions(
             array_filter(
                 array(
-                    'coverage' => $opts->getCoverageReport()
+                    'coverage' => $opts->getCoverageReport(),
                 )
             )
         );
 
         $extensions = $opts->getExtensions();
-        if ($extensions !== null) {
+        if (null !== $extensions) {
             $phpmd->setFileExtensions(explode(',', $extensions));
         }
 
         $ignore = $opts->getIgnore();
-        if ($ignore !== null) {
+        if (null !== $ignore) {
             $phpmd->setIgnorePattern(explode(',', $ignore));
         }
 
@@ -172,13 +217,14 @@ class CommandPhpmd
      */
     private function getVersion(): string
     {
-        $build = __DIR__ . '/../../../../../build.properties';
+        $build = __DIR__.'/../../../../../build.properties';
 
         $version = '@package_version@';
         if (file_exists($build)) {
             $data = @parse_ini_file($build);
             $version = $data['project.version'];
         }
+
         return $version;
     }
 
@@ -199,9 +245,10 @@ class CommandPhpmd
 
             $exitCode = $command->run($options, $ruleSetFactory);
         } catch (\Throwable $e) {
-            fwrite(STDERR, $e->getMessage() . PHP_EOL);
+            fwrite(STDERR, $e->getMessage().PHP_EOL);
             $exitCode = self::EXIT_EXCEPTION;
         }
+
         return $exitCode;
     }
 }

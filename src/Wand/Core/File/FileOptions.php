@@ -32,7 +32,7 @@ class FileOptions extends Options
         $this->defineGroup($resolver);
         $this->defineTarget($resolver);
 
-        if ($this->getProfile() === 'without-template') {
+        if ('without-template' === $this->getProfile()) {
             return;
         }
 

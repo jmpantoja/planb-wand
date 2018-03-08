@@ -22,7 +22,9 @@ use PlanB\Wand\Core\Task\Task;
 class ComposerTask extends Task
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
     public function execute(): LogMessage
     {
@@ -31,6 +33,7 @@ class ComposerTask extends Task
         }
 
         $this->logger->info('wait while composer is updated...');
+
         return $this->run('update');
     }
 

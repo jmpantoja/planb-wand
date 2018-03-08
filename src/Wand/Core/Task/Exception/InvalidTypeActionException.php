@@ -23,6 +23,7 @@ class InvalidTypeActionException extends \RuntimeException
      * @param string          $name
      * @param string          $expected
      * @param \Throwable|null $previous
+     *
      * @return \PlanB\Wand\Core\Task\Exception\InvalidTypeActionException
      */
     public static function create(string $name, string $expected, ?\Throwable $previous = null): self

@@ -47,6 +47,11 @@ class ContextManager
     private $values = [];
 
     /**
+     * @var \PlanB\Wand\Core\Context\Context
+     */
+    private $context;
+
+    /**
      * ContextManager constructor.
      *
      * @param \PlanB\Wand\Core\Logger\LogManager $logger
@@ -81,10 +86,13 @@ class ContextManager
      */
     public function getContext(): Context
     {
-        $params = $this->getValues();
-        $paths = $this->pathManager->getPaths();
+        if (empty($this->context)) {
+            $params = $this->getValues();
+            $paths = $this->pathManager->getPaths();
+            $this->context = Context::create($params, $paths);
+        }
 
-        return Context::create($params, $paths);
+        return $this->context;
     }
 
     /**

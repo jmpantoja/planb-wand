@@ -17,7 +17,7 @@ return new Sami($iterator, array(
     'title'                => 'planb/wand',
     'build_dir'            => __DIR__.'/docs/api/',
     'cache_dir'            => __DIR__.'/var/cache/sami/%version%',
-    'template_dirs'        => array(__DIR__.'/../src/Wand/Docs/config/views/template/github'),
+    'template_dirs'        => array(__DIR__.'/src/Wand/Docs/config/views/template/github'),
     'default_opened_level' => 2,
 ));
 

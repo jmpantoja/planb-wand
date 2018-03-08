@@ -149,6 +149,8 @@ class FileManager implements EventSubscriberInterface
 
     /**
      * Borra un archivo de disco.
+     *
+     * @param \PlanB\Wand\Core\File\FileEvent $event
      */
     private function deleteFile(FileEvent $event): void
     {

@@ -12,6 +12,7 @@ namespace PlanB\Wand\Core\Command;
 
 use PlanB\Wand\Core\Action\ActionEvent;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
+use PlanB\Wand\Core\Logger\Message\MessageType;
 
 /**
  * Evento que se lanza al tratar un objeto Command.
@@ -64,10 +65,16 @@ class CommandEvent extends ActionEvent
         $message->setTitle($title);
         $message->setLevel($level);
 
-        $message->setVerbose([
-            'cmd' => $commandLine,
-            'output' => $output,
-        ]);
+        if ($message->isSkipped()) {
+            $message->setVerbose([
+                'output' => $output,
+            ]);
+        } else {
+            $message->setVerbose([
+                'cmd' => $commandLine,
+                'output' => $output,
+            ]);
+        }
     }
 
     /**
@@ -78,5 +85,22 @@ class CommandEvent extends ActionEvent
     public function getCommand(): Command
     {
         return $this->command;
+    }
+
+    /**
+     * Crea un mensaje del tipo dado
+     *
+     * @param \PlanB\Wand\Core\Logger\Message\MessageType $type
+     */
+    public function type(MessageType $type): void
+    {
+
+        if ($type->isSuccessful()) {
+            $this->success();
+        } elseif ($type->isSkipped()) {
+            $this->skip();
+        } elseif ($type->isError()) {
+            $this->error();
+        }
     }
 }

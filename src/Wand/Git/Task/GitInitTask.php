@@ -45,6 +45,7 @@ class GitInitTask extends Task
     private function isInitialized(): bool
     {
         $manager = $this->context->getGitManager();
+
         return $manager->isInitialized();
     }
 }

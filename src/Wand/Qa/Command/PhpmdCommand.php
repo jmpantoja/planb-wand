@@ -20,7 +20,6 @@ use PlanB\Wand\Legacy\Phpmd\CommandPhpmd;
 /**
  * Ejecuta el comando phpmd
  *
- * @package PlanB\Wand\Qa\Command
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class PhpmdCommand extends Command
@@ -48,6 +47,18 @@ class PhpmdCommand extends Command
         }
 
 
-        return $exitCode === 0;
+        return 0 === $exitCode;
+    }
+
+    /**
+     * Formatea el argumento ruta
+     *
+     * @param string[] $files
+     *
+     * @return string
+     */
+    public function parseModifiedFiles(array $files): string
+    {
+        return implode(',', $files);
     }
 }

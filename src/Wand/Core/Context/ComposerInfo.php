@@ -49,6 +49,8 @@ class ComposerInfo
 
     /**
      * ComposerInfo constructor.
+     *
+     * @param string $composerPath
      */
     public function __construct(string $composerPath)
     {
@@ -84,7 +86,6 @@ class ComposerInfo
         $this->contents = json_decode($json, true);
 
         if (!is_array($this->contents)) {
-
             throw  BadFormedJsonException::create($composerPath);
         }
 
@@ -160,7 +161,7 @@ class ComposerInfo
      * Asigna un valor a un path.
      *
      * @param string $path
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return \PlanB\Wand\Core\Context\ComposerInfo
      */

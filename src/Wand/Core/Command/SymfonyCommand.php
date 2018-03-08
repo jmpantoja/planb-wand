@@ -19,7 +19,6 @@ use Symfony\Component\Console\Output\BufferedOutput;
 /**
  * Ejecuta código
  *
- * @package PlanB\Wand\Core\Runner
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class SymfonyCommand extends Command
@@ -68,6 +67,7 @@ class SymfonyCommand extends Command
      */
     public function run(): bool
     {
+
         $application = new Application();
 
         $command = $this->getCommand();
@@ -81,10 +81,9 @@ class SymfonyCommand extends Command
         $status = $command->run($input, $output);
 
         $this->output = $output->fetch();
-        return $status === 0;
+
+        return 0 === $status;
     }
-
-
 
     /**
      * Devuelve el comando

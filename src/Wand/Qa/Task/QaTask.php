@@ -17,7 +17,6 @@ use PlanB\Wand\Core\Task\Task;
 /**
  * Quality Assurance
  *
- * @package PlanB\Wand\Qa\Task
  * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
  */
 class QaTask extends Task
@@ -34,7 +33,7 @@ class QaTask extends Task
             $message = $this->run('phpcs');
         }
 
-        if ($this->hasStagedFiles()) {
+        if ($this->shouldBeRestaged($message)) {
             $message = $this->sequenceFrom($message, 'restage');
         }
 
@@ -51,5 +50,17 @@ class QaTask extends Task
         $manager = $this->context->getGitManager();
 
         return $manager->hasStagedFiles();
+    }
+
+    /**
+     * Indica si el estado del proceso es el adecuado para hacer un restage
+     *
+     * @param \PlanB\Wand\Core\Logger\Message\LogMessage $message
+     *
+     * @return bool
+     */
+    protected function shouldBeRestaged(LogMessage $message): bool
+    {
+        return $message->isSuccessful() && $this->hasStagedFiles();
     }
 }

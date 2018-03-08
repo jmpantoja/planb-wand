@@ -14,6 +14,11 @@ namespace PlanB\Wand\Tdd\Command;
 use PlanB\Wand\Core\Command\SystemCommand;
 use Symfony\Component\Process\Process;
 
+/**
+ * Comando para comprobar el coverage
+ *
+ * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
+ */
 class CoverageCommand extends SystemCommand
 {
     public const COVERAGE_LEVEL = 80;
@@ -22,6 +27,7 @@ class CoverageCommand extends SystemCommand
      * Indica si el comando se ha ejecutado con exito.
      *
      * @param \Symfony\Component\Process\Process $process
+     *
      * @return bool
      */
     protected function isSuccessful(Process $process): bool
@@ -41,6 +47,7 @@ class CoverageCommand extends SystemCommand
      * Devuelve el coverage cubierto para cada tipo de elemento
      *
      * @param string $prefix
+     *
      * @return float
      */
     private function findCoverage(string $prefix): float
@@ -51,7 +58,7 @@ class CoverageCommand extends SystemCommand
 
         $coverage = 0;
         if (preg_match($pattern, $output, $matches)) {
-            $coverage = (float)$matches[1];
+            $coverage = (float) $matches[1];
         }
 
         return $coverage;

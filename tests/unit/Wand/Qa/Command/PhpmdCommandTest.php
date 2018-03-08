@@ -41,6 +41,7 @@ class PhpmdCommandTest extends Unit
      * @test
      *
      * @covers ::run
+     * @covers ::parseModifiedFiles
      */
     public function testRun()
     {
@@ -58,14 +59,16 @@ class PhpmdCommandTest extends Unit
         $command = PhpmdCommand::create([
             'group' => 'qa',
             'params' => [
-                'pattern' => 'phpmd %src% text %project%/phpmd.xml --minimumpriority 3'
+                'pattern' => 'phpmd %changes% text %project%/phpmd.xml --minimumpriority 3',
+                'only_modified' => true
             ]
         ]);
 
         $command->setContext($context);
 
-        $this->assertTrue($command->run());
+        $this->assertTrue($command->execute()->isSuccessful());
 
+        $this->assertContains('phpmd src/fileA.php,src/fileB.php,src/fileC.php text', $command->getCommandLine());
         $this->tester->assertEquals('output', $command->getOutput());
     }
 
@@ -73,6 +76,7 @@ class PhpmdCommandTest extends Unit
      * @test
      *
      * @covers ::run
+     * @covers ::parseModifiedFiles
      */
     public function testRunException()
     {
@@ -88,24 +92,32 @@ class PhpmdCommandTest extends Unit
         $command = PhpmdCommand::create([
             'group' => 'qa',
             'params' => [
-                'pattern' => 'phpmd %src% text %project%/phpmd.xml --minimumpriority 3'
+                'pattern' => 'phpmd %src% text %project%/phpmd.xml --minimumpriority 3',
+                'only_modified' => true
             ]
         ]);
 
         $command->setContext($context);
 
-        $this->assertFalse($command->run());
-
+        $this->assertTrue($command->execute()->isError());
 
         $this->tester->assertEquals('error output', $command->getOutput());
     }
+
 
     /**
      * @return MockInterface
      */
     protected function getContext(): MockInterface
     {
-        $context = $this->stub(Context::class);
+        $context = $this->stub(Context::class, [
+            'getModifiedFiles' => [
+                'src/fileA.php',
+                'src/fileB.php',
+                'src/fileC.php'
+            ]
+        ]);
+
         $context->allows()
             ->getPath(m::anyOf('wand', 'project', 'target'))
             ->andReturn(realpath('.'));
@@ -113,6 +125,7 @@ class PhpmdCommandTest extends Unit
         $context->allows()
             ->getPath('src')
             ->andReturn(realpath('.') . '/src');
+
 
         return $context;
     }

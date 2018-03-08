@@ -13,10 +13,17 @@ namespace PlanB\Wand\Tdd\Task;
 use PlanB\Wand\Core\Logger\Message\LogMessage;
 use PlanB\Wand\Core\Task\Task;
 
+/**
+ * Tarea para incializar codeception
+ *
+ * @author Jose Manuel Pantoja <jmpantoja@gmail.com>
+ */
 class CodeceptTask extends Task
 {
     /**
      * {@inheritdoc}
+     *
+     * @return \PlanB\Wand\Core\Logger\Message\LogMessage
      */
     public function execute(): LogMessage
     {
@@ -29,6 +36,12 @@ class CodeceptTask extends Task
             $message = $this->sequence('codecept_bootstrap', 'codeception');
         }
 
-        return $this->sequenceFrom($message, 'unit_bootstrap', 'acceptance_bootstrap', 'functional_bootstrap');
+        return $this->sequenceFrom(
+            $message,
+            'phpunit',
+            'unit_bootstrap',
+            'acceptance_bootstrap',
+            'functional_bootstrap'
+        );
     }
 }
