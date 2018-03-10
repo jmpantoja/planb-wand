@@ -7,9 +7,11 @@
 
 /bin/*
 !bin/.gitkeep
+!bin/box.phar
 !bin/sami
+!bin/wand.php
 
-/build/
+/build/*
 !build/.gitkeep
 
 !var/.gitkeep

@@ -5,10 +5,12 @@ tasks:
     description: wubba lubba dub dub
     actions:
       src:
+      bin:
+      build:
       tests:
+      docs-api:
       var-cache:
       var-mocks:
-      docs-api:
 
 actions:
   src:
@@ -24,6 +26,14 @@ actions:
         classname: \PlanB\Wand\Core\File\Directory
         params:
           target: bin
+          action: create
+          chmod: 0644
+
+  build:
+        group: project
+        classname: \PlanB\Wand\Core\File\Directory
+        params:
+          target: build
           action: create
           chmod: 0644
 

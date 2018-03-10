@@ -15,13 +15,20 @@ before_script:
 
 script:
   - vendor/bin/codecept run unit --coverage --coverage-text --coverage-xml -f --debug
-  - bin/sami update .sami.php
-#
-#deploy:
-#  provider: releases
-#  api_key:
-#    secure: 59pBdYW/SXnLtA16sjF+szojR1Iom0r3r6P/SJ22v+d5llpHBEYWNxUmeWzCe6ImdwSzhZYvy9V1x8xC847hMIM+QAL8I7KG8P9VLHGHepzy/siisL8rWC51U+VJN7sklWMY35ZcSf1hBP9IDYZA+a6Ss9d+qqRquo+8ia8zhfSgBJYmt+Chr05tyN4tsvO9guV2Q8+r0UpaTk8+GzWEKCF4ga+jePjGDRjZSGOhyDLn7pMgHAb8EJV8qY9xYqz/Jn1ruyzK21sOg0Q7rvlrnB/oo5LZ79pVsajqHHwGqgpChsH8pVaSgiDcq7++o9i2PDfZqQW9//iXmT2O1cFtRyNFgWhHPaG8tl53UB1hxdOYtlJkQVtWs6Q/mD6nHWmCj+iZXn+70aph3lGAhoLCoqKtDTlgTtgKXGcwWdym0mEcNKTuh5pssJnNxBXsrpb/QREr2ft1B9PJ+hUHqjfv1R5lWKWoDmSakrTWtyfL4486lDMjDzKWLzgcHeeXVaAl24NCtXHXStEF6ZRKo6fxLsHfeQBavO5PnYxaGes8RqRAG2ldZQ1m3bpJi5VUk1k6nvidfLbmNFx551yskTw3nV2bsj6cQ07CoE49NzvyDIaMffeRVsRbfAkNMnRi6ITWBfq5ii8nYKtLUhRB0nQ4gSi6QUKD81t4NimeyQqybWg=
-#  file: docs/api/*
-#  on:
-#    repo: jmpantoja/wand
-#    branch: borrame
+
+after_success:
+  - composer install --no-dev
+  - bin/box.phar build -v
+  - git add build/wand.phar
+
+deploy:
+  provider: releases
+  api_key:
+    secure: 59pBdYW/SXnLtA16sjF+szojR1Iom0r3r6P/SJ22v+d5llpHBEYWNxUmeWzCe6ImdwSzhZYvy9V1x8xC847hMIM+QAL8I7KG8P9VLHGHepzy/siisL8rWC51U+VJN7sklWMY35ZcSf1hBP9IDYZA+a6Ss9d+qqRquo+8ia8zhfSgBJYmt+Chr05tyN4tsvO9guV2Q8+r0UpaTk8+GzWEKCF4ga+jePjGDRjZSGOhyDLn7pMgHAb8EJV8qY9xYqz/Jn1ruyzK21sOg0Q7rvlrnB/oo5LZ79pVsajqHHwGqgpChsH8pVaSgiDcq7++o9i2PDfZqQW9//iXmT2O1cFtRyNFgWhHPaG8tl53UB1hxdOYtlJkQVtWs6Q/mD6nHWmCj+iZXn+70aph3lGAhoLCoqKtDTlgTtgKXGcwWdym0mEcNKTuh5pssJnNxBXsrpb/QREr2ft1B9PJ+hUHqjfv1R5lWKWoDmSakrTWtyfL4486lDMjDzKWLzgcHeeXVaAl24NCtXHXStEF6ZRKo6fxLsHfeQBavO5PnYxaGes8RqRAG2ldZQ1m3bpJi5VUk1k6nvidfLbmNFx551yskTw3nV2bsj6cQ07CoE49NzvyDIaMffeRVsRbfAkNMnRi6ITWBfq5ii8nYKtLUhRB0nQ4gSi6QUKD81t4NimeyQqybWg=
+  file_glob: true
+  file: build/wand.phar
+  skip_cleanup: true
+  overwrite: true
+  on:
+    tags: true
+    repo: jmpantoja/wand
