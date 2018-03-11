@@ -2,14 +2,14 @@
 tasks:
   "init/qa":
     classname: \PlanB\Wand\Core\Task\SimpleTask
-    description: wubba lubba dub dub
+    description: Crea los archivos phpcs.xml y phpmd.xml
     actions:
       phpcs_xml:
       phpmd_xml:
 
   qa:
     classname: \PlanB\Wand\Qa\Task\QaTask
-    description: wubba lubba dub dub
+    description: Busca errores en el código
     actions:
       lint:
       phpcpd:
@@ -49,7 +49,7 @@ actions:
     group: qa
     classname: \PlanB\Wand\Core\Command\SymfonyCommand
     params:
-      pattern: vendor/bin/phpcpd --min-tokens 30 %changes%
+      pattern: vendor/bin/phpcpd --min-tokens 30 %src%
       command: \PlanB\Wand\Legacy\Phpcpd\PhpcpdCommand
       only_modified: true
 
@@ -57,21 +57,21 @@ actions:
     group: qa
     classname: \PlanB\Wand\Qa\Command\PhpmdCommand
     params:
-      pattern: vendor/bin/phpmd %changes% text %project%/.phpmd.xml --minimumpriority 3
+      pattern: vendor/bin/phpmd %src% text %project%/.phpmd.xml --minimumpriority 3
       only_modified: true
 
   phpcbf:
     group: qa
     classname: \PlanB\Wand\Qa\Command\PhpcbfCommand
     params:
-      pattern: vendor/bin/phpcbf %changes% -p --standard=%project%/.phpcs.xml -q
+      pattern: vendor/bin/phpcbf %src% -p --standard=%project%/.phpcs.xml -q
       only_modified: true
 
   phpcs:
     group: qa
     classname: \PlanB\Wand\Qa\Command\PhpcsCommand
     params:
-      pattern: vendor/bin/phpcs %changes% -p --standard=%project%/.phpcs.xml -q
+      pattern: vendor/bin/phpcs %src% -p --standard=%project%/.phpcs.xml -q
       only_modified: true
 
 

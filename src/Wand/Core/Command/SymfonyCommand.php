@@ -73,6 +73,7 @@ class SymfonyCommand extends Command
         $command = $this->getCommand();
         $tokens = $this->getCommandTokens();
 
+
         $input = new ArgvInput($tokens, $command->getDefinition());
         $output = new BufferedOutput();
 

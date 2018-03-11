@@ -2,11 +2,11 @@
 tasks:
   "init/project":
     classname: \PlanB\Wand\Core\Task\SimpleTask
-    description: wubba lubba dub dub
+    description: Crea la estructura de directorios del proyecto
     actions:
       src:
       bin:
-      build:
+#      build:
       tests:
       docs-api:
       var-cache:

@@ -2,7 +2,7 @@
 tasks:
   "composer/validate":
     classname: \PlanB\Wand\Composer\Task\ComposerTask
-    description: wubba lubba dub dub
+    description: Comprueba si el archivo composer.lock necesita ser actualizado
     actions:
       update:
       validate:

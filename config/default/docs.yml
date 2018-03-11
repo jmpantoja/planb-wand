@@ -1,15 +1,15 @@
 ---
 tasks:
-  "init/documentation":
+  "init/sami":
     classname: \PlanB\Wand\Core\Task\SimpleTask
-    description: wubba lubba dub dub
+    description: Crea la configuración de sami
     actions:
       doc_index:
       sami_conf:
 
   "sami":
     classname: PlanB\Wand\Docs\Task\SamiTask
-    description: wubba lubba dub dub
+    description: Actualza la documentación
     actions:
       sami:
 
@@ -37,4 +37,4 @@ actions:
         classname: \PlanB\Wand\Core\Command\SystemCommand
         params:
           pattern: sami update %project%/.sami.php -v
-          cwd: vendor/bin
+#          cwd: vendor/bin

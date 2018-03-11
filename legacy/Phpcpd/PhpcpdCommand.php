@@ -30,6 +30,7 @@ final class PhpcpdCommand extends AbstractCommand
      */
     protected function configure(): void
     {
+
         $this->setName('phpcpd')
             ->setDefinition(
                 [

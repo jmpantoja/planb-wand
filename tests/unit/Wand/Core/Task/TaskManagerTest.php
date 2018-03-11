@@ -106,6 +106,18 @@ class TaskManagerTest extends Unit
 
     }
 
+    /**
+     * @test
+     *
+     * @covers ::getTasks
+     */
+    public function testGetTasks(){
+        $manager = $this->getTaskManager();
+
+        $this->assertContainsOnlyInstancesOf(TaskInterface::class, $manager->getTasks());
+        $this->assertCount(2, $manager->getTasks());
+    }
+
 
     /**
      * @test

@@ -2,7 +2,7 @@
 tasks:
   "init/ci":
     classname: \PlanB\Wand\Core\Task\SimpleTask
-    description: wubba lubba dub dub
+    description: Crea la configuración de travis y scrutnizer
     actions:
       travis:
       scrutinizer:

@@ -10,6 +10,7 @@
 
 namespace PlanB\WandBundle\Command;
 
+use PlanB\Wand\Core\Task\TaskEvent;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,7 +37,6 @@ class WandCommand extends BaseCommand
      *
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
@@ -44,7 +44,6 @@ class WandCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $this->initPaths($input);
         $this->initConsole($input, $output);
 
@@ -52,11 +51,15 @@ class WandCommand extends BaseCommand
 
         $taskName = $input->getArgument('task');
 
+        if ('list' === $taskName) {
+            return $this->showList();
+        }
+
         return $this->getTaskManager()->executeByName($taskName);
     }
 
     /**
-     * Indica al pathManager cual es la ruta raiz del proyecto.
+     * asdfad
      *
      * @param \Symfony\Component\Console\Input\InputInterface $input
      */
@@ -80,5 +83,23 @@ class WandCommand extends BaseCommand
 
         $dispatcher = $this->getEventDispatcher();
         $dispatcher->addSubscriber($consoleManager);
+    }
+
+    /**
+     * Muestra el listado de tareas por consola
+     *
+     * @return int
+     */
+    private function showList(): int
+    {
+
+        $dispatcher = $this->getEventDispatcher();
+        $tasks = $this->getTaskManager()->getTasks();
+
+        foreach ($tasks as $task) {
+            $dispatcher->dispatch('wand.log.task', new TaskEvent($task));
+        }
+
+        return 0;
     }
 }

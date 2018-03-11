@@ -61,10 +61,10 @@ class GitManagerTest extends Unit
                 'base' => $base,
                 'initialized' => true
             ], 'directorio raiz')
-            ->add([
-                'base' => "$base/src",
-                'initialized' => true
-            ], 'subdirectorio')
+//            ->add([
+//                'base' => "$base/src",
+//                'initialized' => true
+//            ], 'subdirectorio')
             ->add([
                 'base' => "/tmp",
                 'initialized' => false

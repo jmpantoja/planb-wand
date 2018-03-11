@@ -13,6 +13,7 @@ namespace PlanB\WandBundle\Command;
 use PlanB\Wand\Core\Logger\Confirm\ConfirmEvent;
 use PlanB\Wand\Core\Logger\Message\MessageEvent;
 use PlanB\Wand\Core\Logger\Question\QuestionEvent;
+use PlanB\Wand\Core\Task\TaskEvent;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -80,6 +81,7 @@ class ConsoleManager implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
+            'wand.log.task' => 'task',
             'wand.log.message' => 'message',
             'wand.log.question' => 'question',
             'wand.log.confirm' => 'confirm',
@@ -94,6 +96,19 @@ class ConsoleManager implements EventSubscriberInterface
     public function getQuestionHelper(): QuestionHelper
     {
         return $this->helperSet->get('question');
+    }
+
+    /**
+     * Muestra el nombre de una tarea y su descripción
+     *
+     * @param \PlanB\Wand\Core\Task\TaskEvent $event
+     */
+    public function task(TaskEvent $event): void
+    {
+        $task = $event->getTask();
+
+        $message = sprintf("   <fg=yellow>%s</>: %s\n", $task->getName(), $task->getDescription());
+        $this->output->writeln($message);
     }
 
     /**

@@ -58,6 +58,21 @@ Devuelve el question Helper.
 ---
 
 
+### task
+``` php
+ task ([PlanB\Wand\Core\Task\TaskEvent](../../../PlanB/Wand/Core/Task/TaskEvent.md) $event)
+
+Muestra el nombre de una tarea y su descripción
+
+```
+
+|Parameters: | | |
+| --- | --- | --- |
+|[PlanB\Wand\Core\Task\TaskEvent](../../../PlanB/Wand/Core/Task/TaskEvent.md) |$event |  |
+
+---
+
+
 ### message
 ``` php
  message ([PlanB\Wand\Core\Logger\Message\MessageEvent](../../../PlanB/Wand/Core/Logger/Message/MessageEvent.md) $event)

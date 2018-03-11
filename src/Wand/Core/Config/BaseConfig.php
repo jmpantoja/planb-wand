@@ -77,6 +77,7 @@ abstract class BaseConfig
      */
     protected function readFromFile(string $path): array
     {
+
         return Yaml::parseFile($path);
     }
 

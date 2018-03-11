@@ -2,7 +2,7 @@
 tasks:
   "tdd/unit":
     classname: \PlanB\Wand\Core\Task\SimpleTask
-    description: wubba lubba dub dub
+    description: Ejecuta los tests unitarios
     actions:
       unit:
 

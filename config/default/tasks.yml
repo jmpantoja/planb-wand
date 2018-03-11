@@ -2,20 +2,21 @@
 tasks:
   init:
     classname: \PlanB\Wand\Core\Task\SimpleTask
-    description: wubba lubba dub dub
+    description: Crea y configura un proyecto
     actions:
       "@composer/validate":
       "@init/project":
       "@init/info":
-      "@init/codecept":
-      "@init/ci":
+      "@init/codecept":           
+      "@init/ci":      
+      
       "@init/qa":
       "@init/git":
-      "@init/documentation":
+      "@init/sami":
 
   validate:
     classname: \PlanB\Wand\Qa\Task\ValidateTask
-    description: wubba lubba dub dub
+    description: Hook pre-commit
     actions:
       "@composer/validate":
       "@qa":

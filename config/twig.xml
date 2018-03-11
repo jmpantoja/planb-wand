@@ -37,9 +37,11 @@
 
         <service id="wand.twig" class="Twig_Environment">
             <argument type="service" id="wand.twig_loader"/>
+            
             <argument type="collection">
                 <argument key="debug">constant('true')</argument>
             </argument>
+            
             <call method="addExtension">
                 <argument type="service" id="wand.twig_debug"/>
             </call>

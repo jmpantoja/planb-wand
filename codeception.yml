@@ -22,4 +22,3 @@ coverage:
     remote: false
     whitelist:
         include:
-          - src/Wand/*.php

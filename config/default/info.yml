@@ -2,7 +2,7 @@
 tasks:
   "init/info":
     classname: \PlanB\Wand\Core\Task\SimpleTask
-    description: wubba lubba dub dub
+    description: Crea los archivos con información del proyecto (readme, license, changelog, etc)
     actions:
       readme:
       changelog:

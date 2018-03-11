@@ -84,6 +84,18 @@ class TaskManager implements EventSubscriberInterface
     }
 
     /**
+     * Devuelve todas las tareas
+     *
+     * @return \PlanB\Wand\Core\Task\TaskInterface[]
+     */
+    public function getTasks(): array
+    {
+        ksort($this->tasks);
+
+        return $this->tasks;
+    }
+
+    /**
      * Añade una tarea al stack.
      *
      * @param string                              $name
@@ -143,6 +155,7 @@ class TaskManager implements EventSubscriberInterface
 
         return $this->context;
     }
+
 
     /**
      * Ejecuta una tarea definida por su nombre.

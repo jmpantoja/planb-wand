@@ -2,7 +2,7 @@
 tasks:
   "init/git":
     classname: \PlanB\Wand\Git\Task\GitInitTask
-    description: wubba lubba dub dub
+    description: Crea el archivo .gitignore y los hooks de git
     actions:
       git:
       gitignore:

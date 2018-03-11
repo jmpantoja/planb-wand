@@ -2,7 +2,7 @@
 tasks:
   "init/codecept":
     classname: \PlanB\Wand\Tdd\Task\CodeceptTask
-    description: wubba lubba dub dub
+    description: Configura codeception
     actions:
       phpunit:
       codeception:

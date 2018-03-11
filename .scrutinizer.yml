@@ -3,23 +3,23 @@ checks:
 
 filter:
     excluded_paths:
-        - "legacy/"
         - "tests/"
         - "var/"
         - "sami.php"
 
     dependency_paths:
         - "vendor/"
+
 build:
     nodes:
         analisys:
             environment:
-                php: "7.1"
+                php: "7.2"
 
-            tests:
-                override:
-                  - php-scrutinizer-run
-                  -
+        tests:
+            override:
+                - php-scrutinizer-run
+                -
                     command: vendor/bin/codecept run unit --coverage --coverage-xml -f --debug
                     coverage:
                         file: tests/_output/coverage.xml

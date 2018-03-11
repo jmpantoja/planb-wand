@@ -61,6 +61,18 @@ Añade un conjunto de tareas definidas en un array de configuración.
 ---
 
 
+### getTasks
+``` php
+[PlanB\Wand\Core\Task\TaskInterface](../../../../PlanB/Wand/Core/Task/TaskInterface.md)[] getTasks ()
+
+Devuelve todas las tareas
+
+```
+
+
+---
+
+
 ### addTask
 ``` php
 [PlanB\Wand\Core\Task\TaskManager](../../../../PlanB/Wand/Core/Task/TaskManager.md) addTask (string $name, [PlanB\Wand\Core\Task\TaskInterface](../../../../PlanB/Wand/Core/Task/TaskInterface.md) $task)
