@@ -155,6 +155,7 @@ class PathManager
         return [
             'project' => $this->projectDir(),
             'src' => Path::join($this->projectDir(), 'src'),
+            'docs_api' => Path::join($this->projectDir(), 'docs/api'),
             'vendor' => Path::join($this->projectDir(), 'vendor'),
             'vendor/bin' => Path::join($this->projectDir(), 'vendor/bin'),
             'wand-vendor/bin' => Path::join($this->wandDir(), 'vendor/bin'),

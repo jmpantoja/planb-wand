@@ -50,9 +50,9 @@ class ValidateTaskTest extends Unit
 
 
         $task->allows()
-            ->run(m::anyOf('@composer/validate', '@qa', '@tdd/unit'))
+            ->run(m::anyOf('@composer/validate', '@qa', '@sami', '@tdd/unit'))
             ->andReturn(LogMessage::success())
-            ->times(3);
+            ->times(4);
 
         $this->tester->assertTrue($task->execute()->isSuccessful());
     }
@@ -77,11 +77,10 @@ class ValidateTaskTest extends Unit
             ->times(2);
 
         $task->allows()
-            ->run('@tdd/unit')
+            ->run(m::anyOf('@sami', '@tdd/unit'))
             ->never();
 
         $this->tester->assertTrue($task->execute()->isError());
     }
-
 
 }

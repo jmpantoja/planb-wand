@@ -133,7 +133,7 @@ class GitManagerTest extends Unit
      * @test
      *
      * @covers ::reStageFiles
-     * @covers ::gitAdd
+     * @covers ::addFilesToStage
      */
     public function testRestage()
     {
@@ -149,10 +149,8 @@ class GitManagerTest extends Unit
         ]);
 
         $manager->allows()
-            ->run(m::anyOf('git add src/FileA.php',
-                'git add src/FileC.php',
-                'git add src/FileD.php'))
-            ->times(3)
+            ->run('git add src/FileA.php src/FileC.php src/FileD.php')
+            ->once()
             ->andReturn($response);
 
         $manager->reStageFiles();

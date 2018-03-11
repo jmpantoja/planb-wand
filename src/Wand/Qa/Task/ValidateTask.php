@@ -30,9 +30,9 @@ class ValidateTask extends Task
         $message = $this->sequence('@composer/validate', '@qa');
 
         if ($message->isSuccessful()) {
-            $message = $this->sequenceFrom($message, '@tdd/unit');
+            $message = $this->sequenceFrom($message, '@sami', '@tdd/unit');
         }
-        
+
         return $message;
     }
 }

@@ -5,6 +5,12 @@ tasks:
     description: wubba lubba dub dub
     actions:
       doc_index:
+      sami_conf:
+
+  "sami":
+    classname: PlanB\Wand\Docs\Task\SamiTask
+    description: wubba lubba dub dub
+    actions:
       sami:
 
 actions:
@@ -17,7 +23,7 @@ actions:
           action: create
           chmod: 0644
 
-  sami:
+  sami_conf:
         group: documentation
         classname: \PlanB\Wand\Core\File\File
         params:
@@ -25,3 +31,10 @@ actions:
           target: .sami.php
           action: create
           chmod: 0644
+
+  sami:
+        group: documentation
+        classname: \PlanB\Wand\Core\Command\SystemCommand
+        params:
+          pattern: sami update %project%/.sami.php -v
+          cwd: vendor/bin

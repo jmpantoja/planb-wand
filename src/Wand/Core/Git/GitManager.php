@@ -145,28 +145,22 @@ class GitManager
     {
         $stage = $this->getStagedFiles();
 
-        $success = true;
-        foreach ($stage as $file) {
-            $success = $success && $this->gitAdd($file);
-        }
-
-        return $success;
+        return $this->addFilesToStage($stage);
     }
 
     /**
-     * Añade un archivo al stage de git
+     * Añade una serie de archivos al stage
      *
-     * @param string $file
+     * @param string[] $files
      *
      * @return bool
      */
-    protected function gitAdd(string $file): bool
+    public function addFilesToStage(array $files): bool
     {
-        $cmd = sprintf('git add %s', $file);
+        $cmd = sprintf('git add %s', implode(' ', $files));
 
         return $this->run($cmd)->isSuccessful();
     }
-
 
     /**
      * Devuelve el comando para ver los ficheros que estan en el stage

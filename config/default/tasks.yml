@@ -19,4 +19,5 @@ tasks:
     actions:
       "@composer/validate":
       "@qa":
+      "@sami":
       "@tdd/unit":
