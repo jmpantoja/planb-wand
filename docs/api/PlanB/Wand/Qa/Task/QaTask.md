@@ -26,24 +26,22 @@
 ## Methods
 
 ### getLevel
-``` php
-int getLevel ()
-
 Devuelve el nivel de esta acción.
 
-```
+
+**QaTask::getLevel**() : int
+
 
 
 ---
 
 
 ### setLevel
-``` php
-[PlanB\Wand\Core\Action\ActionInterface](../../../../PlanB/Wand/Core/Action/ActionInterface.md) setLevel (int $level)
-
 Asigna el nivel en la jerarquia de tareas/acciones.
 
-```
+
+**QaTask::setLevel**(int $level) : [ActionInterface](../../../../ActionInterface.md)
+
 
 |Parameters: | | |
 | --- | --- | --- |
@@ -53,27 +51,25 @@ Asigna el nivel en la jerarquia de tareas/acciones.
 
 
 ### setContext
-``` php
-[PlanB\Wand\Core\Action\ActionInterface](../../../../PlanB/Wand/Core/Action/ActionInterface.md) setContext ([PlanB\Wand\Core\Context\Context](../../../../PlanB/Wand/Core/Context/Context.md) $context)
-
 Asigna el contexto.
 
-```
+
+**QaTask::setContext**([Context](../../../../Context.md) $context) : [ActionInterface](../../../../ActionInterface.md)
+
 
 |Parameters: | | |
 | --- | --- | --- |
-|[PlanB\Wand\Core\Context\Context](../../../../PlanB/Wand/Core/Context/Context.md) |$context |  |
+|[Context](../../../../Context.md) |$context |  |
 
 ---
 
 
 ### __construct
-``` php
-final __construct (array $options)
-
 Task constructor.
 
-```
+
+final **QaTask::__construct**(array $options) : 
+
 
 |Parameters: | | |
 | --- | --- | --- |
@@ -83,12 +79,11 @@ Task constructor.
 
 
 ### create
-``` php
-finalstatic[PlanB\Wand\Core\Task\TaskInterface](../../../../PlanB/Wand/Core/Task/TaskInterface.md) create (array $params)
-
 Crea una nueva instancia.
 
-```
+
+final static **QaTask::create**(array $params) : [TaskInterface](../../../../TaskInterface.md)
+
 
 |Parameters: | | |
 | --- | --- | --- |
@@ -98,12 +93,11 @@ Crea una nueva instancia.
 
 
 ### setName
-``` php
-[PlanB\Wand\Core\Task\TaskInterface](../../../../PlanB/Wand/Core/Task/TaskInterface.md) setName (string $name)
-
 {@inheritdoc}
 
-```
+
+**QaTask::setName**(string $name) : [TaskInterface](../../../../TaskInterface.md)
+
 
 |Parameters: | | |
 | --- | --- | --- |
@@ -113,78 +107,72 @@ Crea una nueva instancia.
 
 
 ### getName
-``` php
-string getName ()
-
 Devuelve el nombre de la tarea.
 
-```
+
+**QaTask::getName**() : string
+
 
 
 ---
 
 
 ### setEventDispatcher
-``` php
-[PlanB\Wand\Core\Task\TaskInterface](../../../../PlanB/Wand/Core/Task/TaskInterface.md) setEventDispatcher ([Symfony\Component\EventDispatcher\EventDispatcher](../../../../Symfony/Component/EventDispatcher/EventDispatcher.md) $dispatcher)
-
 Asigna el controlador de eventos.
 
-```
+
+**QaTask::setEventDispatcher**([EventDispatcher](../../../../EventDispatcher.md) $dispatcher) : [TaskInterface](../../../../TaskInterface.md)
+
 
 |Parameters: | | |
 | --- | --- | --- |
-|[Symfony\Component\EventDispatcher\EventDispatcher](../../../../Symfony/Component/EventDispatcher/EventDispatcher.md) |$dispatcher |  |
+|[EventDispatcher](../../../../EventDispatcher.md) |$dispatcher |  |
 
 ---
 
 
 ### setLogger
-``` php
-[PlanB\Wand\Core\Task\TaskInterface](../../../../PlanB/Wand/Core/Task/TaskInterface.md) setLogger ([PlanB\Wand\Core\Logger\LogManager](../../../../PlanB/Wand/Core/Logger/LogManager.md) $logger)
-
 Asigna el gestor de logs.
 
-```
+
+**QaTask::setLogger**([LogManager](../../../../LogManager.md) $logger) : [TaskInterface](../../../../TaskInterface.md)
+
 
 |Parameters: | | |
 | --- | --- | --- |
-|[PlanB\Wand\Core\Logger\LogManager](../../../../PlanB/Wand/Core/Logger/LogManager.md) |$logger |  |
+|[LogManager](../../../../LogManager.md) |$logger |  |
 
 ---
 
 
 ### getDescription
-``` php
-string getDescription ()
-
 Devuelve la descripción de la tarea.
 
-```
+
+**QaTask::getDescription**() : string
+
 
 
 ---
 
 
 ### getActions
-``` php
-[PlanB\Wand\Core\Action\ActionInterface](../../../../PlanB/Wand/Core/Action/ActionInterface.md)[] getActions ()
-
 Devuelve las acciones definidas en esta tarea.
 
-```
+
+**QaTask::getActions**() : [ActionInterface](../../../../ActionInterface.md)[]
+
 
 
 ---
 
 
 ### exists
-``` php
-bool exists (string $name)
-
 Indica si una acción está definida.
 
-```
+
+**QaTask::exists**(string $name) : bool
+
 
 |Parameters: | | |
 | --- | --- | --- |
@@ -194,12 +182,11 @@ Indica si una acción está definida.
 
 
 ### get
-``` php
-[PlanB\Wand\Core\Action\ActionInterface](../../../../PlanB/Wand/Core/Action/ActionInterface.md) get (string $name)
-
 Devuelve una acción.
 
-```
+
+**QaTask::get**(string $name) : [ActionInterface](../../../../ActionInterface.md)
+
 
 |Parameters: | | |
 | --- | --- | --- |
@@ -209,12 +196,11 @@ Devuelve una acción.
 
 
 ### file
-``` php
-[PlanB\Wand\Core\File\File](../../../../PlanB/Wand/Core/File/File.md) file (string $name)
-
 Devuelve una acción tipo file.
 
-```
+
+**QaTask::file**(string $name) : [File](../../../../File.md)
+
 
 |Parameters: | | |
 | --- | --- | --- |
@@ -224,12 +210,11 @@ Devuelve una acción tipo file.
 
 
 ### run
-``` php
-[PlanB\Wand\Core\Logger\Message\LogMessage](../../../../PlanB/Wand/Core/Logger/Message/LogMessage.md) run (string $action)
-
 Ejecuta una acción.
 
-```
+
+**QaTask::run**(string $action) : [LogMessage](../../../../LogMessage.md)
+
 
 |Parameters: | | |
 | --- | --- | --- |
@@ -239,12 +224,11 @@ Ejecuta una acción.
 
 
 ### sequence
-``` php
-[PlanB\Wand\Core\Logger\Message\LogMessage](../../../../PlanB/Wand/Core/Logger/Message/LogMessage.md) sequence (string ...$actions)
-
 Ejecuta varias acciones
 
-```
+
+**QaTask::sequence**(string ...$actions) : [LogMessage](../../../../LogMessage.md)
+
 
 |Parameters: | | |
 | --- | --- | --- |
@@ -254,56 +238,52 @@ Ejecuta varias acciones
 
 
 ### sequenceFrom
-``` php
-[PlanB\Wand\Core\Logger\Message\LogMessage](../../../../PlanB/Wand/Core/Logger/Message/LogMessage.md) sequenceFrom ([PlanB\Wand\Core\Logger\Message\LogMessage](../../../../PlanB/Wand/Core/Logger/Message/LogMessage.md) $message, string ...$actions)
-
 Ejecuta varias acciones
 
-```
+
+**QaTask::sequenceFrom**([LogMessage](../../../../LogMessage.md) $message, string ...$actions) : [LogMessage](../../../../LogMessage.md)
+
 
 |Parameters: | | |
 | --- | --- | --- |
-|[PlanB\Wand\Core\Logger\Message\LogMessage](../../../../PlanB/Wand/Core/Logger/Message/LogMessage.md) |$message |  |
+|[LogMessage](../../../../LogMessage.md) |$message |  |
 |string |...$actions |  |
 
 ---
 
 
 ### launch
-``` php
-int launch ()
-
 Lanza la tarea.
 
-```
+
+**QaTask::launch**() : int
+
 
 
 ---
 
 
 ### execute
-``` php
- execute ()
-
 {@inheritdoc}
 
-```
+
+**QaTask::execute**() : 
+
 
 
 ---
 
 
 ### shouldBeRestaged
-``` php
-protectedbool shouldBeRestaged ([PlanB\Wand\Core\Logger\Message\LogMessage](../../../../PlanB/Wand/Core/Logger/Message/LogMessage.md) $message)
-
 Indica si el estado del proceso es el adecuado para hacer un restage
 
-```
+
+protected **QaTask::shouldBeRestaged**([LogMessage](../../../../LogMessage.md) $message) : bool
+
 
 |Parameters: | | |
 | --- | --- | --- |
-|[PlanB\Wand\Core\Logger\Message\LogMessage](../../../../PlanB/Wand/Core/Logger/Message/LogMessage.md) |$message |  |
+|[LogMessage](../../../../LogMessage.md) |$message |  |
 
 ---
 

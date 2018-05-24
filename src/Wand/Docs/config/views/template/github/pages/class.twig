@@ -1,10 +1,11 @@
 {% extends "layout/layout.twig" %}
-{% from "macros.twig" import list, deprecated, table, short, signature, hint_link %}
+{% from "macros.twig" import list, deprecated, table, short, long, signature, hint_link %}
 
 
 {% block page_content %}
+{% set className = class.name|split('\\')|last|raw %}
 
-# {{ class.name|split('\\')|last|raw }}
+# {{ className }}
 {{ deprecated(class) }}
 
 > {{ class.shortdesc|desc(class) }}
@@ -22,12 +23,10 @@
 {% for method in methods %}
 
 ### {{ method.name }}
-``` php
-{{ signature(method) }}
+{{ long(method) }}
 
-{{ short(method) }}
+{{ signature(className, method) }}
 
-```
 
 {% if method.parameters %}
 |Parameters: | | |

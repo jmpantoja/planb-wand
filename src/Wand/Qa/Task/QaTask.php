@@ -33,6 +33,8 @@ class QaTask extends Task
             $message = $this->run('phpcs');
         }
 
+        $message = $this->sequenceFrom($message, '@sami');
+
         if ($this->shouldBeRestaged($message)) {
             $message = $this->sequenceFrom($message, 'restage');
         }

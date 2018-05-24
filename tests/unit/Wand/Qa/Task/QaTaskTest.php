@@ -56,9 +56,9 @@ class QaTaskTest extends Unit
 
 
         $task->allows()
-            ->run(m::anyOf('lint', 'phpcpd', 'phpmd', 'phpcbf', 'restage'))
+            ->run(m::anyOf('lint', 'phpcpd', 'phpmd', 'phpcbf', 'restage', '@sami'))
             ->andReturn(LogMessage::success())
-            ->times(5);
+            ->times(6);
 
         $task->allows()
             ->run('phpcs')
@@ -82,9 +82,9 @@ class QaTaskTest extends Unit
         $task->setContext($context);
 
         $task->allows()
-            ->run(m::anyOf('lint', 'phpcpd', 'phpmd', 'phpcbf'))
+            ->run(m::anyOf('lint', 'phpcpd', 'phpmd', 'phpcbf', '@sami'))
             ->andReturn(LogMessage::success())
-            ->times(4);
+            ->times(5);
 
         $task->allows()
             ->run('restage')
@@ -113,9 +113,9 @@ class QaTaskTest extends Unit
         $task->setContext($context);
 
         $task->allows()
-            ->run(m::anyOf('lint', 'phpcpd', 'phpmd', 'restage', 'phpcs'))
+            ->run(m::anyOf('lint', 'phpcpd', 'phpmd', 'restage', 'phpcs', '@sami'))
             ->andReturn(LogMessage::success())
-            ->times(4);
+            ->times(5);
 
         $task->allows()
             ->run('phpcbf')

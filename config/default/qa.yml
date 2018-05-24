@@ -17,6 +17,7 @@ tasks:
       phpcbf:
       phpcs:
       restage:
+      "@sami":
 
 actions:
   phpcs_xml:

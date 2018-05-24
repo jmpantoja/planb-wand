@@ -183,11 +183,13 @@
 {%- endmacro %}
 
 {% macro short(reflection) %}
-{% if reflection.shortdesc is defined %}{{ reflection.shortdesc }}{% endif %}
+{% if reflection.shortdesc is defined %}{{ reflection.shortdesc|raw }}{% endif %}
 {% endmacro %}
 
 {% macro long(reflection) %}
-{% if reflection.longdesc is defined %}{{ reflection.longdesc }}{% endif %}
+{% if reflection.shortdesc is defined %}{{ reflection.shortdesc|raw }}{% endif %}
+
+{% if reflection.longdesc is defined %}{{ reflection.longdesc|raw }}{% endif %}
 {% endmacro %}
 
 {% macro deprecated(reflection) %}
@@ -195,14 +197,14 @@
 {% endmacro %}
 
 
-{% macro signature(method) -%}
+{% macro signature(className, method) -%}
 {%- from _self import hint_link, params %}
-{% if method.final %}final{% endif %}
-{% if method.abstract %}abstract{% endif %}
-{% if method.static %}static{% endif %}
-{% if method.protected %}protected{% endif %}
-{% if method.private %}private{% endif %}
-{{- hint_link (method.hint) }} {{ method.name|raw }} {{ params(method) }}
+{% if method.final %}final {% endif %}
+{% if method.abstract %}abstract {% endif %}
+{% if method.static %}static {% endif %}
+{% if method.protected %}protected {% endif %}
+{% if method.private %}private {% endif %}
+**{{- className }}::{{ method.name|raw }}**{{ params(method) }} : {{ hint_link (method.hint) }}
 {%- endmacro%}
 
 {% macro hint_link(hints) -%}
@@ -210,9 +212,9 @@
     {%- if hints %}
         {%- for hint in hints %}
             {%- if hint.class %}
-                {{- link(hint.name) }}
-            {%- elseif hint.name %}
-                {{- hint.name }}
+                {{- link(hint.name|split('\\')|last|raw) }} 
+            {%- elseif hint.name %} 
+                {{- hint.name }} 
             {%- endif %}
                 {%- if hint.array %}[]{% endif %}
                 {%- if not loop.last %}|{% endif %}
