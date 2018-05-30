@@ -14,7 +14,7 @@
     "marc-mabe/php-enum": "^3.0",
     "overtrue/phplint": "1.0.2",
     "phpmd/phpmd": "^2.6",
-    "planb/utils": "dev-develop",
+    "planb/utils": "dev-wand",
     "sebastian/phpcpd": "^4.0",
     "slevomat/coding-standard": "^4.4",
     "escapestudios/symfony2-coding-standard": "^3.1",

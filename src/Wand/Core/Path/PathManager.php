@@ -70,7 +70,7 @@ class PathManager
             throw InvalidProjectDirectoryException::notFound($path);
         }
 
-        return (string) $realPath;
+        return (string)$realPath;
     }
 
     /**
@@ -99,7 +99,7 @@ class PathManager
             throw InvalidProjectDirectoryException::composerMissing($projectDir);
         }
 
-        return (string) $projectPath;
+        return (string)$projectPath;
     }
 
     /**
@@ -145,6 +145,29 @@ class PathManager
         return $wandDir;
     }
 
+
+    /**
+     * Devuelve la ruta del proyecto wand.
+     *
+     * @return string
+     */
+    public function wandVendorDir(): string
+    {
+        $vendorDir = $this->wandDir();
+
+        $tree = PathTree::create($vendorDir)->getInversedPathTree();
+
+        foreach ($tree as $branch) {
+            $autoload = $branch->append('autoload.php');
+
+            if ($autoload->exists()) {
+                $vendorDir = $branch;
+            }
+        }
+
+        return $vendorDir;
+    }
+
     /**
      * Devuelve un array con todas las rutas.
      *
@@ -158,6 +181,7 @@ class PathManager
             'docs_api' => Path::join($this->projectDir(), 'docs/api'),
             'vendor' => Path::join($this->projectDir(), 'vendor'),
             'vendor/bin' => Path::join($this->projectDir(), 'vendor/bin'),
+            'wand-vendor' => $this->wandVendorDir(),
             'wand-vendor/bin' => Path::join($this->wandDir(), 'vendor/bin'),
             'wand-bin' => Path::join($this->wandDir(), 'bin'),
             'target' => $this->targetPath(),

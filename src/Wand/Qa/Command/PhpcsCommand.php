@@ -80,9 +80,9 @@ class PhpcsCommand extends Command
      */
     protected function initialize(): void
     {
-        $base = $this->context->getPath('wand');
+        $base = $this->context->getPath('wand-vendor');
 
-        $path = Path::join($base, 'vendor/squizlabs/php_codesniffer/autoload.php');
+        $path = Path::join($base, 'squizlabs/php_codesniffer/autoload.php');
         include_once $path;
     }
 
